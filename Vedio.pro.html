@@ -1,0 +1,1514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creative Video Agency Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Modern CSS Variables */
+        :root {
+            /* Creative Agency Colors */
+            --agency-primary: #222;
+            --agency-secondary: #ff9800;
+            --agency-light: #f8f9fa;
+            --agency-dark: #333;
+            
+            /* Video Platform Colors */
+            --vp-primary: #6c5ce7;
+            --vp-secondary: #a29bfe;
+            --vp-dark: #2d3436;
+            --vp-light: #f5f6fa;
+            --vp-accent: #fd79a8;
+            --vp-gradient: linear-gradient(135deg, var(--vp-primary), var(--vp-accent));
+            
+            /* Animation Curves */
+            --ease-smooth: cubic-bezier(0.65, 0, 0.35, 1);
+            --ease-bounce: cubic-bezier(0.68, -0.6, 0.32, 1.6);
+            
+            /* Shadows */
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.15);
+            --shadow-lg: 0 8px 24px rgba(0,0,0,0.2);
+        }
+
+        /* Base Styles with Modern Reset */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            color: var(--agency-dark);
+            background-color: var(--agency-light);
+            overflow-x: hidden;
+        }
+
+        /* Utility Classes */
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .section {
+            padding: 6rem 0;
+        }
+
+        .text-gradient {
+            background: var(--vp-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        /* Creative Agency Styles */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 1.5rem 0;
+            background: rgba(34, 34, 34, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            transition: all 0.4s var(--ease-smooth);
+        }
+
+        header.scrolled {
+            padding: 1rem 0;
+            box-shadow: var(--shadow-md);
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            color: var(--agency-secondary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--agency-secondary);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--agency-secondary);
+            transition: width 0.3s var(--ease-smooth);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .hero {
+            height: 100vh;
+            min-height: 800px;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.3)),
+                        url('https://images.unsplash.com/photo-1579389083078-4e7018379f7e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80') no-repeat center/cover;
+            z-index: -1;
+            animation: zoomInOut 20s infinite alternate;
+        }
+
+        @keyframes zoomInOut {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.1); }
+        }
+
+        .hero-content {
+            max-width: 800px;
+            color: white;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 1s var(--ease-smooth);
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            margin-bottom: 2.5rem;
+            opacity: 0.9;
+            animation: fadeInUp 1s var(--ease-smooth) 0.2s forwards;
+            opacity: 0;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.8rem 2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s var(--ease-smooth);
+            text-decoration: none;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--agency-secondary);
+            color: white;
+            border: 2px solid var(--agency-secondary);
+        }
+
+        .btn-primary:hover {
+            background: transparent;
+            color: var(--agency-secondary);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            color: var(--agency-dark);
+            transform: translateY(-3px);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            animation: fadeInUp 1s var(--ease-smooth) 0.4s forwards;
+            opacity: 0;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* About Section */
+        .about {
+            background: white;
+        }
+
+        .section-title {
+            font-size: clamp(1.8rem, 3vw, 3rem);
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--agency-secondary);
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-image {
+            position: relative;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .about-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+
+        .about-image:hover img {
+            transform: scale(1.05);
+        }
+
+        .about-text {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        /* Services Section */
+        .services {
+            background: var(--agency-light);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .service-card {
+            background: white;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s var(--ease-smooth);
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .service-icon {
+            font-size: 2.5rem;
+            color: var(--agency-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .service-content {
+            padding: 2rem;
+        }
+
+        .service-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Video Platform Section */
+        .video-platform {
+            background-color: var(--vp-dark);
+            color: var(--vp-light);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .video-platform::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(108, 92, 231, 0.1) 0%, transparent 25%),
+                radial-gradient(circle at 80% 70%, rgba(253, 121, 168, 0.1) 0%, transparent 25%);
+            animation: rotateGradient 60s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes rotateGradient {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .vp-container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .vp-section-title {
+            color: white;
+            margin-bottom: 3rem;
+        }
+
+        .vp-section-title::after {
+            background: var(--vp-gradient);
+        }
+
+        /* Upload Section */
+        .upload-section {
+            margin-bottom: 5rem;
+        }
+
+        .upload-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 1.5rem;
+            padding: 3rem;
+            border: 2px dashed rgba(255, 255, 255, 0.1);
+            transition: all 0.3s var(--ease-smooth);
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .upload-container.active {
+            border-color: var(--vp-accent);
+            background: rgba(253, 121, 168, 0.1);
+        }
+
+        .upload-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--vp-primary);
+        }
+
+        .upload-text h3 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+
+        .upload-text p {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 1.5rem;
+        }
+
+        .file-upload-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            background: var(--vp-gradient);
+            color: white;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s var(--ease-smooth);
+            font-weight: 600;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .file-upload-label:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(108, 92, 231, 0.3);
+        }
+
+        #file-upload {
+            display: none;
+        }
+
+        .file-info {
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Progress */
+        .upload-progress {
+            width: 100%;
+            margin-top: 2rem;
+            display: none;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .progress-bar-container {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--vp-gradient);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Video Grid */
+        .video-grid-section {
+            margin-bottom: 5rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .section-heading {
+            font-size: 1.8rem;
+            color: white;
+            position: relative;
+        }
+
+        .section-heading::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 50px;
+            height: 4px;
+            background: var(--vp-gradient);
+            border-radius: 2px;
+        }
+
+        .view-all {
+            color: var(--vp-secondary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .view-all:hover {
+            color: var(--vp-accent);
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .video-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 1rem;
+            overflow: hidden;
+            transition: all 0.3s var(--ease-smooth);
+            position: relative;
+        }
+
+        .video-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .video-thumbnail {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%;
+            overflow: hidden;
+        }
+
+        .video-thumbnail img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .video-card:hover .video-thumbnail img {
+            transform: scale(1.1);
+        }
+
+        .video-badge {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        .video-info {
+            padding: 1.5rem;
+        }
+
+        .video-title {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: white;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .video-meta {
+            display: flex;
+            justify-content: space-between;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+
+        .video-author {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .author-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .author-name {
+            font-size: 0.9rem;
+            color: var(--vp-secondary);
+        }
+
+        /* Video Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            overflow-y: auto;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal.show {
+            opacity: 1;
+        }
+
+        .modal-content {
+            width: 90%;
+            max-width: 1200px;
+            margin: 2rem auto;
+            background: var(--vp-dark);
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
+            transform: translateY(20px);
+            transition: transform 0.3s var(--ease-smooth);
+        }
+
+        .modal.show .modal-content {
+            transform: translateY(0);
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%;
+        }
+
+        .video-container video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            outline: none;
+            background: #000;
+        }
+
+        .video-details {
+            padding: 2rem;
+        }
+
+        .modal-title {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .modal-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1.25rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .action-btn:hover {
+            background: var(--vp-primary);
+        }
+
+        .action-btn.liked {
+            background: var(--vp-accent);
+        }
+
+        .modal-stats {
+            display: flex;
+            gap: 1.5rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .modal-description {
+            margin-top: 1.5rem;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.7;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 0, 0, 0.5);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 1;
+        }
+
+        .close-modal:hover {
+            background: var(--vp-accent);
+            transform: rotate(90deg);
+        }
+
+        /* Footer */
+        .footer {
+            background: rgba(45, 52, 54, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 4rem 0 2rem;
+            position: relative;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-column h3 {
+            font-size: 1.2rem;
+            color: white;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 30px;
+            height: 3px;
+            background: var(--vp-gradient);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-link {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-link a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-link a:hover {
+            color: var(--vp-accent);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            background: var(--vp-gradient);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .about-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .about-image {
+                order: -1;
+                max-width: 600px;
+                margin: 0 auto;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .btn-group {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+            
+            .upload-container {
+                padding: 2rem 1.5rem;
+            }
+            
+            .modal-content {
+                width: 95%;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .section {
+                padding: 4rem 0;
+            }
+            
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Creative Agency Section -->
+    <header id="header">
+        <div class="container header-container">
+            <a href="#" class="logo">
+                <i class="fas fa-video logo-icon"></i>
+                <span>CreativeVideoPro</span>
+            </a>
+            <nav class="nav-links">
+                <a href="#home" class="nav-link">Home</a>
+                <a href="#about" class="nav-link">About</a>
+                <a href="#services" class="nav-link">Services</a>
+                <a href="#video-platform" class="nav-link">Platform</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">Elevate Your Brand With <span class="text-gradient">Professional Video</span></h1>
+                <p class="hero-subtitle">We combine creative storytelling with cutting-edge technology to deliver stunning video solutions that captivate your audience and grow your business.</p>
+                <div class="btn-group">
+                    <a href="#video-platform" class="btn btn-primary">
+                        <i class="fas fa-upload"></i> Upload Video
+                    </a>
+                    <a href="#services" class="btn btn-secondary">
+                        <i class="fas fa-info-circle"></i> Learn More
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="about section" id="about">
+        <div class="container">
+            <h2 class="section-title">About Our Agency</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>Founded in 2015, CreativeVideoPro has established itself as a leader in digital video solutions. Our team of award-winning filmmakers, animators, and marketing experts work together to create compelling visual content.</p>
+                    <p>We've helped over 500 clients worldwide achieve their marketing goals through innovative video strategies and our state-of-the-art video hosting platform.</p>
+                    <p>Our mission is to democratize high-quality video production and distribution, making professional-grade tools accessible to businesses of all sizes.</p>
+                    <a href="#video-platform" class="btn btn-primary" style="align-self: flex-start;">
+                        Try Our Platform
+                    </a>
+                </div>
+                <div class="about-image">
+                    <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Our team working">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="services section" id="services">
+        <div class="container">
+            <h2 class="section-title">Our Premium Services</h2>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-content">
+                        <div class="service-icon">
+                            <i class="fas fa-film"></i>
+                        </div>
+                        <h3 class="service-title">4K Video Production</h3>
+                        <p>From concept to final edit, our team creates cinematic-quality videos tailored to your brand identity and marketing objectives.</p>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <div class="service-content">
+                        <div class="service-icon">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <h3 class="service-title">Enterprise Hosting</h3>
+                        <p>Our secure, scalable platform delivers lightning-fast 4K streaming with advanced analytics and global CDN distribution.</p>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <div class="service-content">
+                        <div class="service-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3 class="service-title">Video Marketing</h3>
+                        <p>Data-driven strategies to maximize your video ROI through targeted distribution, SEO optimization, and performance analytics.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Video Platform Section -->
+    <section class="video-platform section" id="video-platform">
+        <div class="vp-container container">
+            <div class="upload-section">
+                <h2 class="section-title vp-section-title">Upload Your Content</h2>
+                <div class="upload-container" id="upload-container">
+                    <div class="upload-icon">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                    </div>
+                    <div class="upload-text">
+                        <h3>Drag & Drop Your Videos</h3>
+                        <p>Supported formats: MP4, MOV, AVI, MKV up to 8K resolution</p>
+                    </div>
+                    <input type="file" id="file-upload" accept="video/*" multiple>
+                    <label for="file-upload" class="file-upload-label">
+                        <i class="fas fa-folder-open"></i> Choose Files
+                    </label>
+                    <div class="file-info">Or drag files here (Max 20GB per file)</div>
+                    
+                    <div class="upload-progress" id="upload-progress">
+                        <div class="progress-info">
+                            <span id="progress-status">Preparing upload...</span>
+                            <span id="progress-percent">0%</span>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar" id="progress-bar"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="video-grid-section">
+                <div class="section-header">
+                    <h3 class="section-heading">Recently Uploaded</h3>
+                    <a href="#" class="view-all">
+                        View All <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+                <div class="video-grid" id="recent-videos">
+                    <div class="empty-state" style="grid-column: 1 / -1; text-align: center; color: rgba(255,255,255,0.5);">
+                        <i class="fas fa-video-slash" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                        <h4>No videos uploaded yet</h4>
+                        <p>Be the first to share your content!</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="video-grid-section">
+                <div class="section-header">
+                    <h3 class="section-heading">Most Viewed</h3>
+                    <a href="#" class="view-all">
+                        View All <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+                <div class="video-grid" id="popular-videos">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Video Player Modal -->
+    <div class="modal" id="video-modal">
+        <div class="modal-content">
+            <button class="close-modal">&times;</button>
+            <div class="video-container">
+                <video controls id="modal-video">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            <div class="video-details">
+                <h2 class="modal-title" id="modal-title">Video Title</h2>
+                <div class="modal-meta">
+                    <div class="video-author">
+                        <img src="" alt="Author" class="author-avatar" id="modal-avatar">
+                        <span class="author-name" id="modal-author">Author</span>
+                    </div>
+                    <div class="modal-actions">
+                        <button class="action-btn" id="like-btn">
+                            <i class="far fa-thumbs-up"></i>
+                            <span id="like-count">0</span>
+                        </button>
+                        <button class="action-btn">
+                            <i class="far fa-comment"></i> Comments
+                        </button>
+                        <button class="action-btn">
+                            <i class="fas fa-share"></i> Share
+                        </button>
+                    </div>
+                </div>
+                <div class="modal-stats">
+                    <span id="modal-views">0 views</span>
+                    <span id="modal-date">Uploaded just now</span>
+                </div>
+                <p class="modal-description" id="modal-description">Video description goes here.</p>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>CreativeVideoPro</h3>
+                    <p>The ultimate platform for professional video hosting and distribution with advanced analytics and marketing tools.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Platform</h3>
+                    <ul class="footer-links">
+                        <li class="footer-link"><a href="#">Features</a></li>
+                        <li class="footer-link"><a href="#">Pricing</a></li>
+                        <li class="footer-link"><a href="#">API</a></li>
+                        <li class="footer-link"><a href="#">Integrations</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Resources</h3>
+                    <ul class="footer-links">
+                        <li class="footer-link"><a href="#">Documentation</a></li>
+                        <li class="footer-link"><a href="#">Tutorials</a></li>
+                        <li class="footer-link"><a href="#">Blog</a></li>
+                        <li class="footer-link"><a href="#">Support</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Company</h3>
+                    <ul class="footer-links">
+                        <li class="footer-link"><a href="#">About Us</a></li>
+                        <li class="footer-link"><a href="#">Careers</a></li>
+                        <li class="footer-link"><a href="#">Contact</a></li>
+                        <li class="footer-link"><a href="#">Legal</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 CreativeVideoPro. All rights reserved.</p>
+                <p id="storage-info">0 videos stored | 0MB used</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Modern JavaScript with ES6+ features
+        class VideoPlatform {
+            constructor() {
+                this.VIDEO_DB_KEY = 'creativeVideoProDB';
+                this.videoDatabase = [];
+                this.currentVideoId = null;
+                this.init();
+            }
+
+            init() {
+                this.loadDatabase();
+                this.setupEventListeners();
+                this.setupHeaderScroll();
+                this.renderVideos();
+                this.updateStorageInfo();
+            }
+
+            loadDatabase() {
+                const db = localStorage.getItem(this.VIDEO_DB_KEY);
+                if (db) {
+                    this.videoDatabase = JSON.parse(db);
+                } else {
+                    this.addSampleVideos();
+                }
+            }
+
+            saveDatabase() {
+                localStorage.setItem(this.VIDEO_DB_KEY, JSON.stringify(this.videoDatabase));
+                this.updateStorageInfo();
+            }
+
+            updateStorageInfo() {
+                const dbSize = new Blob([JSON.stringify(this.videoDatabase)]).size;
+                const mbUsed = (dbSize / (1024 * 1024)).toFixed(2);
+                document.getElementById('storage-info').textContent = 
+                    `${this.videoDatabase.length} videos stored | ${mbUsed}MB used`;
+            }
+
+            addSampleVideos() {
+                const samples = [
+                    {
+                        id: this.generateId(),
+                        title: "Mountain Adventure in 8K",
+                        description: "Breathtaking 8K footage of mountain landscapes captured with our professional equipment. Perfect for nature lovers and adventure seekers.",
+                        thumbnail: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
+                        videoUrl: "https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4",
+                        duration: "5:42",
+                        views: 2543,
+                        likes: 892,
+                        isLiked: false,
+                        uploadDate: new Date(Date.now() - 86400000).toISOString(),
+                        author: "Adventure Films",
+                        authorAvatar: "https://randomuser.me/api/portraits/men/22.jpg"
+                    },
+                    {
+                        id: this.generateId(),
+                        title: "Cityscape Time-Lapse",
+                        description: "4K time-lapse of New York City skyline at golden hour. Perfect for background videos or commercial use.",
+                        thumbnail: "https://images.unsplash.com/photo-1485872299829-c673f5194813?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1476&q=80",
+                        videoUrl: "https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4",
+                        duration: "3:18",
+                        views: 1876,
+                        likes: 543,
+                        isLiked: false,
+                        uploadDate: new Date(Date.now() - 172800000).toISOString(),
+                        author: "Urban Visuals",
+                        authorAvatar: "https://randomuser.me/api/portraits/women/33.jpg"
+                    }
+                ];
+                
+                this.videoDatabase = [...samples];
+                this.saveDatabase();
+            }
+
+            generateId() {
+                return Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
+            }
+
+            renderVideos() {
+                const recentGrid = document.getElementById('recent-videos');
+                const popularGrid = document.getElementById('popular-videos');
+                
+                // Clear existing content
+                recentGrid.innerHTML = '';
+                popularGrid.innerHTML = '';
+                
+                if (this.videoDatabase.length === 0) {
+                    recentGrid.innerHTML = `
+                        <div class="empty-state" style="grid-column: 1 / -1; text-align: center; color: rgba(255,255,255,0.5);">
+                            <i class="fas fa-video-slash" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                            <h4>No videos uploaded yet</h4>
+                            <p>Be the first to share your content!</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // Sort by upload date (newest first)
+                const recentVideos = [...this.videoDatabase].sort((a, b) => 
+                    new Date(b.uploadDate) - new Date(a.uploadDate)).slice(0, 6);
+                
+                // Sort by views (most viewed first)
+                const popularVideos = [...this.videoDatabase].sort((a, b) => b.views - a.views).slice(0, 6);
+                
+                // Render recent videos
+                recentVideos.forEach(video => {
+                    recentGrid.appendChild(this.createVideoCard(video));
+                });
+                
+                // Render popular videos
+                popularVideos.forEach(video => {
+                    popularGrid.appendChild(this.createVideoCard(video));
+                });
+            }
+
+            createVideoCard(video) {
+                const card = document.createElement('div');
+                card.className = 'video-card';
+                card.dataset.videoId = video.id;
+                
+                // Format view count
+                const views = video.views >= 1000000 
+                    ? `${(video.views / 1000000).toFixed(1)}M views`
+                    : video.views >= 1000 
+                        ? `${(video.views / 1000).toFixed(1)}K views`
+                        : `${video.views} views`;
+                
+                // Format date
+                const uploadDate = new Date(video.uploadDate);
+                const dateStr = uploadDate.toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                });
+                
+                card.innerHTML = `
+                    <div class="video-thumbnail">
+                        <img src="${video.thumbnail}" alt="${video.title}" 
+                             onerror="this.src='https://via.placeholder.com/300x169?text=Video+Thumbnail'">
+                        <span class="video-badge">${video.duration || '0:00'}</span>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">${video.title}</h3>
+                        <div class="video-meta">
+                            <span>${views}</span>
+                            <span>${dateStr}</span>
+                        </div>
+                        <div class="video-author">
+                            <img src="${video.authorAvatar}" alt="${video.author}" class="author-avatar">
+                            <span class="author-name">${video.author}</span>
+                        </div>
+                    </div>
+                `;
+                
+                card.addEventListener('click', () => this.openVideoModal(video.id));
+                return card;
+            }
+
+            openVideoModal(videoId) {
+                const video = this.videoDatabase.find(v => v.id === videoId);
+                if (!video) return;
+                
+                this.currentVideoId = videoId;
+                
+                // Update view count
+                video.views++;
+                this.saveDatabase();
+                
+                // Update modal content
+                document.getElementById('modal-title').textContent = video.title;
+                document.getElementById('modal-author').textContent = video.author;
+                document.getElementById('modal-avatar').src = video.authorAvatar;
+                document.getElementById('modal-description').textContent = video.description;
+                document.getElementById('modal-views').textContent = `${video.views.toLocaleString()} views`;
+                document.getElementById('like-count').textContent = video.likes.toLocaleString();
+                
+                // Set like button state
+                const likeBtn = document.getElementById('like-btn');
+                if (video.isLiked) {
+                    likeBtn.classList.add('liked');
+                    likeBtn.innerHTML = `<i class="fas fa-thumbs-up"></i> <span id="like-count">${video.likes.toLocaleString()}</span>`;
+                } else {
+                    likeBtn.classList.remove('liked');
+                    likeBtn.innerHTML = `<i class="far fa-thumbs-up"></i> <span id="like-count">${video.likes.toLocaleString()}</span>`;
+                }
+                
+                // Format upload date
+                const uploadDate = new Date(video.uploadDate);
+                const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                document.getElementById('modal-date').textContent = `Uploaded ${uploadDate.toLocaleDateString('en-US', options)}`;
+                
+                // Set video source
+                const videoPlayer = document.getElementById('modal-video');
+                videoPlayer.innerHTML = '';
+                const source = document.createElement('source');
+                source.src = video.videoUrl;
+                source.type = 'video/mp4';
+                videoPlayer.appendChild(source);
+                
+                // Show modal
+                const modal = document.getElementById('video-modal');
+                modal.classList.add('show');
+                document.body.style.overflow = 'hidden';
+                
+                // Play video
+                videoPlayer.load();
+                videoPlayer.play().catch(e => console.log("Autoplay prevented:", e));
+            }
+
+            closeVideoModal() {
+                const modal = document.getElementById('video-modal');
+                const videoPlayer = document.getElementById('modal-video');
+                
+                videoPlayer.pause();
+                modal.classList.remove('show');
+                document.body.style.overflow = '';
+                
+                // Update the views in the grid
+                this.renderVideos();
+            }
+
+            toggleLike() {
+                if (!this.currentVideoId) return;
+                
+                const video = this.videoDatabase.find(v => v.id === this.currentVideoId);
+                if (!video) return;
+                
+                video.isLiked = !video.isLiked;
+                video.likes += video.isLiked ? 1 : -1;
+                this.saveDatabase();
+                
+                const likeBtn = document.getElementById('like-btn');
+                if (video.isLiked) {
+                    likeBtn.classList.add('liked');
+                    likeBtn.innerHTML = `<i class="fas fa-thumbs-up"></i> <span id="like-count">${video.likes.toLocaleString()}</span>`;
+                } else {
+                    likeBtn.classList.remove('liked');
+                    likeBtn.innerHTML = `<i class="far fa-thumbs-up"></i> <span id="like-count">${video.likes.toLocaleString()}</span>`;
+                }
+            }
+
+            handleFileUpload(files) {
+                if (!files || files.length === 0) return;
+                
+                const uploadContainer = document.getElementById('upload-container');
+                const progressContainer = document.getElementById('upload-progress');
+                const progressBar = document.getElementById('progress-bar');
+                const progressStatus = document.getElementById('progress-status');
+                const progressPercent = document.getElementById('progress-percent');
+                
+                // Show upload UI
+                uploadContainer.classList.add('active');
+                progressContainer.style.display = 'block';
+                progressBar.style.width = '0%';
+                progressStatus.textContent = 'Preparing upload...';
+                progressPercent.textContent = '0%';
+                
+                // Simulate upload progress (in a real app, this would use actual upload progress)
+                let progress = 0;
+                const totalFiles = files.length;
+                let filesProcessed = 0;
+                
+                const uploadInterval = setInterval(() => {
+                    progress += Math.random() * 10;
+                    if (progress > 90) progress = 90;
+                    
+                    progressBar.style.width = `${progress}%`;
+                    progressPercent.textContent = `${Math.floor(progress)}%`;
+                    progressStatus.textContent = `Uploading ${filesProcessed + 1} of ${totalFiles} files...`;
+                }, 300);
+                
+                // Process each file
+                Array.from(files).forEach((file, index) => {
+                    setTimeout(() => {
+                        // In a real app, you would upload to a server here
+                        // For demo, we'll create a video object with the file data
+                        
+                        // Create thumbnail from video (simulated)
+                        const thumbnail = URL.createObjectURL(file);
+                        
+                        // Create video object
+                        const video = {
+                            id: this.generateId(),
+                            title: file.name.replace(/\.[^/.]+$/, ""), // Remove extension
+                            description: `Uploaded ${new Date().toLocaleDateString()}`,
+                            thumbnail: thumbnail,
+                            videoUrl: URL.createObjectURL(file),
+                            duration: `${Math.floor(Math.random() * 10)}:${Math.floor(Math.random() * 60).toString().padStart(2, '0')}`,
+                            views: 0,
+                            likes: 0,
+                            isLiked: false,
+                            uploadDate: new Date().toISOString(),
+                            author: "You",
+                            authorAvatar: "https://randomuser.me/api/portraits/lego/1.jpg"
+                        };
+                        
+                        // Add to database
+                        this.videoDatabase.unshift(video);
+                        filesProcessed++;
+                        
+                        // Update progress
+                        progress = (filesProcessed / totalFiles) * 100;
+                        progressBar.style.width = `${progress}%`;
+                        progressPercent.textContent = `${Math.floor(progress)}%`;
+                        progressStatus.textContent = filesProcessed === totalFiles 
+                            ? 'Processing files...' 
+                            : `Uploading ${filesProcessed + 1} of ${totalFiles} files...`;
+                        
+                        // If all files processed
+                        if (filesProcessed === totalFiles) {
+                            clearInterval(uploadInterval);
+                            
+                            setTimeout(() => {
+                                // Complete upload
+                                progressBar.style.width = '100%';
+                                progressPercent.textContent = '100%';
+                                progressStatus.textContent = 'Upload complete!';
+                                
+                                // Save to database and update UI
+                                this.saveDatabase();
+                                this.renderVideos();
+                                
+                                // Reset after delay
+                                setTimeout(() => {
+                                    uploadContainer.classList.remove('active');
+                                    progressContainer.style.display = 'none';
+                                }, 2000);
+                            }, 1000);
+                        }
+                    }, index * 1000); // Stagger uploads
+                });
+            }
+
+            setupEventListeners() {
+                // File upload
+                const fileInput = document.getElementById('file-upload');
+                fileInput.addEventListener('change', (e) => {
+                    this.handleFileUpload(e.target.files);
+                    e.target.value = ''; // Reset input
+                });
+                
+                // Drag and drop
+                const uploadContainer = document.getElementById('upload-container');
+                uploadContainer.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    uploadContainer.classList.add('active');
+                });
+                
+                uploadContainer.addEventListener('dragleave', () => {
+                    uploadContainer.classList.remove('active');
+                });
+                
+                uploadContainer.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    uploadContainer.classList.remove('active');
+                    this.handleFileUpload(e.dataTransfer.files);
+                });
+                
+                // Modal controls
+                document.querySelector('.close-modal').addEventListener('click', () => {
+                    this.closeVideoModal();
+                });
+                
+                document.getElementById('like-btn').addEventListener('click', () => {
+                    this.toggleLike();
+                });
+                
+                // Close modal when clicking outside
+                document.getElementById('video-modal').addEventListener('click', (e) => {
+                    if (e.target === document.getElementById('video-modal')) {
+                        this.closeVideoModal();
+                    }
+                });
+            }
+
+            setupHeaderScroll() {
+                const header = document.getElementById('header');
+                let lastScroll = 0;
+                
+                window.addEventListener('scroll', () => {
+                    const currentScroll = window.pageYOffset;
+                    
+                    if (currentScroll <= 0) {
+                        header.classList.remove('scrolled');
+                        return;
+                    }
+                    
+                    if (currentScroll > lastScroll && currentScroll > 100) {
+                        header.classList.add('scrolled');
+                    } else if (currentScroll < lastScroll) {
+                        header.classList.add('scrolled');
+                    }
+                    
+                    lastScroll = currentScroll;
+                });
+            }
+        }
+
+        // Initialize the platform when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            const videoPlatform = new VideoPlatform();
+        });
+    </script>
+</body>
+</html>

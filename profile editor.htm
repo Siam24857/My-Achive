@@ -1,0 +1,1533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProConnect - Professional Profiles</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2980b9;
+            --text-color: #333;
+            --light-text: #f8f9fa;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --border-radius: 8px;
+            --transition: all 0.3s ease;
+        }
+
+        .dark-mode {
+            --primary-color: #3a86ff;
+            --secondary-color: #2667cc;
+            --text-color: #f8f9fa;
+            --light-text: #f8f9fa;
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: var(--transition);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        #particles-js {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: var(--border-radius);
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-color);
+        }
+
+        .hero {
+            text-align: center;
+            padding: 50px 0;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+
+        .profiles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .profile-card {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .profile-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-cover {
+            height: 120px;
+            background-color: var(--primary-color);
+            position: relative;
+        }
+
+        .profile-pic {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid var(--card-bg);
+            position: absolute;
+            bottom: -40px;
+            left: 20px;
+            object-fit: cover;
+            background-color: #ddd;
+        }
+
+        .profile-content {
+            padding: 50px 20px 20px;
+        }
+
+        .profile-name {
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+        }
+
+        .profile-bio {
+            color: var(--text-color);
+            opacity: 0.8;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+
+        .profile-skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .skill-tag {
+            background-color: rgba(52, 152, 219, 0.2);
+            color: var(--primary-color);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        .profile-link {
+            display: inline-block;
+            margin-top: 15px;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* Profile View Page */
+        .profile-view {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            margin-top: 30px;
+        }
+
+        .profile-view-cover {
+            height: 200px;
+            background-color: var(--primary-color);
+            position: relative;
+        }
+
+        .profile-view-pic {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 5px solid var(--card-bg);
+            position: absolute;
+            bottom: -60px;
+            left: 40px;
+            object-fit: cover;
+            background-color: #ddd;
+        }
+
+        .profile-view-content {
+            padding: 80px 40px 40px;
+        }
+
+        .profile-view-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 30px;
+        }
+
+        .profile-view-name {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .profile-view-title {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .profile-view-bio {
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .projects-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .project-card {
+            background-color: rgba(52, 152, 219, 0.1);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+        }
+
+        .project-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .project-title {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+
+        .project-link {
+            display: inline-block;
+            margin-top: 10px;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* Edit Profile Page */
+        .edit-profile {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 30px;
+            margin-top: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+
+        textarea.form-control {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .image-upload {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .image-preview {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            background-color: #ddd;
+            border: 3px solid var(--primary-color);
+        }
+
+        .cover-preview {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background-color: #ddd;
+            border: 3px solid var(--primary-color);
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+        }
+
+        .skills-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .skill-input-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .projects-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .project-input-group {
+            background-color: rgba(52, 152, 219, 0.1);
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-bottom: 15px;
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn-danger {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+
+        .btn-success {
+            background-color: #2ecc71;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #27ae60;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: var(--border-radius);
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-color);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .profile-view-pic {
+                left: 20px;
+            }
+
+            .profile-view-header {
+                flex-direction: column;
+                gap: 20px;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: var(--transition);
+        }
+
+        .tab.active {
+            border-bottom: 3px solid var(--primary-color);
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div>
+    <div class="container">
+        <header>
+            <a href="#" class="logo" onclick="showHomePage()">ProConnect</a>
+            <div class="nav-links">
+                <a href="#" onclick="showHomePage()">Home</a>
+                <a href="#" onclick="showCreateProfilePage()">Create Profile</a>
+                <a href="#" id="myProfileLink" style="display: none;" onclick="showMyProfile()">My Profile</a>
+                <button class="theme-toggle" id="themeToggle">🌓</button>
+            </div>
+        </header>
+
+        <main id="mainContent">
+            <!-- Home Page -->
+            <div id="homePage" class="fade-in">
+                <div class="hero">
+                    <h1>Build Your Professional Profile</h1>
+                    <p>Create, customize, and share your professional profile with the world. No backend, just your browser!</p>
+                    <button class="btn btn-primary" onclick="showCreateProfilePage()">Create Your Profile</button>
+                </div>
+
+                <h2>Featured Profiles</h2>
+                <div class="profiles-grid" id="profilesGrid">
+                    <!-- Profiles will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Create/Edit Profile Page -->
+            <div id="editProfilePage" style="display: none;" class="fade-in">
+                <div class="edit-profile">
+                    <h2>Edit Your Profile</h2>
+                    
+                    <div class="tabs">
+                        <div class="tab active" onclick="switchTab('basicInfo')">Basic Info</div>
+                        <div class="tab" onclick="switchTab('skills')">Skills</div>
+                        <div class="tab" onclick="switchTab('projects')">Projects</div>
+                        <div class="tab" onclick="switchTab('contact')">Contact</div>
+                    </div>
+                    
+                    <div id="basicInfo" class="tab-content active">
+                        <div class="form-group">
+                            <label class="form-label">Profile Picture</label>
+                            <div class="image-upload">
+                                <img id="profilePicPreview" class="image-preview" src="https://via.placeholder.com/150" alt="Profile Preview">
+                                <input type="file" id="profilePicUpload" accept="image/*" class="form-control">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Cover Photo</label>
+                            <div class="image-upload">
+                                <img id="coverPicPreview" class="cover-preview" src="https://via.placeholder.com/1200x300" alt="Cover Preview">
+                                <input type="file" id="coverPicUpload" accept="image/*" class="form-control">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="fullName" class="form-label">Full Name</label>
+                            <input type="text" id="fullName" class="form-control" placeholder="John Doe">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="jobTitle" class="form-label">Job Title</label>
+                            <input type="text" id="jobTitle" class="form-control" placeholder="Software Developer">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="bio" class="form-label">Bio</label>
+                            <textarea id="bio" class="form-control" placeholder="Tell us about yourself..."></textarea>
+                        </div>
+                    </div>
+                    
+                    <div id="skills" class="tab-content">
+                        <div class="form-group">
+                            <label class="form-label">Your Skills</label>
+                            <div class="skills-container" id="skillsContainer">
+                                <!-- Skills will be added here -->
+                            </div>
+                            <div class="skill-input-container">
+                                <input type="text" id="newSkill" class="form-control" placeholder="Add a new skill">
+                                <button class="btn btn-primary" onclick="addSkill()">Add</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="projects" class="tab-content">
+                        <div class="form-group">
+                            <label class="form-label">Your Projects</label>
+                            <div class="projects-container" id="projectsContainer">
+                                <!-- Projects will be added here -->
+                            </div>
+                            <button class="btn btn-primary" onclick="addProjectField()">Add Project</button>
+                        </div>
+                    </div>
+                    
+                    <div id="contact" class="tab-content">
+                        <div class="form-group">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" id="email" class="form-control" placeholder="your.email@example.com">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="phone" class="form-label">Phone</label>
+                            <input type="tel" id="phone" class="form-control" placeholder="+1 (123) 456-7890">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="website" class="form-label">Website</label>
+                            <input type="url" id="website" class="form-control" placeholder="https://yourwebsite.com">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="linkedin" class="form-label">LinkedIn</label>
+                            <input type="url" id="linkedin" class="form-control" placeholder="https://linkedin.com/in/yourprofile">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="github" class="form-label">GitHub</label>
+                            <input type="url" id="github" class="form-control" placeholder="https://github.com/yourusername">
+                        </div>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button class="btn btn-secondary" onclick="showHomePage()">Cancel</button>
+                        <button class="btn btn-success" onclick="saveProfile()">Save Profile</button>
+                    </div>
+                    
+                    <div class="form-group" style="margin-top: 40px;">
+                        <label class="form-label">Profile Data</label>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn btn-secondary" onclick="exportProfile()">Export Profile</button>
+                            <button class="btn btn-secondary" onclick="importProfile()">Import Profile</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile View Page -->
+            <div id="profileViewPage" style="display: none;" class="fade-in">
+                <div class="profile-view">
+                    <div class="profile-view-cover" id="profileViewCover">
+                        <!-- Cover image will be set as background -->
+                    </div>
+                    <img id="profileViewPic" class="profile-view-pic" src="https://via.placeholder.com/120" alt="Profile Picture">
+                    
+                    <div class="profile-view-content">
+                        <div class="profile-view-header">
+                            <div>
+                                <h1 class="profile-view-name" id="profileViewName">John Doe</h1>
+                                <h2 class="profile-view-title" id="profileViewTitle">Software Developer</h2>
+                            </div>
+                            <div id="profileActions" style="display: none;">
+                                <button class="btn btn-primary" onclick="editCurrentProfile()">Edit Profile</button>
+                            </div>
+                        </div>
+                        
+                        <p class="profile-view-bio" id="profileViewBio">This is a sample bio that tells about the person and their professional background.</p>
+                        
+                        <div class="contact-info" id="profileViewContact">
+                            <!-- Contact info will be added here -->
+                        </div>
+                        
+                        <h3 class="section-title">Skills</h3>
+                        <div class="profile-skills" id="profileViewSkills">
+                            <!-- Skills will be added here -->
+                        </div>
+                        
+                        <h3 class="section-title">Projects</h3>
+                        <div class="projects-list" id="profileViewProjects">
+                            <!-- Projects will be added here -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 30px;">
+                    <button class="btn btn-secondary" onclick="showHomePage()">Back to Profiles</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Import/Export Modal -->
+    <div class="modal" id="importExportModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Modal Title</h3>
+                <button class="close-modal" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Content will be added here -->
+            </div>
+            <div class="modal-footer" id="modalFooter" style="margin-top: 20px; text-align: right;">
+                <!-- Buttons will be added here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let currentUserId = localStorage.getItem('currentUserId');
+        let profiles = JSON.parse(localStorage.getItem('profiles')) || [];
+        let editingProfileId = null;
+        let isDarkMode = localStorage.getItem('darkMode') === 'true';
+
+        // DOM elements
+        const mainContent = document.getElementById('mainContent');
+        const homePage = document.getElementById('homePage');
+        const editProfilePage = document.getElementById('editProfilePage');
+        const profileViewPage = document.getElementById('profileViewPage');
+        const profilesGrid = document.getElementById('profilesGrid');
+        const myProfileLink = document.getElementById('myProfileLink');
+        const themeToggle = document.getElementById('themeToggle');
+        const profilePicPreview = document.getElementById('profilePicPreview');
+        const coverPicPreview = document.getElementById('coverPicPreview');
+        const profilePicUpload = document.getElementById('profilePicUpload');
+        const coverPicUpload = document.getElementById('coverPicUpload');
+        const skillsContainer = document.getElementById('skillsContainer');
+        const projectsContainer = document.getElementById('projectsContainer');
+        const importExportModal = document.getElementById('importExportModal');
+
+        // Initialize the app
+        function init() {
+            loadProfiles();
+            setupEventListeners();
+            applyTheme();
+            
+            if (currentUserId) {
+                myProfileLink.style.display = 'inline';
+            }
+        }
+
+        // Set up event listeners
+        function setupEventListeners() {
+            // Theme toggle
+            themeToggle.addEventListener('click', toggleTheme);
+            
+            // Image uploads
+            profilePicUpload.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        profilePicPreview.src = event.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            coverPicUpload.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        coverPicPreview.src = event.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        // Theme functions
+        function toggleTheme() {
+            isDarkMode = !isDarkMode;
+            localStorage.setItem('darkMode', isDarkMode);
+            applyTheme();
+        }
+
+        function applyTheme() {
+            if (isDarkMode) {
+                document.body.classList.add('dark-mode');
+                themeToggle.textContent = '☀️';
+            } else {
+                document.body.classList.remove('dark-mode');
+                themeToggle.textContent = '🌓';
+            }
+        }
+
+        // Page navigation functions
+        function showHomePage() {
+            homePage.style.display = 'block';
+            editProfilePage.style.display = 'none';
+            profileViewPage.style.display = 'none';
+            loadProfiles();
+        }
+
+        function showCreateProfilePage() {
+            editingProfileId = null;
+            resetEditForm();
+            homePage.style.display = 'none';
+            editProfilePage.style.display = 'block';
+            profileViewPage.style.display = 'none';
+            switchTab('basicInfo');
+        }
+
+        function showProfilePage(profileId) {
+            const profile = profiles.find(p => p.id === profileId);
+            if (!profile) return;
+
+            // Set profile data
+            document.getElementById('profileViewName').textContent = profile.fullName || 'No Name';
+            document.getElementById('profileViewTitle').textContent = profile.jobTitle || '';
+            document.getElementById('profileViewBio').textContent = profile.bio || 'No bio provided.';
+            
+            // Set profile picture
+            const profilePic = document.getElementById('profileViewPic');
+            profilePic.src = profile.profilePic || 'https://via.placeholder.com/120';
+            
+            // Set cover photo
+            const coverDiv = document.getElementById('profileViewCover');
+            if (profile.coverPic) {
+                coverDiv.style.backgroundImage = `url(${profile.coverPic})`;
+                coverDiv.style.backgroundSize = 'cover';
+                coverDiv.style.backgroundPosition = 'center';
+            } else {
+                coverDiv.style.backgroundImage = '';
+                coverDiv.style.backgroundColor = 'var(--primary-color)';
+            }
+            
+            // Set contact info
+            const contactContainer = document.getElementById('profileViewContact');
+            contactContainer.innerHTML = '';
+            
+            if (profile.email) {
+                contactContainer.appendChild(createContactItem('✉️', 'Email', profile.email, `mailto:${profile.email}`));
+            }
+            if (profile.phone) {
+                contactContainer.appendChild(createContactItem('📱', 'Phone', profile.phone, `tel:${profile.phone}`));
+            }
+            if (profile.website) {
+                contactContainer.appendChild(createContactItem('🌐', 'Website', profile.website, profile.website));
+            }
+            if (profile.linkedin) {
+                contactContainer.appendChild(createContactItem('🔗', 'LinkedIn', 'View Profile', profile.linkedin));
+            }
+            if (profile.github) {
+                contactContainer.appendChild(createContactItem('💻', 'GitHub', 'View Profile', profile.github));
+            }
+            
+            // Set skills
+            const skillsContainer = document.getElementById('profileViewSkills');
+            skillsContainer.innerHTML = '';
+            
+            if (profile.skills && profile.skills.length > 0) {
+                profile.skills.forEach(skill => {
+                    const skillTag = document.createElement('span');
+                    skillTag.className = 'skill-tag';
+                    skillTag.textContent = skill;
+                    skillsContainer.appendChild(skillTag);
+                });
+            } else {
+                skillsContainer.innerHTML = '<p>No skills added yet.</p>';
+            }
+            
+            // Set projects
+            const projectsContainer = document.getElementById('profileViewProjects');
+            projectsContainer.innerHTML = '';
+            
+            if (profile.projects && profile.projects.length > 0) {
+                profile.projects.forEach(project => {
+                    const projectCard = document.createElement('div');
+                    projectCard.className = 'project-card';
+                    
+                    const title = document.createElement('h3');
+                    title.className = 'project-title';
+                    title.textContent = project.title || 'Untitled Project';
+                    
+                    const desc = document.createElement('p');
+                    desc.textContent = project.description || 'No description provided.';
+                    
+                    const link = document.createElement('a');
+                    link.className = 'project-link';
+                    link.textContent = 'View Project →';
+                    link.href = project.link || '#';
+                    link.target = '_blank';
+                    
+                    projectCard.appendChild(title);
+                    projectCard.appendChild(desc);
+                    if (project.link) {
+                        projectCard.appendChild(link);
+                    }
+                    
+                    projectsContainer.appendChild(projectCard);
+                });
+            } else {
+                projectsContainer.innerHTML = '<p>No projects added yet.</p>';
+            }
+            
+            // Show edit button if it's the current user's profile
+            const profileActions = document.getElementById('profileActions');
+            if (profileId === currentUserId) {
+                profileActions.style.display = 'block';
+            } else {
+                profileActions.style.display = 'none';
+            }
+            
+            homePage.style.display = 'none';
+            editProfilePage.style.display = 'none';
+            profileViewPage.style.display = 'block';
+        }
+
+        function showMyProfile() {
+            if (currentUserId) {
+                showProfilePage(currentUserId);
+            } else {
+                showCreateProfilePage();
+            }
+        }
+
+        function editCurrentProfile() {
+            if (!currentUserId) return;
+            
+            const profile = profiles.find(p => p.id === currentUserId);
+            if (!profile) return;
+            
+            editingProfileId = profile.id;
+            populateEditForm(profile);
+            homePage.style.display = 'none';
+            editProfilePage.style.display = 'block';
+            profileViewPage.style.display = 'none';
+            switchTab('basicInfo');
+        }
+
+        // Profile CRUD functions
+        function loadProfiles() {
+            profilesGrid.innerHTML = '';
+            
+            if (profiles.length === 0) {
+                profilesGrid.innerHTML = '<p>No profiles found. Be the first to create one!</p>';
+                return;
+            }
+            
+            profiles.forEach(profile => {
+                const profileCard = document.createElement('div');
+                profileCard.className = 'profile-card';
+                profileCard.onclick = () => showProfilePage(profile.id);
+                
+                const cover = document.createElement('div');
+                cover.className = 'profile-cover';
+                if (profile.coverPic) {
+                    cover.style.backgroundImage = `url(${profile.coverPic})`;
+                    cover.style.backgroundSize = 'cover';
+                    cover.style.backgroundPosition = 'center';
+                }
+                
+                const pic = document.createElement('img');
+                pic.className = 'profile-pic';
+                pic.src = profile.profilePic || 'https://via.placeholder.com/80';
+                pic.alt = profile.fullName || 'Profile Picture';
+                
+                const content = document.createElement('div');
+                content.className = 'profile-content';
+                
+                const name = document.createElement('h3');
+                name.className = 'profile-name';
+                name.textContent = profile.fullName || 'No Name';
+                
+                const bio = document.createElement('p');
+                bio.className = 'profile-bio';
+                bio.textContent = profile.jobTitle || 'No title';
+                
+                const skills = document.createElement('div');
+                skills.className = 'profile-skills';
+                
+                if (profile.skills && profile.skills.length > 0) {
+                    profile.skills.slice(0, 3).forEach(skill => {
+                        const skillTag = document.createElement('span');
+                        skillTag.className = 'skill-tag';
+                        skillTag.textContent = skill;
+                        skills.appendChild(skillTag);
+                    });
+                    
+                    if (profile.skills.length > 3) {
+                        const moreTag = document.createElement('span');
+                        moreTag.className = 'skill-tag';
+                        moreTag.textContent = `+${profile.skills.length - 3} more`;
+                        skills.appendChild(moreTag);
+                    }
+                } else {
+                    skills.innerHTML = '<span class="skill-tag">No skills</span>';
+                }
+                
+                const link = document.createElement('a');
+                link.className = 'profile-link';
+                link.textContent = 'View Profile →';
+                link.href = '#';
+                link.onclick = (e) => {
+                    e.stopPropagation();
+                    showProfilePage(profile.id);
+                };
+                
+                content.appendChild(name);
+                content.appendChild(bio);
+                content.appendChild(skills);
+                content.appendChild(link);
+                
+                profileCard.appendChild(cover);
+                profileCard.appendChild(pic);
+                profileCard.appendChild(content);
+                
+                profilesGrid.appendChild(profileCard);
+            });
+        }
+
+        function saveProfile() {
+            const fullName = document.getElementById('fullName').value.trim();
+            const jobTitle = document.getElementById('jobTitle').value.trim();
+            const bio = document.getElementById('bio').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const website = document.getElementById('website').value.trim();
+            const linkedin = document.getElementById('linkedin').value.trim();
+            const github = document.getElementById('github').value.trim();
+            
+            // Get skills
+            const skillElements = skillsContainer.querySelectorAll('.skill-tag');
+            const skills = Array.from(skillElements).map(el => el.textContent);
+            
+            // Get projects
+            const projectElements = projectsContainer.querySelectorAll('.project-input-group');
+            const projects = Array.from(projectElements).map(el => {
+                return {
+                    title: el.querySelector('.project-title-input').value.trim(),
+                    description: el.querySelector('.project-desc-input').value.trim(),
+                    link: el.querySelector('.project-link-input').value.trim()
+                };
+            }).filter(proj => proj.title || proj.description || proj.link);
+            
+            // Get images
+            const profilePic = profilePicPreview.src;
+            const coverPic = coverPicPreview.src;
+            
+            if (editingProfileId) {
+                // Update existing profile
+                const index = profiles.findIndex(p => p.id === editingProfileId);
+                if (index !== -1) {
+                    profiles[index] = {
+                        ...profiles[index],
+                        fullName,
+                        jobTitle,
+                        bio,
+                        email,
+                        phone,
+                        website,
+                        linkedin,
+                        github,
+                        skills,
+                        projects,
+                        profilePic,
+                        coverPic
+                    };
+                }
+            } else {
+                // Create new profile
+                const newProfile = {
+                    id: generateId(),
+                    fullName,
+                    jobTitle,
+                    bio,
+                    email,
+                    phone,
+                    website,
+                    linkedin,
+                    github,
+                    skills,
+                    projects,
+                    profilePic,
+                    coverPic,
+                    createdAt: new Date().toISOString()
+                };
+                
+                profiles.push(newProfile);
+                currentUserId = newProfile.id;
+                localStorage.setItem('currentUserId', currentUserId);
+                myProfileLink.style.display = 'inline';
+            }
+            
+            localStorage.setItem('profiles', JSON.stringify(profiles));
+            showProfilePage(editingProfileId || currentUserId);
+        }
+
+        function resetEditForm() {
+            document.getElementById('fullName').value = '';
+            document.getElementById('jobTitle').value = '';
+            document.getElementById('bio').value = '';
+            document.getElementById('email').value = '';
+            document.getElementById('phone').value = '';
+            document.getElementById('website').value = '';
+            document.getElementById('linkedin').value = '';
+            document.getElementById('github').value = '';
+            
+            profilePicPreview.src = 'https://via.placeholder.com/150';
+            coverPicPreview.src = 'https://via.placeholder.com/1200x300';
+            
+            skillsContainer.innerHTML = '';
+            projectsContainer.innerHTML = '';
+        }
+
+        function populateEditForm(profile) {
+            document.getElementById('fullName').value = profile.fullName || '';
+            document.getElementById('jobTitle').value = profile.jobTitle || '';
+            document.getElementById('bio').value = profile.bio || '';
+            document.getElementById('email').value = profile.email || '';
+            document.getElementById('phone').value = profile.phone || '';
+            document.getElementById('website').value = profile.website || '';
+            document.getElementById('linkedin').value = profile.linkedin || '';
+            document.getElementById('github').value = profile.github || '';
+            
+            profilePicPreview.src = profile.profilePic || 'https://via.placeholder.com/150';
+            coverPicPreview.src = profile.coverPic || 'https://via.placeholder.com/1200x300';
+            
+            // Populate skills
+            skillsContainer.innerHTML = '';
+            if (profile.skills && profile.skills.length > 0) {
+                profile.skills.forEach(skill => {
+                    addSkillToContainer(skill);
+                });
+            }
+            
+            // Populate projects
+            projectsContainer.innerHTML = '';
+            if (profile.projects && profile.projects.length > 0) {
+                profile.projects.forEach(project => {
+                    addProjectField(project.title, project.description, project.link);
+                });
+            }
+        }
+
+        // Skill functions
+        function addSkill() {
+            const skillInput = document.getElementById('newSkill');
+            const skill = skillInput.value.trim();
+            
+            if (skill) {
+                addSkillToContainer(skill);
+                skillInput.value = '';
+            }
+        }
+
+        function addSkillToContainer(skill) {
+            const skillTag = document.createElement('span');
+            skillTag.className = 'skill-tag';
+            skillTag.textContent = skill;
+            
+            const removeBtn = document.createElement('button');
+            removeBtn.innerHTML = '&times;';
+            removeBtn.style.marginLeft = '5px';
+            removeBtn.style.background = 'none';
+            removeBtn.style.border = 'none';
+            removeBtn.style.color = 'inherit';
+            removeBtn.style.cursor = 'pointer';
+            removeBtn.onclick = function(e) {
+                e.stopPropagation();
+                skillTag.remove();
+            };
+            
+            skillTag.appendChild(removeBtn);
+            skillsContainer.appendChild(skillTag);
+        }
+
+        // Project functions
+        function addProjectField(title = '', description = '', link = '') {
+            const projectGroup = document.createElement('div');
+            projectGroup.className = 'project-input-group';
+            
+            const titleInput = document.createElement('input');
+            titleInput.type = 'text';
+            titleInput.className = 'form-control project-title-input';
+            titleInput.placeholder = 'Project Title';
+            titleInput.value = title;
+            
+            const descInput = document.createElement('textarea');
+            descInput.className = 'form-control project-desc-input';
+            descInput.placeholder = 'Project Description';
+            descInput.value = description;
+            descInput.style.marginTop = '10px';
+            descInput.style.minHeight = '80px';
+            
+            const linkInput = document.createElement('input');
+            linkInput.type = 'url';
+            linkInput.className = 'form-control project-link-input';
+            linkInput.placeholder = 'Project URL (optional)';
+            linkInput.value = link;
+            linkInput.style.marginTop = '10px';
+            
+            const removeBtn = document.createElement('button');
+            removeBtn.className = 'btn btn-danger';
+            removeBtn.textContent = 'Remove Project';
+            removeBtn.style.marginTop = '10px';
+            removeBtn.onclick = function() {
+                projectGroup.remove();
+            };
+            
+            projectGroup.appendChild(titleInput);
+            projectGroup.appendChild(descInput);
+            projectGroup.appendChild(linkInput);
+            projectGroup.appendChild(removeBtn);
+            
+            projectsContainer.appendChild(projectGroup);
+        }
+
+        // Helper functions
+        function generateId() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+
+        function createContactItem(icon, label, text, href) {
+            const container = document.createElement('div');
+            container.className = 'contact-item';
+            
+            const iconSpan = document.createElement('span');
+            iconSpan.textContent = icon;
+            
+            const labelSpan = document.createElement('span');
+            labelSpan.textContent = `${label}: `;
+            labelSpan.style.fontWeight = '600';
+            
+            const textSpan = document.createElement('a');
+            textSpan.href = href;
+            textSpan.target = '_blank';
+            textSpan.textContent = text;
+            textSpan.style.textDecoration = 'none';
+            textSpan.style.color = 'var(--primary-color)';
+            
+            container.appendChild(iconSpan);
+            container.appendChild(labelSpan);
+            container.appendChild(textSpan);
+            
+            return container;
+        }
+
+        function switchTab(tabId) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Deactivate all tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Activate selected tab
+            document.getElementById(tabId).classList.add('active');
+            document.querySelector(`.tab[onclick="switchTab('${tabId}')"]`).classList.add('active');
+        }
+
+        // Import/Export functions
+        function exportProfile() {
+            if (!editingProfileId && !currentUserId) return;
+            
+            const profileId = editingProfileId || currentUserId;
+            const profile = profiles.find(p => p.id === profileId);
+            
+            if (!profile) return;
+            
+            const profileJson = JSON.stringify(profile, null, 2);
+            
+            // Show modal with export options
+            document.getElementById('modalTitle').textContent = 'Export Profile';
+            document.getElementById('modalBody').innerHTML = `
+                <textarea id="exportJson" class="form-control" style="min-height: 200px; font-family: monospace;" readonly>${profileJson}</textarea>
+                <p style="margin-top: 10px;">Copy this JSON to save your profile data.</p>
+            `;
+            
+            document.getElementById('modalFooter').innerHTML = `
+                <button class="btn btn-secondary" onclick="closeModal()">Close</button>
+                <button class="btn btn-primary" onclick="copyExportJson()">Copy to Clipboard</button>
+                <button class="btn btn-success" onclick="downloadExportJson()">Download as File</button>
+            `;
+            
+            importExportModal.style.display = 'flex';
+        }
+
+        function importProfile() {
+            document.getElementById('modalTitle').textContent = 'Import Profile';
+            document.getElementById('modalBody').innerHTML = `
+                <textarea id="importJson" class="form-control" style="min-height: 200px; font-family: monospace;" placeholder="Paste your profile JSON here"></textarea>
+                <p style="margin-top: 10px; color: #e74c3c; font-size: 0.9rem;">Warning: Importing will overwrite your current profile data.</p>
+            `;
+            
+            document.getElementById('modalFooter').innerHTML = `
+                <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="confirmImport()">Import Profile</button>
+            `;
+            
+            importExportModal.style.display = 'flex';
+        }
+
+        function copyExportJson() {
+            const exportJson = document.getElementById('exportJson');
+            exportJson.select();
+            document.execCommand('copy');
+            alert('Profile JSON copied to clipboard!');
+        }
+
+        function downloadExportJson() {
+            const exportJson = document.getElementById('exportJson').value;
+            const blob = new Blob([exportJson], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'profile-export.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function confirmImport() {
+            const importJson = document.getElementById('importJson').value.trim();
+            
+            if (!importJson) {
+                alert('Please paste your profile JSON data.');
+                return;
+            }
+            
+            try {
+                const profile = JSON.parse(importJson);
+                
+                if (!profile.id) {
+                    alert('Invalid profile data: Missing ID');
+                    return;
+                }
+                
+                // Check if this is an existing profile
+                const existingIndex = profiles.findIndex(p => p.id === profile.id);
+                
+                if (existingIndex !== -1) {
+                    // Update existing profile
+                    profiles[existingIndex] = profile;
+                } else {
+                    // Add new profile
+                    profiles.push(profile);
+                }
+                
+                localStorage.setItem('profiles', JSON.stringify(profiles));
+                
+                if (profile.id === currentUserId || !currentUserId) {
+                    currentUserId = profile.id;
+                    localStorage.setItem('currentUserId', currentUserId);
+                    myProfileLink.style.display = 'inline';
+                }
+                
+                closeModal();
+                
+                if (editingProfileId) {
+                    populateEditForm(profile);
+                } else {
+                    showProfilePage(profile.id);
+                }
+                
+                alert('Profile imported successfully!');
+            } catch (e) {
+                alert('Error parsing JSON: ' + e.message);
+            }
+        }
+
+        function closeModal() {
+            importExportModal.style.display = 'none';
+        }
+
+        // Initialize particles.js for the gaming background effect
+        function initParticles() {
+            particlesJS("particles-js", {
+                "particles": {
+                    "number": {
+                        "value": 80,
+                        "density": {
+                            "enable": true,
+                            "value_area": 800
+                        }
+                    },
+                    "color": {
+                        "value": "#ffffff"
+                    },
+                    "shape": {
+                        "type": "circle",
+                        "stroke": {
+                            "width": 0,
+                            "color": "#000000"
+                        },
+                        "polygon": {
+                            "nb_sides": 5
+                        }
+                    },
+                    "opacity": {
+                        "value": 0.5,
+                        "random": false,
+                        "anim": {
+                            "enable": false,
+                            "speed": 1,
+                            "opacity_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "size": {
+                        "value": 3,
+                        "random": true,
+                        "anim": {
+                            "enable": false,
+                            "speed": 40,
+                            "size_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "line_linked": {
+                        "enable": true,
+                        "distance": 150,
+                        "color": "#ffffff",
+                        "opacity": 0.4,
+                        "width": 1
+                    },
+                    "move": {
+                        "enable": true,
+                        "speed": 2,
+                        "direction": "none",
+                        "random": false,
+                        "straight": false,
+                        "out_mode": "out",
+                        "bounce": false,
+                        "attract": {
+                            "enable": false,
+                            "rotateX": 600,
+                            "rotateY": 1200
+                        }
+                    }
+                },
+                "interactivity": {
+                    "detect_on": "canvas",
+                    "events": {
+                        "onhover": {
+                            "enable": true,
+                            "mode": "grab"
+                        },
+                        "onclick": {
+                            "enable": true,
+                            "mode": "push"
+                        },
+                        "resize": true
+                    },
+                    "modes": {
+                        "grab": {
+                            "distance": 140,
+                            "line_linked": {
+                                "opacity": 1
+                            }
+                        },
+                        "bubble": {
+                            "distance": 400,
+                            "size": 40,
+                            "duration": 2,
+                            "opacity": 8,
+                            "speed": 3
+                        },
+                        "repulse": {
+                            "distance": 200,
+                            "duration": 0.4
+                        },
+                        "push": {
+                            "particles_nb": 4
+                        },
+                        "remove": {
+                            "particles_nb": 2
+                        }
+                    }
+                },
+                "retina_detect": true
+            });
+        }
+
+        // Initialize the app when the DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            init();
+            initParticles();
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+</body>
+</html>

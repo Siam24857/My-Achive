@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multilingual PDF Generator</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=SolaimanLipi&display=swap">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <style>
+        /* Particle Background */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 30px;
+            background: rgba(15, 15, 26, 0.85);
+            border-radius: 10px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(100, 200, 255, 0.2);
+            color: #e0e0e0;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Cyberpunk UI Elements */
+        .btn-cyber {
+            background: transparent;
+            color: #64c8ff;
+            border: 1px solid #64c8ff;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(100, 200, 255, 0.3);
+        }
+
+        .btn-cyber:hover {
+            background: rgba(100, 200, 255, 0.1);
+            box-shadow: 0 0 20px rgba(100, 200, 255, 0.5);
+        }
+
+        .glow {
+            text-shadow: 0 0 10px rgba(100, 200, 255, 0.7);
+        }
+
+        /* Editor Styles */
+        #editor {
+            min-height: 400px;
+            padding: 20px;
+            background: rgba(30, 30, 50, 0.7);
+            border: 1px solid rgba(100, 200, 255, 0.3);
+            color: #ffffff;
+            font-size: 16px;
+            line-height: 1.6;
+            border-radius: 5px;
+        }
+
+        /* Include all previous CSS styles */
+        .language-switcher {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 15px;
+            gap: 5px;
+        }
+
+        .options-panel {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(30, 30, 50, 0.5);
+            border-radius: 5px;
+        }
+
+        .option-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .option-group label {
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 14px;
+            color: #64c8ff;
+        }
+
+        .option-group select, .option-group input {
+            padding: 8px;
+            background: rgba(30, 30, 50, 0.7);
+            border: 1px solid rgba(100, 200, 255, 0.3);
+            border-radius: 4px;
+            font-size: 14px;
+            color: #ffffff;
+        }
+
+        .toolbar {
+            background: rgba(30, 30, 50, 0.7);
+            padding: 8px;
+            border-bottom: 1px solid rgba(100, 200, 255, 0.3);
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+            border-radius: 5px 5px 0 0;
+        }
+
+        .toolbar button {
+            padding: 5px 10px;
+            background: rgba(30, 30, 50, 0.7);
+            border: 1px solid rgba(100, 200, 255, 0.3);
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #ffffff;
+        }
+
+        .toolbar button:hover {
+            background: rgba(100, 200, 255, 0.2);
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        .modal-content {
+            background: rgba(15, 15, 26, 0.9);
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid rgba(100, 200, 255, 0.3);
+            width: 80%;
+            max-width: 900px;
+            border-radius: 5px;
+            position: relative;
+            color: #ffffff;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #64c8ff;
+        }
+
+        /* Language specific styles */
+        .bangla-font {
+            font-family: 'SolaimanLipi', Arial, sans-serif;
+            direction: rtl;
+            unicode-bidi: bidi-override;
+        }
+
+        .mixed-font {
+            font-family: 'SolaimanLipi', Arial, sans-serif;
+        }
+
+        .rtl-text {
+            direction: rtl;
+            unicode-bidi: bidi-override;
+            display: inline-block;
+        }
+
+        .ltr-text {
+            direction: ltr;
+            display: inline-block;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .options-panel {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Particle Background -->
+    <div id="particles-js"></div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="language-switcher">
+            <button id="enBtn" class="btn-cyber active glow">English</button>
+            <button id="bnBtn" class="btn-cyber glow">বাংলা</button>
+            <button id="mixBtn" class="btn-cyber glow">Mixed</button>
+        </div>
+        
+        <h1 id="appTitle" class="glow">Multilingual PDF Generator</h1>
+        
+        <div class="options-panel">
+            <div class="option-group">
+                <label id="pageSizeLabel" for="pageSize">Page Size:</label>
+                <select id="pageSize">
+                    <option value="a4">A4</option>
+                    <option value="letter">Letter</option>
+                    <option value="legal">Legal</option>
+                </select>
+            </div>
+            
+            <div class="option-group">
+                <label id="orientationLabel" for="orientation">Orientation:</label>
+                <select id="orientation">
+                    <option value="portrait">Portrait</option>
+                    <option value="landscape">Landscape</option>
+                </select>
+            </div>
+            
+            <div class="option-group">
+                <label id="fontSizeLabel" for="fontSize">Font Size:</label>
+                <select id="fontSize">
+                    <option value="10">10pt</option>
+                    <option value="12" selected>12pt</option>
+                    <option value="14">14pt</option>
+                    <option value="16">16pt</option>
+                    <option value="18">18pt</option>
+                    <option value="20">20pt</option>
+                </select>
+            </div>
+            
+            <div class="option-group">
+                <label id="fontFamilyLabel" for="fontFamily">Font Family:</label>
+                <select id="fontFamily">
+                    <option value="Arial">Arial</option>
+                    <option value="Times New Roman">Times New Roman</option>
+                    <option value="SolaimanLipi" selected>SolaimanLipi</option>
+                    <option value="Kalpurush">Kalpurush</option>
+                    <option value="Siyam Rupali">Siyam Rupali</option>
+                </select>
+            </div>
+            
+            <div class="option-group">
+                <label id="marginLabel" for="margin">Margin (mm):</label>
+                <input type="number" id="margin" min="0" max="50" value="20">
+            </div>
+            
+            <div class="option-group">
+                <label id="lineHeightLabel" for="lineHeight">Line Height:</label>
+                <input type="number" id="lineHeight" min="1" max="3" step="0.1" value="1.5">
+            </div>
+            
+            <div class="option-group">
+                <label id="fileNameLabel" for="fileName">PDF File Name:</label>
+                <input type="text" id="fileName" placeholder="Enter file name" value="document">
+            </div>
+        </div>
+        
+        <div class="editor-container">
+            <div class="toolbar">
+                <button id="boldBtn" title="Bold"><b>B</b></button>
+                <button id="italicBtn" title="Italic"><i>I</i></button>
+                <button id="underlineBtn" title="Underline"><u>U</u></button>
+                <button id="alignLeftBtn" title="Align Left">&#xf036;</button>
+                <button id="alignCenterBtn" title="Align Center">&#xf037;</button>
+                <button id="alignRightBtn" title="Align Right">&#xf038;</button>
+                <button id="insertImageBtn" title="Insert Image">&#xf03e;</button>
+                <button id="languageSwitchBtn" title="Switch Language">EN/BN</button>
+                <button id="clearBtn" title="Clear All">Clear</button>
+            </div>
+            <div id="editor" contenteditable="true" spellcheck="true" placeholder="Type your text here..."></div>
+        </div>
+        
+        <div class="action-buttons">
+            <button id="generatePdfBtn" class="btn-cyber">Generate PDF</button>
+            <button id="previewPdfBtn" class="btn-cyber">Preview PDF</button>
+            <button id="saveTemplateBtn" class="btn-cyber">Save as Template</button>
+            <button id="loadTemplateBtn" class="btn-cyber">Load Template</button>
+        </div>
+        
+        <div id="previewModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <iframe id="pdfPreview" style="width:100%; height:80vh; border:none;"></iframe>
+            </div>
+        </div>
+        
+        <div id="templatesModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2 id="templatesTitle">Saved Templates</h2>
+                <div id="templatesList"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Language texts
+        const translations = {
+            en: {
+                appTitle: "Multilingual PDF Generator",
+                pageSizeLabel: "Page Size:",
+                orientationLabel: "Orientation:",
+                fontSizeLabel: "Font Size:",
+                fontFamilyLabel: "Font Family:",
+                marginLabel: "Margin (mm):",
+                lineHeightLabel: "Line Height:",
+                fileNameLabel: "PDF File Name:",
+                generatePdfBtn: "Generate PDF",
+                previewPdfBtn: "Preview PDF",
+                saveTemplateBtn: "Save as Template",
+                loadTemplateBtn: "Load Template",
+                templatesTitle: "Saved Templates",
+                editorPlaceholder: "Type your text here...",
+                templateNamePrompt: "Enter a name for this template:",
+                templateSaved: "Template saved successfully!",
+                noTemplates: "No saved templates found.",
+                switchToBangla: "Switch to Bangla",
+                switchToEnglish: "Switch to English",
+                mixedMode: "Mixed Mode"
+            },
+            bn: {
+                appTitle: "মাল্টিলিঙ্গুয়াল পিডিএফ জেনারেটর",
+                pageSizeLabel: "পৃষ্ঠার সাইজ:",
+                orientationLabel: "অভিমুখ:",
+                fontSizeLabel: "ফন্ট সাইজ:",
+                fontFamilyLabel: "ফন্ট ফ্যামিলি:",
+                marginLabel: "মার্জিন (মিমি):",
+                lineHeightLabel: "লাইন উচ্চতা:",
+                fileNameLabel: "পিডিএফ ফাইলের নাম:",
+                generatePdfBtn: "পিডিএফ তৈরি করুন",
+                previewPdfBtn: "পিডিএফ প্রিভিউ",
+                saveTemplateBtn: "টেমপ্লেট হিসেবে সেভ করুন",
+                loadTemplateBtn: "টেমপ্লেট লোড করুন",
+                templatesTitle: "সংরক্ষিত টেমপ্লেটসমূহ",
+                editorPlaceholder: "এখানে আপনার টেক্সট লিখুন...",
+                templateNamePrompt: "এই টেমপ্লেটের জন্য একটি নাম দিন:",
+                templateSaved: "টেমপ্লেট সফলভাবে সংরক্ষিত হয়েছে!",
+                noTemplates: "কোন সংরক্ষিত টেমপ্লেট পাওয়া যায়নি।",
+                switchToBangla: "বাংলায় স্যুইচ করুন",
+                switchToEnglish: "ইংরেজিতে স্যুইচ করুন",
+                mixedMode: "মিশ্র মোড"
+            }
+        };
+
+        // Current language and editor mode
+        let currentLanguage = 'en';
+        let editorMode = 'mixed';
+        let currentCursorPosition = 0;
+
+        // Wait for DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize jsPDF
+            const { jsPDF } = window.jspdf;
+            
+            // Initialize particle.js background
+            particlesJS('particles-js', {
+                particles: {
+                    number: { value: 80, density: { enable: true, value_area: 800 } },
+                    color: { value: "#64c8ff" },
+                    shape: { type: "circle" },
+                    opacity: { value: 0.5, random: true },
+                    size: { value: 3, random: true },
+                    line_linked: { enable: true, distance: 150, color: "#64c8ff", opacity: 0.4, width: 1 },
+                    move: { enable: true, speed: 1, direction: "none", random: true }
+                },
+                interactivity: {
+                    detect_on: "canvas",
+                    events: {
+                        onhover: { enable: true, mode: "grab" },
+                        onclick: { enable: true, mode: "push" }
+                    }
+                }
+            });
+
+            // DOM elements
+            const editor = document.getElementById('editor');
+            const generatePdfBtn = document.getElementById('generatePdfBtn');
+            const previewPdfBtn = document.getElementById('previewPdfBtn');
+            const saveTemplateBtn = document.getElementById('saveTemplateBtn');
+            const loadTemplateBtn = document.getElementById('loadTemplateBtn');
+            const previewModal = document.getElementById('previewModal');
+            const templatesModal = document.getElementById('templatesModal');
+            const pdfPreview = document.getElementById('pdfPreview');
+            const templatesList = document.getElementById('templatesList');
+            const closeButtons = document.querySelectorAll('.close');
+            const enBtn = document.getElementById('enBtn');
+            const bnBtn = document.getElementById('bnBtn');
+            const mixBtn = document.getElementById('mixBtn');
+            const languageSwitchBtn = document.getElementById('languageSwitchBtn');
+            
+            // Toolbar buttons
+            const boldBtn = document.getElementById('boldBtn');
+            const italicBtn = document.getElementById('italicBtn');
+            const underlineBtn = document.getElementById('underlineBtn');
+            const alignLeftBtn = document.getElementById('alignLeftBtn');
+            const alignCenterBtn = document.getElementById('alignCenterBtn');
+            const alignRightBtn = document.getElementById('alignRightBtn');
+            const insertImageBtn = document.getElementById('insertImageBtn');
+            const clearBtn = document.getElementById('clearBtn');
+            
+            // Options
+            const pageSizeSelect = document.getElementById('pageSize');
+            const orientationSelect = document.getElementById('orientation');
+            const fontSizeSelect = document.getElementById('fontSize');
+            const fontFamilySelect = document.getElementById('fontFamily');
+            const marginInput = document.getElementById('margin');
+            const lineHeightInput = document.getElementById('lineHeight');
+            const fileNameInput = document.getElementById('fileName');
+            
+            // Language elements
+            const appTitle = document.getElementById('appTitle');
+            const pageSizeLabel = document.getElementById('pageSizeLabel');
+            const orientationLabel = document.getElementById('orientationLabel');
+            const fontSizeLabel = document.getElementById('fontSizeLabel');
+            const fontFamilyLabel = document.getElementById('fontFamilyLabel');
+            const marginLabel = document.getElementById('marginLabel');
+            const lineHeightLabel = document.getElementById('lineHeightLabel');
+            const fileNameLabel = document.getElementById('fileNameLabel');
+            const templatesTitle = document.getElementById('templatesTitle');
+            
+            // Set default font to SolaimanLipi for Bangla support
+            fontFamilySelect.value = 'SolaimanLipi';
+            
+            // Update UI language
+            function updateLanguage(lang) {
+                currentLanguage = lang;
+                const t = translations[lang];
+                
+                // Update text content
+                appTitle.textContent = t.appTitle;
+                pageSizeLabel.textContent = t.pageSizeLabel;
+                orientationLabel.textContent = t.orientationLabel;
+                fontSizeLabel.textContent = t.fontSizeLabel;
+                fontFamilyLabel.textContent = t.fontFamilyLabel;
+                marginLabel.textContent = t.marginLabel;
+                lineHeightLabel.textContent = t.lineHeightLabel;
+                fileNameLabel.textContent = t.fileNameLabel;
+                generatePdfBtn.textContent = t.generatePdfBtn;
+                previewPdfBtn.textContent = t.previewPdfBtn;
+                saveTemplateBtn.textContent = t.saveTemplateBtn;
+                loadTemplateBtn.textContent = t.loadTemplateBtn;
+                templatesTitle.textContent = t.templatesTitle;
+                editor.setAttribute('placeholder', t.editorPlaceholder);
+                
+                // Update language switch button text
+                if (editorMode === 'english') {
+                    languageSwitchBtn.textContent = t.switchToBangla;
+                } else if (editorMode === 'bangla') {
+                    languageSwitchBtn.textContent = t.switchToEnglish;
+                } else {
+                    languageSwitchBtn.textContent = t.mixedMode;
+                }
+                
+                // Update active language button
+                enBtn.classList.remove('active');
+                bnBtn.classList.remove('active');
+                mixBtn.classList.remove('active');
+                
+                if (editorMode === 'english') {
+                    enBtn.classList.add('active');
+                    editor.classList.remove('bangla-font', 'mixed-font');
+                    editor.style.direction = 'ltr';
+                } else if (editorMode === 'bangla') {
+                    bnBtn.classList.add('active');
+                    editor.classList.add('bangla-font');
+                    editor.classList.remove('mixed-font');
+                    editor.style.direction = 'rtl';
+                } else {
+                    mixBtn.classList.add('active');
+                    editor.classList.add('mixed-font');
+                    editor.classList.remove('bangla-font');
+                    editor.style.direction = 'ltr';
+                }
+            }
+            
+            // Language switcher event listeners
+            enBtn.addEventListener('click', () => {
+                editorMode = 'english';
+                updateLanguage(currentLanguage);
+            });
+            
+            bnBtn.addEventListener('click', () => {
+                editorMode = 'bangla';
+                updateLanguage(currentLanguage);
+            });
+            
+            mixBtn.addEventListener('click', () => {
+                editorMode = 'mixed';
+                updateLanguage(currentLanguage);
+            });
+            
+            // Language switch button for mixed mode
+            languageSwitchBtn.addEventListener('click', () => {
+                if (editorMode === 'mixed') {
+                    const selection = window.getSelection();
+                    if (!selection.rangeCount) return;
+                    
+                    const range = selection.getRangeAt(0);
+                    const selectedText = range.toString();
+                    
+                    if (selectedText) {
+                        // Check if the selected text is already wrapped in a span
+                        let parent = range.commonAncestorContainer;
+                        while (parent && parent !== editor) {
+                            if (parent.nodeType === Node.ELEMENT_NODE && 
+                                (parent.classList.contains('rtl-text') || parent.classList.contains('ltr-text'))) {
+                                // Toggle direction
+                                if (parent.classList.contains('rtl-text')) {
+                                    parent.classList.remove('rtl-text');
+                                    parent.classList.add('ltr-text');
+                                    parent.style.direction = 'ltr';
+                                } else {
+                                    parent.classList.remove('ltr-text');
+                                    parent.classList.add('rtl-text');
+                                    parent.style.direction = 'rtl';
+                                }
+                                return;
+                            }
+                            parent = parent.parentNode;
+                        }
+                        
+                        // Create new span for the selection
+                        const span = document.createElement('span');
+                        span.classList.add('rtl-text');
+                        range.surroundContents(span);
+                    }
+                } else {
+                    // Toggle between English and Bangla in non-mixed mode
+                    if (editorMode === 'english') {
+                        editorMode = 'bangla';
+                    } else {
+                        editorMode = 'english';
+                    }
+                    updateLanguage(currentLanguage);
+                }
+            });
+            
+            // Save cursor position
+            editor.addEventListener('keyup', saveCursorPosition);
+            editor.addEventListener('mouseup', saveCursorPosition);
+            
+            function saveCursorPosition() {
+                const selection = window.getSelection();
+                if (selection.rangeCount > 0) {
+                    const range = selection.getRangeAt(0);
+                    const preCaretRange = range.cloneRange();
+                    preCaretRange.selectNodeContents(editor);
+                    preCaretRange.setEnd(range.endContainer, range.endOffset);
+                    currentCursorPosition = preCaretRange.toString().length;
+                }
+            }
+            
+            // Restore cursor position
+            function restoreCursorPosition(pos) {
+                const textNodes = getTextNodes(editor);
+                let charCount = 0;
+                
+                for (const node of textNodes) {
+                    const nextCharCount = charCount + node.length;
+                    
+                    if (pos <= nextCharCount) {
+                        const range = document.createRange();
+                        range.setStart(node, pos - charCount);
+                        range.collapse(true);
+                        
+                        const selection = window.getSelection();
+                        selection.removeAllRanges();
+                        selection.addRange(range);
+                        
+                        editor.focus();
+                        break;
+                    }
+                    
+                    charCount = nextCharCount;
+                }
+            }
+            
+            // Get all text nodes
+            function getTextNodes(node) {
+                let textNodes = [];
+                
+                if (node.nodeType === Node.TEXT_NODE) {
+                    textNodes.push(node);
+                } else {
+                    const children = node.childNodes;
+                    for (let i = 0; i < children.length; i++) {
+                        textNodes = textNodes.concat(getTextNodes(children[i]));
+                    }
+                }
+                
+                return textNodes;
+            }
+            
+            // Formatting functions
+            function formatText(command, value = null) {
+                saveCursorPosition();
+                document.execCommand(command, false, value);
+                restoreCursorPosition(currentCursorPosition);
+            }
+            
+            // Toolbar event listeners
+            boldBtn.addEventListener('click', () => formatText('bold'));
+            italicBtn.addEventListener('click', () => formatText('italic'));
+            underlineBtn.addEventListener('click', () => formatText('underline'));
+            alignLeftBtn.addEventListener('click', () => formatText('justifyLeft'));
+            alignCenterBtn.addEventListener('click', () => formatText('justifyCenter'));
+            alignRightBtn.addEventListener('click', () => formatText('justifyRight'));
+            
+            clearBtn.addEventListener('click', () => {
+                editor.innerHTML = '';
+                editor.focus();
+            });
+            
+            insertImageBtn.addEventListener('click', () => {
+                const url = prompt('Enter the image URL:');
+                if (url) {
+                    formatText('insertImage', url);
+                }
+            });
+            
+            // Generate PDF function with multilingual support
+            async function generatePDF(preview = false) {
+                const pageSize = pageSizeSelect.value;
+                const orientation = orientationSelect.value;
+                const fontSize = fontSizeSelect.value;
+                const fontFamily = fontFamilySelect.value;
+                const margin = parseInt(marginInput.value);
+                const lineHeight = parseFloat(lineHeightInput.value);
+                const fileName = fileNameInput.value || 'document';
+                
+                // For mixed content or Bangla, we'll use html2canvas for better rendering
+                if (editorMode === 'mixed' || editorMode === 'bangla' || fontFamily === 'SolaimanLipi' || 
+                    fontFamily === 'Kalpurush' || fontFamily === 'Siyam Rupali') {
+                    
+                    // Get editor content as HTML
+                    const content = editor.innerHTML;
+                    
+                    // Create a temporary div to hold our content for conversion
+                    const tempDiv = document.createElement('div');
+                    tempDiv.style.width = pageSize === 'a4' ? '210mm' : 
+                                         pageSize === 'letter' ? '216mm' : '356mm';
+                    tempDiv.style.padding = margin + 'mm';
+                    tempDiv.style.fontFamily = fontFamily;
+                    tempDiv.style.fontSize = fontSize + 'pt';
+                    tempDiv.style.lineHeight = lineHeight;
+                    
+                    // Set direction based on mode
+                    if (editorMode === 'bangla') {
+                        tempDiv.style.direction = 'rtl';
+                        tempDiv.style.unicodeBidi = 'bidi-override';
+                    } else {
+                        tempDiv.style.direction = 'ltr';
+                    }
+                    
+                    tempDiv.innerHTML = content;
+                    
+                    // Hide the element and add to body
+                    tempDiv.style.position = 'absolute';
+                    tempDiv.style.left = '-9999px';
+                    document.body.appendChild(tempDiv);
+                    
+                    // Use html2canvas to convert to image
+                    try {
+                        const canvas = await html2canvas(tempDiv, {
+                            scale: 2,
+                            logging: false,
+                            useCORS: true,
+                            allowTaint: true
+                        });
+                        
+                        // Remove the temporary div
+                        document.body.removeChild(tempDiv);
+                        
+                        // Create PDF
+                        const doc = new jsPDF({
+                            orientation: orientation,
+                            unit: 'mm',
+                            format: pageSize
+                        });
+                        
+                        // Convert canvas to image data
+                        const imgData = canvas.toDataURL('image/png');
+                        
+                        // Calculate dimensions
+                        const imgWidth = doc.internal.pageSize.getWidth() - (margin * 2);
+                        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                        
+                        // Add image to PDF
+                        doc.addImage(imgData, 'PNG', margin, margin, imgWidth, imgHeight);
+                        
+                        if (preview) {
+                            // Generate blob for preview
+                            const pdfBlob = doc.output('blob');
+                            const pdfUrl = URL.createObjectURL(pdfBlob);
+                            pdfPreview.src = pdfUrl;
+                            previewModal.style.display = 'block';
+                        } else {
+                            // Save the PDF
+                            doc.save(`${fileName}.pdf`);
+                        }
+                    } catch (error) {
+                        console.error('Error generating PDF:', error);
+                        alert('Error generating PDF. Please try again.');
+                        document.body.removeChild(tempDiv);
+                    }
+                    
+                    return;
+                }
+                
+                // For non-Bangla fonts, use standard text approach
+                const doc = new jsPDF({
+                    orientation: orientation,
+                    unit: 'mm',
+                    format: pageSize
+                });
+                
+                // Set font
+                doc.setFont(fontFamily);
+                doc.setFontSize(fontSize);
+                
+                // Get editor content
+                let content = editor.innerHTML;
+                
+                // Convert HTML to plain text with basic formatting
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = content;
+                const plainText = tempDiv.textContent || tempDiv.innerText || '';
+                
+                // Split text into lines
+                const pageWidth = doc.internal.pageSize.getWidth() - (margin * 2);
+                const textLines = doc.splitTextToSize(plainText, pageWidth);
+                
+                // Add text to PDF
+                let yPos = margin;
+                const lineHeightPx = fontSize * lineHeight * 0.3528; // Convert pt to mm
+                
+                textLines.forEach(line => {
+                    if (yPos > doc.internal.pageSize.getHeight() - margin) {
+                        doc.addPage();
+                        yPos = margin;
+                    }
+                    
+                    doc.text(line, margin, yPos);
+                    yPos += lineHeightPx;
+                });
+                
+                if (preview) {
+                    // Generate blob for preview
+                    const pdfBlob = doc.output('blob');
+                    const pdfUrl = URL.createObjectURL(pdfBlob);
+                    pdfPreview.src = pdfUrl;
+                    previewModal.style.display = 'block';
+                } else {
+                    // Save the PDF
+                    doc.save(`${fileName}.pdf`);
+                }
+            }
+            
+            // Save template function
+            function saveTemplate() {
+                const t = translations[currentLanguage];
+                const templateName = prompt(t.templateNamePrompt);
+                if (templateName) {
+                    const templates = JSON.parse(localStorage.getItem('pdfTemplates') || '[]');
+                    
+                    const newTemplate = {
+                        name: templateName,
+                        content: editor.innerHTML,
+                        options: {
+                            pageSize: pageSizeSelect.value,
+                            orientation: orientationSelect.value,
+                            fontSize: fontSizeSelect.value,
+                            fontFamily: fontFamilySelect.value,
+                            margin: marginInput.value,
+                            lineHeight: lineHeightInput.value,
+                            fileName: fileNameInput.value
+                        },
+                        timestamp: new Date().toISOString(),
+                        language: currentLanguage,
+                        editorMode: editorMode
+                    };
+                    
+                    templates.push(newTemplate);
+                    localStorage.setItem('pdfTemplates', JSON.stringify(templates));
+                    alert(t.templateSaved);
+                }
+            }
+            
+            // Load templates function
+            function loadTemplates() {
+                const t = translations[currentLanguage];
+                const templates = JSON.parse(localStorage.getItem('pdfTemplates') || '[]');
+                
+                if (templates.length === 0) {
+                    templatesList.innerHTML = `<p>${t.noTemplates}</p>`;
+                } else {
+                    templatesList.innerHTML = '';
+                    templates.forEach((template, index) => {
+                        const templateItem = document.createElement('div');
+                        templateItem.className = 'template-item';
+                        templateItem.innerHTML = `
+                            <h3>${template.name}</h3>
+                            <p>Saved on ${new Date(template.timestamp).toLocaleString()}</p>
+                        `;
+                        
+                        templateItem.addEventListener('click', () => {
+                            editor.innerHTML = template.content;
+                            pageSizeSelect.value = template.options.pageSize;
+                            orientationSelect.value = template.options.orientation;
+                            fontSizeSelect.value = template.options.fontSize;
+                            fontFamilySelect.value = template.options.fontFamily;
+                            marginInput.value = template.options.margin;
+                            lineHeightInput.value = template.options.lineHeight;
+                            fileNameInput.value = template.options.fileName;
+                            
+                            // Set language and editor mode if saved with template
+                            if (template.language && template.language !== currentLanguage) {
+                                currentLanguage = template.language;
+                            }
+                            
+                            if (template.editorMode) {
+                                editorMode = template.editorMode;
+                            }
+                            
+                            updateLanguage(currentLanguage);
+                            templatesModal.style.display = 'none';
+                            editor.focus();
+                        });
+                        
+                        templatesList.appendChild(templateItem);
+                    });
+                }
+                
+                templatesModal.style.display = 'block';
+            }
+            
+            // Event listeners
+            generatePdfBtn.addEventListener('click', () => generatePDF(false));
+            previewPdfBtn.addEventListener('click', () => generatePDF(true));
+            saveTemplateBtn.addEventListener('click', saveTemplate);
+            loadTemplateBtn.addEventListener('click', loadTemplates);
+            
+            // Close modals when clicking X
+            closeButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    this.closest('.modal').style.display = 'none';
+                });
+            });
+            
+            // Close modals when clicking outside
+            window.addEventListener('click', function(event) {
+                if (event.target === previewModal) {
+                    previewModal.style.display = 'none';
+                }
+                if (event.target === templatesModal) {
+                    templatesModal.style.display = 'none';
+                }
+            });
+            
+            // Initialize with English language and mixed mode
+            editorMode = 'mixed';
+            updateLanguage('en');
+            editor.focus();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌈 Colorful Tic-Tac-Toe | Play vs AI</title>
+    <style>
+        :root {
+            --rainbow-1: #FF9AA2;
+            --rainbow-2: #FFB7B2;
+            --rainbow-3: #FFDAC1;
+            --rainbow-4: #E2F0CB;
+            --rainbow-5: #B5EAD7;
+            --rainbow-6: #C7CEEA;
+            --x-color: #FF6B6B;
+            --o-color: #4ECDC4;
+            --text-dark: #2F4858;
+            --text-light: #F7FFF7;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Neue', cursive;
+            background: linear-gradient(135deg, var(--rainbow-1), var(--rainbow-3), var(--rainbow-5));
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            animation: bgShift 15s infinite alternate;
+            overflow-x: hidden;
+        }
+
+        @keyframes bgShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        h1 {
+            color: var(--text-dark);
+            margin-bottom: 20px;
+            font-size: 2.5rem;
+            background: linear-gradient(to right, var(--rainbow-1), var(--rainbow-3), var(--rainbow-5));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .game-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .status {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--text-dark);
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 10px 20px;
+            border-radius: 50px;
+            flex-grow: 1;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 50px;
+            font-family: inherit;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(45deg, var(--rainbow-4), var(--rainbow-5));
+            color: var(--text-dark);
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        button:active {
+            transform: translateY(1px);
+        }
+
+        select {
+            padding: 10px;
+            border-radius: 50px;
+            border: 2px solid var(--rainbow-5);
+            font-family: inherit;
+            background-color: white;
+            color: var(--text-dark);
+            font-weight: bold;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+            aspect-ratio: 1/1;
+        }
+
+        .cell {
+            background-color: white;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cell::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, var(--rainbow-2), var(--rainbow-4));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 0;
+        }
+
+        .cell:hover::before {
+            opacity: 0.3;
+        }
+
+        .cell.x {
+            color: var(--x-color);
+            text-shadow: 0 0 10px rgba(255, 107, 107, 0.4);
+        }
+
+        .cell.o {
+            color: var(--o-color);
+            text-shadow: 0 0 10px rgba(78, 205, 196, 0.4);
+        }
+
+        .cell.winner {
+            animation: pulse 1s infinite;
+            background: linear-gradient(45deg, var(--rainbow-3), var(--rainbow-6));
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background-color: var(--rainbow-1);
+            opacity: 0;
+            z-index: 100;
+            animation: confettiFall 5s linear forwards;
+        }
+
+        @keyframes confettiFall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .cell {
+                font-size: 3rem;
+            }
+        }
+
+        /* Animated background elements */
+        .bg-element {
+            position: fixed;
+            border-radius: 50%;
+            opacity: 0.1;
+            z-index: -1;
+            animation: float 15s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            25% {
+                transform: translate(50px, 50px) rotate(90deg);
+            }
+            50% {
+                transform: translate(0, 100px) rotate(180deg);
+            }
+            75% {
+                transform: translate(-50px, 50px) rotate(270deg);
+            }
+            100% {
+                transform: translate(0, 0) rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated background elements -->
+    <div class="bg-element" style="width: 300px; height: 300px; background: var(--rainbow-1); top: 10%; left: 5%; animation-delay: 0s;"></div>
+    <div class="bg-element" style="width: 200px; height: 200px; background: var(--rainbow-3); top: 60%; left: 80%; animation-delay: 2s;"></div>
+    <div class="bg-element" style="width: 250px; height: 250px; background: var(--rainbow-5); top: 30%; left: 70%; animation-delay: 4s;"></div>
+    <div class="bg-element" style="width: 150px; height: 150px; background: var(--rainbow-2); top: 80%; left: 20%; animation-delay: 6s;"></div>
+
+    <div class="container">
+        <h1>🌈 Colorful Tic-Tac-Toe</h1>
+        
+        <div class="game-info">
+            <div class="status" id="status">Your turn (X)</div>
+            <div class="controls">
+                <select id="difficulty">
+                    <option value="easy">Easy</option>
+                    <option value="medium" selected>Medium</option>
+                    <option value="hard">Hard</option>
+                </select>
+                <button id="switch">Switch Player</button>
+                <button id="restart">New Game</button>
+            </div>
+        </div>
+        
+        <div class="board" id="board">
+            <div class="cell" data-index="0"></div>
+            <div class="cell" data-index="1"></div>
+            <div class="cell" data-index="2"></div>
+            <div class="cell" data-index="3"></div>
+            <div class="cell" data-index="4"></div>
+            <div class="cell" data-index="5"></div>
+            <div class="cell" data-index="6"></div>
+            <div class="cell" data-index="7"></div>
+            <div class="cell" data-index="8"></div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const board = document.getElementById('board');
+            const cells = document.querySelectorAll('.cell');
+            const status = document.getElementById('status');
+            const restartBtn = document.getElementById('restart');
+            const switchBtn = document.getElementById('switch');
+            const difficultySelect = document.getElementById('difficulty');
+            
+            let currentPlayer = 'X';
+            let gameBoard = ['', '', '', '', '', '', '', '', ''];
+            let gameActive = true;
+            let playerSymbol = 'X';
+            let aiSymbol = 'O';
+            
+            // Winning combinations
+            const winningCombos = [
+                [0, 1, 2], [3, 4, 5], [6, 7, 8], // rows
+                [0, 3, 6], [1, 4, 7], [2, 5, 8], // columns
+                [0, 4, 8], [2, 4, 6]             // diagonals
+            ];
+            
+            // Initialize the game
+            function initGame() {
+                gameBoard = ['', '', '', '', '', '', '', '', ''];
+                gameActive = true;
+                currentPlayer = 'X';
+                
+                cells.forEach(cell => {
+                    cell.textContent = '';
+                    cell.classList.remove('x', 'o', 'winner');
+                });
+                
+                if (playerSymbol === 'O') {
+                    status.textContent = "AI's turn (X)";
+                    status.style.color = '#FF6B6B';
+                    setTimeout(aiMove, 500);
+                } else {
+                    status.textContent = "Your turn (X)";
+                    status.style.color = '#FF6B6B';
+                }
+                
+                // Remove all confetti
+                document.querySelectorAll('.confetti').forEach(el => el.remove());
+            }
+            
+            // Handle cell click
+            function handleCellClick(e) {
+                const cell = e.target;
+                const cellIndex = parseInt(cell.getAttribute('data-index'));
+                
+                if (gameBoard[cellIndex] !== '' || !gameActive || currentPlayer !== playerSymbol) {
+                    return;
+                }
+                
+                makeMove(cell, cellIndex, playerSymbol);
+                
+                if (checkWin(gameBoard, playerSymbol)) {
+                    status.textContent = playerSymbol === 'X' ? "🎉 You win! (X)" : "🎉 You win! (O)";
+                    status.style.color = playerSymbol === 'X' ? '#FF6B6B' : '#4ECDC4';
+                    gameActive = false;
+                    highlightWinningCells();
+                    createConfetti();
+                    return;
+                }
+                
+                if (checkDraw()) {
+                    status.textContent = "😅 Game ended in a draw!";
+                    status.style.color = '#2F4858';
+                    gameActive = false;
+                    return;
+                }
+                
+                currentPlayer = aiSymbol;
+                status.textContent = `🤖 AI's turn (${aiSymbol})`;
+                status.style.color = aiSymbol === 'X' ? '#FF6B6B' : '#4ECDC4';
+                
+                setTimeout(aiMove, 500 + Math.random() * 500); // Random delay for more natural feel
+            }
+            
+            // Make a move on the board
+            function makeMove(cell, index, symbol) {
+                gameBoard[index] = symbol;
+                cell.textContent = symbol;
+                cell.classList.add(symbol.toLowerCase());
+                
+                // Add animation class temporarily
+                cell.classList.add('animate');
+                setTimeout(() => {
+                    cell.classList.remove('animate');
+                }, 300);
+            }
+            
+            // AI makes a move
+            function aiMove() {
+                if (!gameActive || currentPlayer !== aiSymbol) return;
+                
+                const difficulty = difficultySelect.value;
+                let moveIndex;
+                
+                if (difficulty === 'easy') {
+                    moveIndex = getRandomMove();
+                } else if (difficulty === 'medium') {
+                    // 70% chance to make best move, 30% random
+                    moveIndex = Math.random() < 0.7 ? getBestMove() : getRandomMove();
+                } else {
+                    // Hard - always makes best move
+                    moveIndex = getBestMove();
+                }
+                
+                // Small delay for each AI move for better UX
+                setTimeout(() => {
+                    makeMove(cells[moveIndex], moveIndex, aiSymbol);
+                    
+                    if (checkWin(gameBoard, aiSymbol)) {
+                        status.textContent = aiSymbol === 'X' ? "😢 AI wins! (X)" : "😢 AI wins! (O)";
+                        status.style.color = aiSymbol === 'X' ? '#FF6B6B' : '#4ECDC4';
+                        gameActive = false;
+                        highlightWinningCells();
+                        return;
+                    }
+                    
+                    if (checkDraw()) {
+                        status.textContent = "😅 Game ended in a draw!";
+                        status.style.color = '#2F4858';
+                        gameActive = false;
+                        return;
+                    }
+                    
+                    currentPlayer = playerSymbol;
+                    status.textContent = `Your turn (${playerSymbol})`;
+                    status.style.color = playerSymbol === 'X' ? '#FF6B6B' : '#4ECDC4';
+                }, 300);
+            }
+            
+            // Get a random available move
+            function getRandomMove() {
+                const availableMoves = gameBoard
+                    .map((val, idx) => val === '' ? idx : null)
+                    .filter(val => val !== null);
+                
+                return availableMoves[Math.floor(Math.random() * availableMoves.length)];
+            }
+            
+            // Get the best move using minimax algorithm
+            function getBestMove() {
+                // Simple immediate win/block logic
+                // Check for winning move
+                for (let i = 0; i < gameBoard.length; i++) {
+                    if (gameBoard[i] === '') {
+                        gameBoard[i] = aiSymbol;
+                        if (checkWin(gameBoard, aiSymbol)) {
+                            gameBoard[i] = '';
+                            return i;
+                        }
+                        gameBoard[i] = '';
+                    }
+                }
+                
+                // Check for blocking move
+                for (let i = 0; i < gameBoard.length; i++) {
+                    if (gameBoard[i] === '') {
+                        gameBoard[i] = playerSymbol;
+                        if (checkWin(gameBoard, playerSymbol)) {
+                            gameBoard[i] = '';
+                            return i;
+                        }
+                        gameBoard[i] = '';
+                    }
+                }
+                
+                // For hard difficulty, use minimax
+                if (difficultySelect.value === 'hard') {
+                    return minimax(gameBoard, aiSymbol).index;
+                }
+                
+                // Take center if available
+                if (gameBoard[4] === '') return 4;
+                
+                // Take a corner
+                const corners = [0, 2, 6, 8];
+                const availableCorners = corners.filter(i => gameBoard[i] === '');
+                if (availableCorners.length > 0) {
+                    return availableCorners[Math.floor(Math.random() * availableCorners.length)];
+                }
+                
+                // Otherwise random move
+                return getRandomMove();
+            }
+            
+            // Minimax algorithm
+            function minimax(board, player) {
+                const availableMoves = board
+                    .map((val, idx) => val === '' ? idx : null)
+                    .filter(val => val !== null);
+                
+                // Check for terminal states
+                if (checkWin(board, aiSymbol)) {
+                    return { score: 10 };
+                } else if (checkWin(board, playerSymbol)) {
+                    return { score: -10 };
+                } else if (availableMoves.length === 0) {
+                    return { score: 0 };
+                }
+                
+                const moves = [];
+                
+                for (let i = 0; i < availableMoves.length; i++) {
+                    const move = {};
+                    move.index = availableMoves[i];
+                    
+                    board[availableMoves[i]] = player;
+                    
+                    if (player === aiSymbol) {
+                        const result = minimax(board, playerSymbol);
+                        move.score = result.score;
+                    } else {
+                        const result = minimax(board, aiSymbol);
+                        move.score = result.score;
+                    }
+                    
+                    board[availableMoves[i]] = '';
+                    moves.push(move);
+                }
+                
+                let bestMove;
+                if (player === aiSymbol) {
+                    let bestScore = -Infinity;
+                    for (let i = 0; i < moves.length; i++) {
+                        if (moves[i].score > bestScore) {
+                            bestScore = moves[i].score;
+                            bestMove = i;
+                        }
+                    }
+                } else {
+                    let bestScore = Infinity;
+                    for (let i = 0; i < moves.length; i++) {
+                        if (moves[i].score < bestScore) {
+                            bestScore = moves[i].score;
+                            bestMove = i;
+                        }
+                    }
+                }
+                
+                return moves[bestMove];
+            }
+            
+            // Check for win
+            function checkWin(board, player) {
+                return winningCombos.some(combo => {
+                    return combo.every(index => {
+                        return board[index] === player;
+                    });
+                });
+            }
+            
+            // Check for draw
+            function checkDraw() {
+                return gameBoard.every(cell => cell !== '');
+            }
+            
+            // Highlight winning cells
+            function highlightWinningCells() {
+                const winner = checkWin(gameBoard, 'X') ? 'X' : 
+                              checkWin(gameBoard, 'O') ? 'O' : null;
+                
+                if (!winner) return;
+                
+                const winningCombo = winningCombos.find(combo => {
+                    return combo.every(index => gameBoard[index] === winner);
+                });
+                
+                winningCombo.forEach(index => {
+                    cells[index].classList.add('winner');
+                });
+            }
+            
+            // Create confetti effect
+            function createConfetti() {
+                const colors = ['#FF9AA2', '#FFB7B2', '#FFDAC1', '#E2F0CB', '#B5EAD7', '#C7CEEA'];
+                
+                for (let i = 0; i < 100; i++) {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = `${Math.random() * 100}vw`;
+                    confetti.style.width = `${Math.random() * 10 + 5}px`;
+                    confetti.style.height = `${Math.random() * 10 + 5}px`;
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDuration = `${Math.random() * 3 + 2}s`;
+                    confetti.style.animationDelay = `${Math.random() * 0.5}s`;
+                    
+                    document.body.appendChild(confetti);
+                }
+            }
+            
+            // Switch player symbol
+            function switchPlayer() {
+                playerSymbol = playerSymbol === 'X' ? 'O' : 'X';
+                aiSymbol = aiSymbol === 'X' ? 'O' : 'X';
+                initGame();
+            }
+            
+            // Event listeners
+            cells.forEach(cell => {
+                cell.addEventListener('click', handleCellClick);
+            });
+            
+            restartBtn.addEventListener('click', initGame);
+            switchBtn.addEventListener('click', switchPlayer);
+            
+            // Initialize the game
+            initGame();
+        });
+    </script>
+</body>
+</html>

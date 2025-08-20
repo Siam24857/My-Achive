@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Notepad - Advanced Text Editor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            width: 95%;
+            height: 90vh;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            display: flex;
+            overflow: hidden;
+        }
+        
+        .tools-panel {
+            width: 250px;
+            background: rgba(25, 25, 35, 0.8);
+            padding: 20px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            overflow-y: auto;
+        }
+        
+        .tools-section {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 12px;
+        }
+        
+        .tools-section h3 {
+            margin-bottom: 12px;
+            font-size: 16px;
+            color: #64FFDA;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .tools-section h3 i {
+            font-size: 18px;
+        }
+        
+        .format-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .btn {
+            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+        
+        .btn.active {
+            background: #2962FF;
+        }
+        
+        select, input {
+            width: 100%;
+            padding: 8px;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            margin-top: 5px;
+        }
+        
+        .color-picker {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .color-option {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .color-option:hover {
+            transform: scale(1.1);
+        }
+        
+        .editor-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .header {
+            padding: 15px 25px;
+            background: rgba(25, 25, 35, 0.9);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            background: linear-gradient(45deg, #FF9A8B, #FF6A88, #FF99AC);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .action-btn {
+            background: linear-gradient(45deg, #2962FF, #00B0FF);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(41, 98, 255, 0.4);
+        }
+        
+        .note-area {
+            flex: 1;
+            padding: 25px;
+            background: rgba(245, 245, 255, 0.9);
+            overflow-y: auto;
+        }
+        
+        #note {
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            border: none;
+            outline: none;
+            resize: none;
+            font-size: 18px;
+            line-height: 1.6;
+            color: #333;
+        }
+        
+        .ai-chatbot {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #FF6B6B, #FF8E53);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(255, 107, 107, 0.5);
+            z-index: 100;
+            transition: all 0.3s;
+        }
+        
+        .ai-chatbot:hover {
+            transform: scale(1.1);
+        }
+        
+        .chat-window {
+            position: absolute;
+            bottom: 100px;
+            right: 30px;
+            width: 300px;
+            height: 400px;
+            background: rgba(25, 25, 35, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+            display: none;
+            flex-direction: column;
+            z-index: 100;
+        }
+        
+        .chat-header {
+            padding: 15px;
+            background: rgba(35, 35, 45, 0.95);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .chat-header h3 {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .close-chat {
+            cursor: pointer;
+            font-size: 20px;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .message {
+            padding: 10px 15px;
+            border-radius: 10px;
+            max-width: 80%;
+        }
+        
+        .ai-message {
+            background: rgba(41, 98, 255, 0.2);
+            align-self: flex-start;
+            color: white;
+        }
+        
+        .user-message {
+            background: rgba(255, 107, 107, 0.3);
+            align-self: flex-end;
+            color: white;
+        }
+        
+        .chat-input {
+            padding: 15px;
+            display: flex;
+            gap: 10px;
+            background: rgba(35, 35, 45, 0.95);
+        }
+        
+        .chat-input input {
+            flex: 1;
+            padding: 12px;
+            border-radius: 20px;
+        }
+        
+        .send-btn {
+            background: linear-gradient(45deg, #2962FF, #00B0FF);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                height: 95vh;
+            }
+            
+            .tools-panel {
+                width: 100%;
+                height: auto;
+                flex-direction: row;
+                overflow-x: auto;
+                padding: 10px;
+                gap: 15px;
+            }
+            
+            .tools-section {
+                min-width: 200px;
+            }
+            
+            .editor-area {
+                flex: 1;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="tools-panel">
+            <div class="tools-section">
+                <h3><i class="fas fa-text-height"></i> Font Options</h3>
+                <select id="fontFamily">
+                    <option value="Arial, sans-serif">Arial</option>
+                    <option value="'Times New Roman', serif">Times New Roman</option>
+                    <option value="'Courier New', monospace">Courier New</option>
+                    <option value="Georgia, serif">Georgia</option>
+                    <option value="'Trebuchet MS', sans-serif">Trebuchet MS</option>
+                    <option value="Verdana, sans-serif">Verdana</option>
+                    <option value="'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">Segoe UI</option>
+                </select>
+                <select id="fontSize" style="margin-top: 10px;">
+                    <option value="1">8px</option>
+                    <option value="2">10px</option>
+                    <option value="3">12px</option>
+                    <option value="4">14px</option>
+                    <option value="5" selected>16px</option>
+                    <option value="6">18px</option>
+                    <option value="7">24px</option>
+                </select>
+            </div>
+            
+            <div class="tools-section">
+                <h3><i class="fas fa-palette"></i> Text Color</h3>
+                <div class="color-picker">
+                    <div class="color-option" style="background-color: #FF6B6B;" data-color="#FF6B6B"></div>
+                    <div class="color-option" style="background-color: #4ECDC4;" data-color="#4ECDC4"></div>
+                    <div class="color-option" style="background-color: #FFE66D;" data-color="#FFE66D"></div>
+                    <div class="color-option" style="background-color: #2962FF;" data-color="#2962FF"></div>
+                </div>
+                <input type="color" id="customColor" value="#2962FF" style="margin-top: 10px;">
+            </div>
+            
+            <div class="tools-section">
+                <h3><i class="fas fa-bold"></i> Text Formatting</h3>
+                <div class="format-buttons">
+                    <button class="btn" id="boldBtn"><i class="fas fa-bold"></i></button>
+                    <button class="btn" id="italicBtn"><i class="fas fa-italic"></i></button>
+                    <button class="btn" id="underlineBtn"><i class="fas fa-underline"></i></button>
+                    <button class="btn" id="strikeBtn"><i class="fas fa-strikethrough"></i></button>
+                </div>
+                <div class="format-buttons" style="margin-top: 10px;">
+                    <button class="btn" id="alignLeftBtn"><i class="fas fa-align-left"></i></button>
+                    <button class="btn" id="alignCenterBtn"><i class="fas fa-align-center"></i></button>
+                    <button class="btn" id="alignRightBtn"><i class="fas fa-align-right"></i></button>
+                    <button class="btn" id="alignJustifyBtn"><i class="fas fa-align-justify"></i></button>
+                </div>
+            </div>
+            
+            <div class="tools-section">
+                <h3><i class="fas fa-magic"></i> AI Tools</h3>
+                <button class="btn" id="improveBtn"><i class="fas fa-wand-magic-sparkles"></i> Improve Writing</button>
+                <button class="btn" id="summarizeBtn" style="margin-top: 10px;"><i class="fas fa-file-contract"></i> Summarize</button>
+                <button class="btn" id="grammarBtn" style="margin-top: 10px;"><i class="fas fa-spell-check"></i> Check Grammar</button>
+            </div>
+        </div>
+        
+        <div class="editor-area">
+            <div class="header">
+                <h1>AI Notepad</h1>
+                <div class="header-actions">
+                    <button class="action-btn" id="saveBtn"><i class="fas fa-save"></i> Save</button>
+                    <button class="action-btn" id="downloadBtn"><i class="fas fa-download"></i> Download</button>
+                </div>
+            </div>
+            
+            <div class="note-area">
+                <textarea id="note" placeholder="Start typing your note here..."></textarea>
+            </div>
+        </div>
+    </div>
+    
+    <div class="ai-chatbot">
+        <i class="fas fa-robot"></i>
+    </div>
+    
+    <div class="chat-window">
+        <div class="chat-header">
+            <h3><i class="fas fa-robot"></i> AI Assistant</h3>
+            <span class="close-chat"><i class="fas fa-times"></i></span>
+        </div>
+        <div class="chat-messages">
+            <div class="message ai-message">
+                Hello! I'm your AI writing assistant. How can I help you today?
+            </div>
+        </div>
+        <div class="chat-input">
+            <input type="text" placeholder="Ask something..." id="chatInput">
+            <button class="send-btn"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const note = document.getElementById('note');
+            const fontFamily = document.getElementById('fontFamily');
+            const fontSize = document.getElementById('fontSize');
+            const customColor = document.getElementById('customColor');
+            const colorOptions = document.querySelectorAll('.color-option');
+            const boldBtn = document.getElementById('boldBtn');
+            const italicBtn = document.getElementById('italicBtn');
+            const underlineBtn = document.getElementById('underlineBtn');
+            const strikeBtn = document.getElementById('strikeBtn');
+            const alignLeftBtn = document.getElementById('alignLeftBtn');
+            const alignCenterBtn = document.getElementById('alignCenterBtn');
+            const alignRightBtn = document.getElementById('alignRightBtn');
+            const alignJustifyBtn = document.getElementById('alignJustifyBtn');
+            const saveBtn = document.getElementById('saveBtn');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const improveBtn = document.getElementById('improveBtn');
+            const summarizeBtn = document.getElementById('summarizeBtn');
+            const grammarBtn = document.getElementById('grammarBtn');
+            const aiChatbot = document.querySelector('.ai-chatbot');
+            const chatWindow = document.querySelector('.chat-window');
+            const closeChat = document.querySelector('.close-chat');
+            const chatInput = document.getElementById('chatInput');
+            const sendBtn = document.querySelector('.send-btn');
+            const chatMessages = document.querySelector('.chat-messages');
+            
+            // Load saved note from localStorage
+            if (localStorage.getItem('savedNote')) {
+                note.value = localStorage.getItem('savedNote');
+            }
+            
+            // Font family change
+            fontFamily.addEventListener('change', function() {
+                note.style.fontFamily = this.value;
+            });
+            
+            // Font size change
+            fontSize.addEventListener('change', function() {
+                const sizes = ['8px', '10px', '12px', '14px', '16px', '18px', '24px'];
+                note.style.fontSize = sizes[this.value - 1];
+            });
+            
+            // Color options
+            colorOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    note.style.color = this.getAttribute('data-color');
+                    customColor.value = this.getAttribute('data-color');
+                });
+            });
+            
+            // Custom color picker
+            customColor.addEventListener('input', function() {
+                note.style.color = this.value;
+            });
+            
+            // Formatting buttons
+            boldBtn.addEventListener('click', function() {
+                document.execCommand('bold', false, null);
+                this.classList.toggle('active');
+            });
+            
+            italicBtn.addEventListener('click', function() {
+                document.execCommand('italic', false, null);
+                this.classList.toggle('active');
+            });
+            
+            underlineBtn.addEventListener('click', function() {
+                document.execCommand('underline', false, null);
+                this.classList.toggle('active');
+            });
+            
+            strikeBtn.addEventListener('click', function() {
+                document.execCommand('strikeThrough', false, null);
+                this.classList.toggle('active');
+            });
+            
+            // Alignment buttons
+            alignLeftBtn.addEventListener('click', function() {
+                document.execCommand('justifyLeft', false, null);
+                updateActiveAlignment(this);
+            });
+            
+            alignCenterBtn.addEventListener('click', function() {
+                document.execCommand('justifyCenter', false, null);
+                updateActiveAlignment(this);
+            });
+            
+            alignRightBtn.addEventListener('click', function() {
+                document.execCommand('justifyRight', false, null);
+                updateActiveAlignment(this);
+            });
+            
+            alignJustifyBtn.addEventListener('click', function() {
+                document.execCommand('justifyFull', false, null);
+                updateActiveAlignment(this);
+            });
+            
+            function updateActiveAlignment(activeBtn) {
+                [alignLeftBtn, alignCenterBtn, alignRightBtn, alignJustifyBtn].forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                activeBtn.classList.add('active');
+            }
+            
+            // Save note
+            saveBtn.addEventListener('click', function() {
+                localStorage.setItem('savedNote', note.value);
+                showNotification('Note saved successfully!');
+            });
+            
+            // Download note
+            downloadBtn.addEventListener('click', function() {
+                const blob = new Blob([note.value], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'ai-note.txt';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                showNotification('Note downloaded successfully!');
+            });
+            
+            // AI Tools
+            improveBtn.addEventListener('click', function() {
+                showNotification('AI is improving your writing...');
+                simulateAIResponse('I\'ve improved your writing by making it more concise and impactful.');
+            });
+            
+            summarizeBtn.addEventListener('click', function() {
+                showNotification('AI is summarizing your text...');
+                simulateAIResponse('Here\'s a summary of your text: This is a demonstration of AI summarization capabilities.');
+            });
+            
+            grammarBtn.addEventListener('click', function() {
+                showNotification('AI is checking your grammar...');
+                simulateAIResponse('I\'ve checked your grammar and found 2 minor issues that I fixed for you.');
+            });
+            
+            // AI Chatbot
+            aiChatbot.addEventListener('click', function() {
+                chatWindow.style.display = 'flex';
+            });
+            
+            closeChat.addEventListener('click', function() {
+                chatWindow.style.display = 'none';
+            });
+            
+            function addMessage(text, isUser = false) {
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('message');
+                messageDiv.classList.add(isUser ? 'user-message' : 'ai-message');
+                messageDiv.textContent = text;
+                chatMessages.appendChild(messageDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            sendBtn.addEventListener('click', sendMessage);
+            chatInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+            
+            function sendMessage() {
+                const message = chatInput.value.trim();
+                if (message) {
+                    addMessage(message, true);
+                    chatInput.value = '';
+                    
+                    // Simulate AI response after a short delay
+                    setTimeout(() => {
+                        const responses = [
+                            "I can help you with your writing tasks!",
+                            "That's an interesting question. Let me think about how to best assist you.",
+                            "I'd be happy to help improve your writing. Just paste your text and I'll provide suggestions.",
+                            "As an AI writing assistant, I can help with grammar, style, and structure.",
+                            "Would you like me to analyze your current document?"
+                        ];
+                        const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                        addMessage(randomResponse);
+                    }, 1000);
+                }
+            }
+            
+            // Helper functions
+            function showNotification(message) {
+                const notification = document.createElement('div');
+                notification.style.position = 'fixed';
+                notification.style.bottom = '20px';
+                notification.style.left = '50%';
+                notification.style.transform = 'translateX(-50%)';
+                notification.style.backgroundColor = '#2962FF';
+                notification.style.color = 'white';
+                notification.style.padding = '10px 20px';
+                notification.style.borderRadius = '30px';
+                notification.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.2)';
+                notification.style.zIndex = '1000';
+                notification.textContent = message;
+                
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.style.opacity = '0';
+                    notification.style.transition = 'opacity 0.5s';
+                    setTimeout(() => {
+                        document.body.removeChild(notification);
+                    }, 500);
+                }, 2000);
+            }
+            
+            function simulateAIResponse(message) {
+                // Create and show AI response notification
+                const response = document.createElement('div');
+                response.style.position = 'fixed';
+                response.style.top = '20px';
+                response.style.right = '20px';
+                response.style.backgroundColor = 'rgba(25, 25, 35, 0.9)';
+                response.style.color = 'white';
+                response.style.padding = '15px';
+                response.style.borderRadius = '10px';
+                response.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.3)';
+                response.style.zIndex = '1000';
+                response.style.maxWidth = '300px';
+                response.innerHTML = `
+                    <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                        <i class="fas fa-robot" style="color: #64FFDA; margin-right: 10px;"></i>
+                        <strong>AI Assistant</strong>
+                    </div>
+                    <div>${message}</div>
+                `;
+                
+                document.body.appendChild(response);
+                
+                setTimeout(() => {
+                    response.style.opacity = '0';
+                    response.style.transition = 'opacity 0.5s';
+                    setTimeout(() => {
+                        document.body.removeChild(response);
+                    }, 500);
+                }, 3000);
+            }
+        });
+    </script>
+</body>
+</html>

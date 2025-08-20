@@ -1,0 +1,1173 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BusinessPlan Pro | AI-Powered Business Planning</title>
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary: #6c5ce7;
+            --secondary: #a29bfe;
+            --accent: #fd79a8;
+            --dark: #2d3436;
+            --light: #f5f6fa;
+            --success: #00b894;
+            --warning: #fdcb6e;
+            --danger: #d63031;
+        }
+
+        body {
+            background-color: #000;
+            color: #fff;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Particle Background */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            background-color: #000;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            color: var(--primary);
+        }
+
+        p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Layout */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        section {
+            padding: 5rem 0;
+            position: relative;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.8rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-right: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 4px 15px rgba(108, 92, 231, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(108, 92, 231, 0.6);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        /* Header */
+        header {
+            padding: 1.5rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: var(--primary);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 2rem;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        nav ul li a:hover {
+            color: var(--primary);
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            bottom: -5px;
+            left: 0;
+            transition: width 0.3s;
+        }
+
+        nav ul li a:hover::after {
+            width: 100%;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .hero-btns {
+            margin-top: 2rem;
+        }
+
+        /* Features Section */
+        .features {
+            background-color: rgba(15, 15, 20, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 3rem;
+            margin: 3rem 0;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            background-color: rgba(30, 30, 40, 0.6);
+            border-radius: 15px;
+            padding: 2rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            border-color: var(--primary);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+
+        /* Business Plans Section */
+        .plans-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .plan-card {
+            background-color: rgba(30, 30, 40, 0.6);
+            border-radius: 15px;
+            padding: 2rem;
+            transition: all 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .plan-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            border-color: var(--primary);
+        }
+
+        .plan-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .plan-industry {
+            display: inline-block;
+            background-color: rgba(108, 92, 231, 0.2);
+            color: var(--primary);
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .plan-description {
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .plan-details-btn {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background-color: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .plan-details-btn:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        /* AI Generator Section */
+        .ai-generator {
+            background-color: rgba(15, 15, 20, 0.7);
+            border-radius: 20px;
+            padding: 3rem;
+            margin: 3rem 0;
+        }
+
+        .generator-form {
+            margin-top: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background-color: rgba(30, 30, 40, 0.8);
+            color: white;
+            font-size: 1rem;
+            transition: border 0.3s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        /* Notepad Section */
+        .notepad-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            display: none;
+            flex-direction: column;
+            padding: 2rem;
+        }
+
+        .notepad-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .notepad-toolbar {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .tool-btn {
+            padding: 0.5rem 1rem;
+            background-color: rgba(30, 30, 40, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .tool-btn:hover {
+            background-color: var(--primary);
+        }
+
+        .notepad-content {
+            flex-grow: 1;
+            background-color: rgba(30, 30, 40, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 1rem;
+            color: white;
+            font-size: 1rem;
+            line-height: 1.6;
+            outline: none;
+            overflow-y: auto;
+        }
+
+        .close-notepad {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Footer */
+        footer {
+            background-color: rgba(15, 15, 20, 0.9);
+            padding: 3rem 0;
+            text-align: center;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .copyright {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 1s ease forwards;
+        }
+
+        .delay-1 { animation-delay: 0.2s; }
+        .delay-2 { animation-delay: 0.4s; }
+        .delay-3 { animation-delay: 0.6s; }
+        .delay-4 { animation-delay: 0.8s; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            h2 { font-size: 2rem; }
+            
+            .header-container {
+                padding: 0 1rem;
+            }
+            
+            nav {
+                position: fixed;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                background-color: rgba(0, 0, 0, 0.9);
+                padding: 1rem;
+                clip-path: circle(0 at 90% -10%);
+                transition: all 0.5s ease-out;
+                pointer-events: none;
+            }
+            
+            nav.active {
+                clip-path: circle(1000px at 90% -10%);
+                pointer-events: all;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            nav ul li {
+                margin: 1rem 0;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .features-grid, .plans-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .features, .ai-generator {
+                padding: 2rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Particle Background -->
+    <div id="particles-js"></div>
+    
+    <!-- Header -->
+    <header>
+        <div class="header-container container">
+            <a href="#" class="logo">Business<span>Plan</span> Pro</a>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+            <nav id="mainNav">
+                <ul>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#plans">Business Plans</a></li>
+                    <li><a href="#generator">AI Generator</a></li>
+                    <li><a href="#" id="openNotepad">Notepad</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content container fade-in">
+            <h1 class="delay-1">Craft Winning Business Plans with AI</h1>
+            <p class="delay-2">Generate professional business plans, access 50+ industry templates, and collaborate with our advanced notepad - all in one platform designed for entrepreneurs and startups.</p>
+            <div class="hero-btns delay-3">
+                <a href="#generator" class="btn btn-primary">Generate AI Plan</a>
+                <a href="#plans" class="btn btn-secondary">Explore Templates</a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Features Section -->
+    <section id="features" class="container">
+        <h2 class="fade-in">Powerful Features</h2>
+        <p class="fade-in delay-1">Everything you need to create, manage, and present your business plan professionally</p>
+        
+        <div class="features">
+            <div class="features-grid">
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">📊</div>
+                    <h3>50+ Business Plans</h3>
+                    <p>Access professionally crafted business plan templates across various industries to kickstart your venture.</p>
+                </div>
+                
+                <div class="feature-card fade-in delay-1">
+                    <div class="feature-icon">🤖</div>
+                    <h3>AI Plan Generator</h3>
+                    <p>Our advanced AI creates customized 500-word business plans tailored to your specific needs and industry.</p>
+                </div>
+                
+                <div class="feature-card fade-in delay-2">
+                    <div class="feature-icon">📝</div>
+                    <h3>Advanced Notepad</h3>
+                    <p>Full-featured notepad with rich text editing, formatting options, and cloud saving capabilities.</p>
+                </div>
+                
+                <div class="feature-card fade-in delay-3">
+                    <div class="feature-icon">🌐</div>
+                    <h3>International Focus</h3>
+                    <p>Plans tailored for global markets with localization options for different regions and business cultures.</p>
+                </div>
+                
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">📈</div>
+                    <h3>Financial Tools</h3>
+                    <p>Built-in financial projections, revenue models, and investment calculators for accurate planning.</p>
+                </div>
+                
+                <div class="feature-card fade-in delay-1">
+                    <div class="feature-icon">🔄</div>
+                    <h3>Real-time Updates</h3>
+                    <p>Always up-to-date with the latest business trends, regulations, and market analysis.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Business Plans Section -->
+    <section id="plans" class="container">
+        <h2 class="fade-in">Business Plan Templates</h2>
+        <p class="fade-in delay-1">Browse our collection of 50+ professional business plans across various industries</p>
+        
+        <div class="plans-container" id="plansContainer">
+            <!-- Plans will be loaded dynamically with JavaScript -->
+        </div>
+    </section>
+    
+    <!-- AI Generator Section -->
+    <section id="generator" class="container">
+        <h2 class="fade-in">AI Business Plan Generator</h2>
+        <p class="fade-in delay-1">Let our AI create a customized 500-word business plan tailored to your needs</p>
+        
+        <div class="ai-generator">
+            <div class="generator-form">
+                <div class="form-group fade-in">
+                    <label for="business-name">Business Name</label>
+                    <input type="text" id="business-name" placeholder="Enter your business name">
+                </div>
+                
+                <div class="form-group fade-in delay-1">
+                    <label for="industry">Industry</label>
+                    <select id="industry">
+                        <option value="">Select your industry</option>
+                        <option value="technology">Technology</option>
+                        <option value="healthcare">Healthcare</option>
+                        <option value="education">Education</option>
+                        <option value="retail">Retail</option>
+                        <option value="food">Food & Beverage</option>
+                        <option value="finance">Finance</option>
+                        <option value="manufacturing">Manufacturing</option>
+                        <option value="entertainment">Entertainment</option>
+                        <option value="real-estate">Real Estate</option>
+                        <option value="transportation">Transportation</option>
+                    </select>
+                </div>
+                
+                <div class="form-group fade-in delay-2">
+                    <label for="business-concept">Business Concept</label>
+                    <textarea id="business-concept" placeholder="Describe your business idea, target market, and unique value proposition"></textarea>
+                </div>
+                
+                <div class="fade-in delay-3">
+                    <button id="generatePlanBtn" class="btn btn-primary">Generate Business Plan</button>
+                </div>
+            </div>
+            
+            <div id="generatedPlan" class="fade-in" style="display: none; margin-top: 3rem;">
+                <h3>Your Generated Business Plan</h3>
+                <div id="planOutput" style="background-color: rgba(30, 30, 40, 0.8); padding: 1.5rem; border-radius: 8px; margin-top: 1rem;"></div>
+                <button id="saveToNotepad" class="btn btn-secondary" style="margin-top: 1.5rem;">Save to Notepad</button>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Notepad Section (hidden by default) -->
+    <div class="notepad-container" id="notepadContainer">
+        <div class="notepad-header">
+            <h3>Business Plan Notepad</h3>
+            <button class="close-notepad" id="closeNotepad">✕</button>
+        </div>
+        
+        <div class="notepad-toolbar">
+            <button class="tool-btn" data-command="bold" title="Bold">B</button>
+            <button class="tool-btn" data-command="italic" title="Italic">I</button>
+            <button class="tool-btn" data-command="underline" title="Underline">U</button>
+            <button class="tool-btn" data-command="insertUnorderedList" title="Bullet List">•</button>
+            <button class="tool-btn" data-command="insertOrderedList" title="Numbered List">1.</button>
+            <select class="tool-btn" id="fontFamily">
+                <option value="Arial">Arial</option>
+                <option value="Courier New">Courier New</option>
+                <option value="Georgia">Georgia</option>
+                <option value="Times New Roman">Times New Roman</option>
+                <option value="Verdana">Verdana</option>
+            </select>
+            <select class="tool-btn" id="fontSize">
+                <option value="1">Small</option>
+                <option value="3" selected>Normal</option>
+                <option value="5">Large</option>
+                <option value="7">Extra Large</option>
+            </select>
+            <input type="color" class="tool-btn" id="textColor" value="#ffffff">
+            <input type="color" class="tool-btn" id="bgColor" value="#000000">
+            <button class="tool-btn" id="saveNote">Save</button>
+            <button class="tool-btn" id="loadNote">Load</button>
+            <button class="tool-btn" id="clearNote">Clear</button>
+        </div>
+        
+        <div class="notepad-content" id="notepadContent" contenteditable="true"></div>
+    </div>
+    
+    <!-- Contact Section -->
+    <section id="contact" class="container">
+        <h2 class="fade-in">Contact Us</h2>
+        <p class="fade-in delay-1">Have questions or need assistance? Reach out to our team</p>
+        
+        <div class="features fade-in delay-2">
+            <div class="form-group">
+                <label for="contact-name">Your Name</label>
+                <input type="text" id="contact-name" placeholder="Enter your name">
+            </div>
+            
+            <div class="form-group">
+                <label for="contact-email">Email Address</label>
+                <input type="email" id="contact-email" placeholder="Enter your email">
+            </div>
+            
+            <div class="form-group">
+                <label for="contact-message">Message</label>
+                <textarea id="contact-message" placeholder="Enter your message"></textarea>
+            </div>
+            
+            <button id="sendMessageBtn" class="btn btn-primary">Send Message</button>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-links fade-in">
+                <a href="#features">Features</a>
+                <a href="#plans">Templates</a>
+                <a href="#generator">AI Generator</a>
+                <a href="#" id="openNotepadFooter">Notepad</a>
+                <a href="#contact">Contact</a>
+            </div>
+            <p class="copyright fade-in delay-1">© 2023 BusinessPlan Pro. All rights reserved.</p>
+        </div>
+    </footer>
+    
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile Menu Toggle
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const mainNav = document.getElementById('mainNav');
+            
+            mobileMenuBtn.addEventListener('click', function() {
+                mainNav.classList.toggle('active');
+            });
+            
+            // Smooth Scrolling for Anchor Links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    if (this.id === 'openNotepad' || this.id === 'openNotepadFooter') {
+                        return;
+                    }
+                    
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                        
+                        // Close mobile menu if open
+                        if (mainNav.classList.contains('active')) {
+                            mainNav.classList.remove('active');
+                        }
+                    }
+                });
+            });
+            
+            // Notepad Functionality
+            const notepadContainer = document.getElementById('notepadContainer');
+            const openNotepadButtons = document.querySelectorAll('#openNotepad, #openNotepadFooter');
+            const closeNotepad = document.getElementById('closeNotepad');
+            const notepadContent = document.getElementById('notepadContent');
+            const saveToNotepadBtn = document.getElementById('saveToNotepad');
+            const saveNoteBtn = document.getElementById('saveNote');
+            const loadNoteBtn = document.getElementById('loadNote');
+            const clearNoteBtn = document.getElementById('clearNote');
+            const textColorPicker = document.getElementById('textColor');
+            const bgColorPicker = document.getElementById('bgColor');
+            const fontFamilySelect = document.getElementById('fontFamily');
+            const fontSizeSelect = document.getElementById('fontSize');
+            
+            // Open notepad
+            openNotepadButtons.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    notepadContainer.style.display = 'flex';
+                    document.body.style.overflow = 'hidden';
+                });
+            });
+            
+            // Close notepad
+            closeNotepad.addEventListener('click', function() {
+                notepadContainer.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            });
+            
+            // Formatting buttons
+            document.querySelectorAll('.tool-btn[data-command]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const command = this.getAttribute('data-command');
+                    document.execCommand(command, false, null);
+                    notepadContent.focus();
+                });
+            });
+            
+            // Text color
+            textColorPicker.addEventListener('input', function() {
+                document.execCommand('foreColor', false, this.value);
+                notepadContent.focus();
+            });
+            
+            // Background color
+            bgColorPicker.addEventListener('change', function() {
+                notepadContent.style.backgroundColor = this.value;
+            });
+            
+            // Font family
+            fontFamilySelect.addEventListener('change', function() {
+                document.execCommand('fontName', false, this.value);
+                notepadContent.focus();
+            });
+            
+            // Font size
+            fontSizeSelect.addEventListener('change', function() {
+                document.execCommand('fontSize', false, this.value);
+                notepadContent.focus();
+            });
+            
+            // Save to notepad from generated plan
+            saveToNotepadBtn.addEventListener('click', function() {
+                const planContent = document.getElementById('planOutput').innerHTML;
+                notepadContent.innerHTML += `<h3>${document.getElementById('business-name').value || 'New Business'} Plan</h3>${planContent}`;
+                notepadContainer.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            });
+            
+            // Save note to localStorage
+            saveNoteBtn.addEventListener('click', function() {
+                localStorage.setItem('businessPlanNote', notepadContent.innerHTML);
+                alert('Note saved successfully!');
+            });
+            
+            // Load note from localStorage
+            loadNoteBtn.addEventListener('click', function() {
+                const savedNote = localStorage.getItem('businessPlanNote');
+                if (savedNote) {
+                    notepadContent.innerHTML = savedNote;
+                    alert('Note loaded successfully!');
+                } else {
+                    alert('No saved note found!');
+                }
+            });
+            
+            // Clear note
+            clearNoteBtn.addEventListener('click', function() {
+                if (confirm('Are you sure you want to clear the notepad?')) {
+                    notepadContent.innerHTML = '';
+                }
+            });
+            
+            // Business Plan Generator
+            const generatePlanBtn = document.getElementById('generatePlanBtn');
+            const generatedPlan = document.getElementById('generatedPlan');
+            const planOutput = document.getElementById('planOutput');
+            
+            generatePlanBtn.addEventListener('click', function() {
+                const businessName = document.getElementById('business-name').value;
+                const industry = document.getElementById('industry').value;
+                const businessConcept = document.getElementById('business-concept').value;
+                
+                if (!businessName || !industry || !businessConcept) {
+                    alert('Please fill in all fields to generate a business plan');
+                    return;
+                }
+                
+                // Show loading state
+                generatePlanBtn.disabled = true;
+                generatePlanBtn.textContent = 'Generating...';
+                
+                // Simulate API call with timeout
+                setTimeout(function() {
+                    // Generate the business plan
+                    const plan = generateBusinessPlan(businessName, industry, businessConcept);
+                    
+                    // Display the generated plan
+                    planOutput.innerHTML = plan;
+                    generatedPlan.style.display = 'block';
+                    
+                    // Reset button
+                    generatePlanBtn.disabled = false;
+                    generatePlanBtn.textContent = 'Generate Business Plan';
+                    
+                    // Scroll to the generated plan
+                    window.scrollTo({
+                        top: generatedPlan.offsetTop - 100,
+                        behavior: 'smooth'
+                    });
+                }, 1500);
+            });
+            
+            // Function to generate business plan (simulated AI)
+            function generateBusinessPlan(name, industry, concept) {
+                // This is a simplified version - in a real app, you would call an AI API
+                const plans = {
+                    'technology': `The ${name} will revolutionize the tech industry by ${concept}. Our innovative approach combines cutting-edge technology with user-centric design to create solutions that address real market needs. We project a 30% market share within the first three years through strategic partnerships and continuous innovation.`,
+                    'healthcare': `${name} aims to transform healthcare delivery through ${concept}. Our patient-focused model leverages technology to improve access, reduce costs, and enhance outcomes. With an aging population and increasing healthcare demands, we anticipate strong growth in this $4 trillion global industry.`,
+                    'education': `Education is ripe for disruption, and ${name} will lead the charge with ${concept}. Our platform combines personalized learning with scalable technology to serve students worldwide. The global e-learning market is projected to reach $375 billion by 2026, and we're positioned to capture a significant portion.`,
+                    'retail': `${name} reimagines retail with ${concept}. By blending physical and digital experiences, we create seamless customer journeys that drive loyalty and sales. The retail sector's rapid digital transformation presents a $5 trillion opportunity we're uniquely positioned to address.`,
+                    'food': `The food industry is changing, and ${name} is at the forefront with ${concept}. Our sustainable, tech-enabled approach meets growing consumer demand for convenience, quality, and ethical sourcing. With the global food market exceeding $8 trillion, our scalable model promises substantial returns.`,
+                    'finance': `${name} disrupts traditional finance through ${concept}. Our fintech solutions democratize access to financial services while maintaining robust security and compliance. As digital payments grow to $10 trillion annually, our innovative platform is poised for exponential growth.`,
+                    'manufacturing': `Manufacturing innovation drives ${name}'s approach to ${concept}. By integrating IoT, AI, and sustainable practices, we deliver efficiency gains and cost savings. The $12 trillion global manufacturing sector is undergoing digital transformation, and we're leading the charge.`,
+                    'entertainment': `${name} transforms entertainment with ${concept}. Our content platform leverages creator economies and emerging technologies to deliver immersive experiences. With global entertainment spending surpassing $2 trillion, our scalable model promises substantial market capture.`,
+                    'real-estate': `Real estate needs innovation, and ${name} delivers with ${concept}. Our proptech solutions streamline transactions, enhance property management, and improve accessibility. The $280 trillion global real estate market presents vast opportunities for our disruptive approach.`,
+                    'transportation': `${name} redefines mobility through ${concept}. Our sustainable transportation solutions address urban congestion and environmental concerns. With the mobility-as-a-service market projected to reach $1 trillion by 2030, we're positioned for rapid expansion.`
+                };
+                
+                const industrySpecific = plans[industry] || plans['technology'];
+                
+                return `
+                    <h4>Executive Summary</h4>
+                    <p>${industrySpecific}</p>
+                    
+                    <h4>Business Description</h4>
+                    <p>${name} is a ${industry} company focused on ${concept}. Our mission is to deliver innovative solutions that address pressing market needs while generating sustainable returns for our stakeholders.</p>
+                    
+                    <h4>Market Analysis</h4>
+                    <p>The ${industry} sector is experiencing significant growth, with particular opportunities in ${concept.split(' ').slice(0, 3).join(' ')}. Our target market includes [describe target customers], who currently face [describe pain points].</p>
+                    
+                    <h4>Products/Services</h4>
+                    <p>We offer [describe products/services] that provide [describe benefits]. Our unique value proposition includes [describe differentiation].</p>
+                    
+                    <h4>Business Model</h4>
+                    <p>Revenue will be generated through [describe revenue streams]. Our cost structure focuses on [describe key costs], allowing for healthy margins projected at [X]%.</p>
+                    
+                    <h4>Marketing Strategy</h4>
+                    <p>Our customer acquisition strategy leverages [describe channels]. We'll build brand awareness through [describe tactics] and convert leads with [describe conversion strategy].</p>
+                    
+                    <h4>Financial Projections</h4>
+                    <p>Year 1 revenue: $X million<br>
+                    Year 2 revenue: $Y million<br>
+                    Year 3 revenue: $Z million<br>
+                    Projected profitability by Month [N]</p>
+                    
+                    <h4>Team</h4>
+                    <p>Our experienced leadership team includes [brief bios of key team members]. We're complemented by advisors with expertise in [relevant areas].</p>
+                    
+                    <h4>Investment Opportunity</h4>
+                    <p>We're seeking $[X] in funding to [describe use of funds]. This investment will enable us to [describe milestones] and position the company for [describe exit potential].</p>
+                `;
+            }
+            
+            // Load sample business plans
+            const plansContainer = document.getElementById('plansContainer');
+            const samplePlans = [
+                {
+                    title: "Tech Startup Platform",
+                    industry: "Technology",
+                    description: "Complete business plan for a SaaS platform targeting small businesses with AI-powered tools."
+                },
+                {
+                    title: "Urban Farming Initiative",
+                    industry: "Agriculture",
+                    description: "Sustainable vertical farming business model with revenue projections for urban markets."
+                },
+                {
+                    title: "Boutique Fitness Studio",
+                    industry: "Fitness",
+                    description: "Comprehensive plan for a premium fitness studio with class schedules and membership models."
+                },
+                {
+                    title: "Eco-Friendly Apparel",
+                    industry: "Fashion",
+                    description: "Sustainable clothing line business plan with supply chain and marketing strategy."
+                },
+                {
+                    title: "Mobile Health Clinic",
+                    industry: "Healthcare",
+                    description: "Plan for a fleet of mobile clinics bringing healthcare to underserved communities."
+                },
+                {
+                    title: "AI Consulting Firm",
+                    industry: "Consulting",
+                    description: "Business framework for an AI implementation consultancy serving mid-sized enterprises."
+                },
+                {
+                    title: "Specialty Coffee Roastery",
+                    industry: "Food & Beverage",
+                    description: "Detailed plan for a craft coffee business with wholesale and retail components."
+                },
+                {
+                    title: "EdTech Learning Platform",
+                    industry: "Education",
+                    description: "Complete business model for an online learning platform with subscription revenue."
+                },
+                {
+                    title: "Renewable Energy Installer",
+                    industry: "Energy",
+                    description: "Plan for a residential and commercial solar panel installation business."
+                },
+                {
+                    title: "Pet Care Franchise",
+                    industry: "Pet Services",
+                    description: "Scalable business model for a premium pet care service with franchise potential."
+                }
+            ];
+            
+            samplePlans.forEach((plan, index) => {
+                const planCard = document.createElement('div');
+                planCard.className = `plan-card fade-in delay-${index % 4}`;
+                planCard.innerHTML = `
+                    <span class="plan-industry">${plan.industry}</span>
+                    <h3 class="plan-title">${plan.title}</h3>
+                    <p class="plan-description">${plan.description}</p>
+                    <a href="#" class="plan-details-btn">View Details</a>
+                `;
+                plansContainer.appendChild(planCard);
+            });
+            
+            // Contact form submission
+            const sendMessageBtn = document.getElementById('sendMessageBtn');
+            sendMessageBtn.addEventListener('click', function() {
+                const name = document.getElementById('contact-name').value;
+                const email = document.getElementById('contact-email').value;
+                const message = document.getElementById('contact-message').value;
+                
+                if (!name || !email || !message) {
+                    alert('Please fill in all fields');
+                    return;
+                }
+                
+                // Simulate form submission
+                sendMessageBtn.disabled = true;
+                sendMessageBtn.textContent = 'Sending...';
+                
+                setTimeout(function() {
+                    alert('Thank you for your message! We will get back to you soon.');
+                    document.getElementById('contact-name').value = '';
+                    document.getElementById('contact-email').value = '';
+                    document.getElementById('contact-message').value = '';
+                    sendMessageBtn.disabled = false;
+                    sendMessageBtn.textContent = 'Send Message';
+                }, 1000);
+            });
+            
+            // Initialize particle.js background
+            particlesJS('particles-js', {
+                "particles": {
+                    "number": {
+                        "value": 80,
+                        "density": {
+                            "enable": true,
+                            "value_area": 800
+                        }
+                    },
+                    "color": {
+                        "value": "#6c5ce7"
+                    },
+                    "shape": {
+                        "type": "circle",
+                        "stroke": {
+                            "width": 0,
+                            "color": "#000000"
+                        },
+                        "polygon": {
+                            "nb_sides": 5
+                        }
+                    },
+                    "opacity": {
+                        "value": 0.5,
+                        "random": false,
+                        "anim": {
+                            "enable": false,
+                            "speed": 1,
+                            "opacity_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "size": {
+                        "value": 3,
+                        "random": true,
+                        "anim": {
+                            "enable": false,
+                            "speed": 40,
+                            "size_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "line_linked": {
+                        "enable": true,
+                        "distance": 150,
+                        "color": "#6c5ce7",
+                        "opacity": 0.4,
+                        "width": 1
+                    },
+                    "move": {
+                        "enable": true,
+                        "speed": 2,
+                        "direction": "none",
+                        "random": false,
+                        "straight": false,
+                        "out_mode": "out",
+                        "bounce": false,
+                        "attract": {
+                            "enable": false,
+                            "rotateX": 600,
+                            "rotateY": 1200
+                        }
+                    }
+                },
+                "interactivity": {
+                    "detect_on": "canvas",
+                    "events": {
+                        "onhover": {
+                            "enable": true,
+                            "mode": "grab"
+                        },
+                        "onclick": {
+                            "enable": true,
+                            "mode": "push"
+                        },
+                        "resize": true
+                    },
+                    "modes": {
+                        "grab": {
+                            "distance": 140,
+                            "line_linked": {
+                                "opacity": 1
+                            }
+                        },
+                        "bubble": {
+                            "distance": 400,
+                            "size": 40,
+                            "duration": 2,
+                            "opacity": 8,
+                            "speed": 3
+                        },
+                        "repulse": {
+                            "distance": 200,
+                            "duration": 0.4
+                        },
+                        "push": {
+                            "particles_nb": 4
+                        },
+                        "remove": {
+                            "particles_nb": 2
+                        }
+                    }
+                },
+                "retina_detect": true
+            });
+            
+            // Scroll animations
+            const fadeElements = document.querySelectorAll('.fade-in');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+            
+            fadeElements.forEach(element => {
+                observer.observe(element);
+            });
+        });
+    </script>
+</body>
+</html>

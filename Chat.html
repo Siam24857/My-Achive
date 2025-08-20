@@ -1,0 +1,2027 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Country Explorer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4a6fa5;
+            --secondary-color: #166088;
+            --text-color: #333;
+            --bg-color: #f5f7fa;
+            --card-bg: #ffffff;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        .dark-mode {
+            --primary-color: #6a8fc7;
+            --secondary-color: #2a7fba;
+            --text-color: #f0f0f0;
+            --bg-color: #1a1a2e;
+            --card-bg: #16213e;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .pro-mode {
+            --primary-color: #4ecca3;
+            --secondary-color: #2d898b;
+            --text-color: #e8e8e8;
+            --bg-color: #232931;
+            --card-bg: #393e46;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            transition: var(--transition);
+            overflow-x: hidden;
+        }
+
+        #bg-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+            opacity: 0.15;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            margin-right: 10px;
+        }
+
+        .mode-toggle {
+            display: flex;
+            gap: 10px;
+        }
+
+        .toggle-btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            box-shadow: var(--shadow);
+        }
+
+        .toggle-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .search-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 70%;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 30px;
+            font-size: 16px;
+            box-shadow: var(--shadow);
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            transition: var(--transition);
+        }
+
+        .search-input:focus {
+            outline: none;
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .voice-btn {
+            position: absolute;
+            right: 17%;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        .main-content {
+            display: flex;
+            gap: 20px;
+        }
+
+        .sidebar {
+            width: 300px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .sidebar-btn {
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background-color: var(--primary-color);
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+        }
+
+        .sidebar-btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .country-info {
+            flex: 1;
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            min-height: 500px;
+        }
+
+        .country-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 20px;
+        }
+
+        .country-flag {
+            width: 100px;
+            height: auto;
+            border-radius: 5px;
+            box-shadow: var(--shadow);
+        }
+
+        .country-name {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .country-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .detail-item {
+            background-color: rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .detail-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+        }
+
+        .detail-value {
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .section-title {
+            font-size: 20px;
+            margin: 25px 0 15px;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 5px;
+        }
+
+        .neighbors-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .neighbor-btn {
+            padding: 8px 15px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .neighbor-btn:hover {
+            background-color: var(--secondary-color);
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            width: 80%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-color);
+        }
+
+        /* Notepad styles */
+        #notepad-content {
+            width: 100%;
+            height: 300px;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            resize: none;
+            font-family: 'Poppins', sans-serif;
+            margin-top: 15px;
+        }
+
+        /* Favorites styles */
+        .favorite-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .remove-favorite {
+            background: none;
+            border: none;
+            color: #ff6b6b;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        /* Chatbot styles */
+        .chat-container {
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .message {
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            border-radius: 15px;
+            max-width: 80%;
+        }
+
+        .user-message {
+            background-color: var(--primary-color);
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 5px;
+        }
+
+        .bot-message {
+            background-color: rgba(0, 0, 0, 0.1);
+            margin-right: auto;
+            border-bottom-left-radius: 5px;
+        }
+
+        .chat-input-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 12px 15px;
+            border: none;
+            border-radius: 20px;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+        }
+
+        .send-btn {
+            padding: 12px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        .quick-questions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .quick-question {
+            padding: 8px 12px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        /* History styles */
+        .history-item {
+            padding: 10px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+        }
+
+        .history-item:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        /* Notification styles */
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            transform: translateX(150%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        /* Voice command status */
+        .voice-status {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            padding: 10px 15px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            display: none;
+            z-index: 1000;
+        }
+
+        /* Loading spinner */
+        .loader {
+            display: none;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--primary-color);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive styles */
+        @media (max-width: 992px) {
+            .main-content {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+            .sidebar-btn {
+                flex: 1 1 150px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .country-details {
+                grid-template-columns: 1fr;
+            }
+            .search-input {
+                width: 90%;
+            }
+            .voice-btn {
+                right: 7%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- AI 3D Background Video -->
+    <video id="bg-video" autoplay muted loop>
+        <source src="https://assets.mixkit.co/videos/preview/mixkit-abstract-digital-background-158-large.mp4" type="video/mp4">
+    </video>
+
+    <!-- Voice Command Status Indicator -->
+    <div class="voice-status" id="voice-status">
+        <i class="fas fa-microphone"></i> Listening...
+    </div>
+
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-globe-americas"></i>
+                <span>Global Explorer</span>
+            </div>
+            <div class="mode-toggle">
+                <button class="toggle-btn light-btn active" onclick="setMode('light')">Light</button>
+                <button class="toggle-btn dark-btn" onclick="setMode('dark')">Dark</button>
+                <button class="toggle-btn pro-btn" onclick="setMode('pro')">Pro</button>
+            </div>
+        </header>
+
+        <div class="search-container">
+            <input type="text" class="search-input" placeholder="Search for a country..." id="search-input">
+            <button class="voice-btn" id="voice-btn" title="Voice Search">
+                <i class="fas fa-microphone"></i>
+            </button>
+        </div>
+
+        <div class="main-content">
+            <div class="sidebar">
+                <button class="sidebar-btn" id="voice-command-btn">
+                    <i class="fas fa-microphone-alt"></i> Voice Commands
+                </button>
+                <button class="sidebar-btn" id="history-btn">
+                    <i class="fas fa-history"></i> History
+                </button>
+                <button class="sidebar-btn" id="notepad-btn">
+                    <i class="fas fa-edit"></i> Notepad
+                </button>
+                <button class="sidebar-btn" id="favorites-btn">
+                    <i class="fas fa-star"></i> Favorites
+                </button>
+                <button class="sidebar-btn" id="chatbot-btn">
+                    <i class="fas fa-robot"></i> Country Chatbot
+                </button>
+                <button class="sidebar-btn" id="notifications-btn">
+                    <i class="fas fa-bell"></i> Notifications
+                </button>
+            </div>
+
+            <div class="country-info" id="country-info">
+                <div class="loader" id="loader"></div>
+                <div id="country-content">
+                    <h1 style="text-align: center; margin-top: 100px; color: var(--primary-color);">
+                        Search for a country to get started
+                    </h1>
+                    <p style="text-align: center; margin-top: 20px;">
+                        Try searching for "France", "Japan", or "Brazil" or use voice commands
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Voice Command Modal -->
+    <div class="modal" id="voice-command-modal">
+        <div class="modal-content">
+            <span class="close-btn" id="close-voice-modal">&times;</span>
+            <h2>Voice Commands</h2>
+            <p>Try saying these commands:</p>
+            <ul>
+                <li>"Search for [country name]" - Search for a specific country</li>
+                <li>"Show me countries in [region]" - Show countries in a region (e.g., Europe, Asia)</li>
+                <li>"Countries that speak [language]" - Find countries by language</li>
+                <li>"Countries using [currency]" - Find countries by currency</li>
+                <li>"Add to favorites" - Add current country to favorites</li>
+                <li>"Show favorites" - Display your favorite countries</li>
+                <li>"Open notepad" - Open the notepad</li>
+                <li>"Dark mode" / "Light mode" / "Pro mode" - Change theme</li>
+                <li>"What's the population?" - Get population of current country</li>
+                <li>"What's the capital?" - Get capital of current country</li>
+                <li>"Tell me about [country]" - Get detailed information about a country</li>
+                <li>"What languages are spoken here?" - Get languages of current country</li>
+                <li>"What currency is used?" - Get currency of current country</li>
+                <li>"Show neighboring countries" - Get bordering countries</li>
+                <li>"Get economic data" - Show World Bank economic data</li>
+                <li>"What's the weather?" - Get capital city weather</li>
+                <li>"Open chatbot" - Open the country chatbot</li>
+            </ul>
+            <div style="text-align: center; margin-top: 30px;">
+                <button id="start-listening" style="padding: 15px 30px; background-color: var(--primary-color); color: white; border: none; border-radius: 30px; font-size: 18px; cursor: pointer;">
+                    <i class="fas fa-microphone"></i> Start Listening
+                </button>
+                <p id="listening-status" style="margin-top: 15px; font-style: italic;"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- History Modal -->
+    <div class="modal" id="history-modal">
+        <div class="modal-content">
+            <span class="close-btn" id="close-history-modal">&times;</span>
+            <h2>Search History</h2>
+            <div id="history-list">
+                <!-- History items will be added here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Notepad Modal -->
+    <div class="modal" id="notepad-modal">
+        <div class="modal-content">
+            <span class="close-btn" id="close-notepad-modal">&times;</span>
+            <h2>Notepad</h2>
+            <textarea id="notepad-content" placeholder="Write your notes here..."></textarea>
+            <div style="display: flex; justify-content: space-between; margin-top: 15px;">
+                <button id="clear-notepad" style="padding: 10px 15px; background-color: #ff6b6b; color: white; border: none; border-radius: 5px; cursor: pointer;">Clear</button>
+                <button id="save-notepad" style="padding: 10px 15px; background-color: var(--primary-color); color: white; border: none; border-radius: 5px; cursor: pointer;">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Favorites Modal -->
+    <div class="modal" id="favorites-modal">
+        <div class="modal-content">
+            <span class="close-btn" id="close-favorites-modal">&times;</span>
+            <h2>Favorite Countries</h2>
+            <div id="favorites-list">
+                <!-- Favorite items will be added here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Chatbot Modal -->
+    <div class="modal" id="chatbot-modal">
+        <div class="modal-content">
+            <span class="close-btn" id="close-chatbot-modal">&times;</span>
+            <h2>Country Chatbot</h2>
+            <div class="chat-container">
+                <div class="chat-messages" id="chat-messages">
+                    <div class="message bot-message">
+                        Hello! I'm your country information assistant. Ask me anything about countries!
+                    </div>
+                    <div class="message bot-message">
+                        Here are some questions you can ask:
+                    </div>
+                </div>
+                <div class="quick-questions" id="quick-questions">
+                    <!-- Quick questions will be added here -->
+                </div>
+                <div class="chat-input-container">
+                    <input type="text" class="chat-input" id="chat-input" placeholder="Ask me about countries...">
+                    <button class="send-btn" id="send-btn"><i class="fas fa-paper-plane"></i></button>
+                </div>
+                <div style="text-align: center; margin-top: 15px;">
+                    <button id="voice-chat-btn" style="padding: 10px 20px; background-color: var(--primary-color); color: white; border: none; border-radius: 20px; cursor: pointer;">
+                        <i class="fas fa-microphone"></i> Voice Chat
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notifications Modal -->
+    <div class="modal" id="notifications-modal">
+        <div class="modal-content">
+            <span class="close-btn" id="close-notifications-modal">&times;</span>
+            <h2>Notification Settings</h2>
+            <div style="margin-top: 20px;">
+                <label style="display: flex; align-items: center; margin-bottom: 15px; cursor: pointer;">
+                    <input type="checkbox" id="enable-notifications" style="margin-right: 10px;">
+                    Enable Notifications
+                </label>
+                <label style="display: flex; align-items: center; margin-bottom: 15px; cursor: pointer;">
+                    <input type="checkbox" id="sound-notifications" style="margin-right: 10px;">
+                    Enable Sound
+                </label>
+                <label style="display: flex; align-items: center; margin-bottom: 15px; cursor: pointer;">
+                    <input type="checkbox" id="voice-responses" style="margin-right: 10px;">
+                    Enable Voice Responses
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div class="notification" id="notification">
+        <div id="notification-message"></div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const searchInput = document.getElementById('search-input');
+        const voiceBtn = document.getElementById('voice-btn');
+        const countryInfo = document.getElementById('country-info');
+        const countryContent = document.getElementById('country-content');
+        const loader = document.getElementById('loader');
+        const voiceStatus = document.getElementById('voice-status');
+        
+        // Modal elements
+        const voiceCommandModal = document.getElementById('voice-command-modal');
+        const historyModal = document.getElementById('history-modal');
+        const notepadModal = document.getElementById('notepad-modal');
+        const favoritesModal = document.getElementById('favorites-modal');
+        const chatbotModal = document.getElementById('chatbot-modal');
+        const notificationsModal = document.getElementById('notifications-modal');
+        
+        // Modal buttons
+        const voiceCommandBtn = document.getElementById('voice-command-btn');
+        const historyBtn = document.getElementById('history-btn');
+        const notepadBtn = document.getElementById('notepad-btn');
+        const favoritesBtn = document.getElementById('favorites-btn');
+        const chatbotBtn = document.getElementById('chatbot-btn');
+        const notificationsBtn = document.getElementById('notifications-btn');
+        
+        // Close buttons
+        const closeVoiceModal = document.getElementById('close-voice-modal');
+        const closeHistoryModal = document.getElementById('close-history-modal');
+        const closeNotepadModal = document.getElementById('close-notepad-modal');
+        const closeFavoritesModal = document.getElementById('close-favorites-modal');
+        const closeChatbotModal = document.getElementById('close-chatbot-modal');
+        const closeNotificationsModal = document.getElementById('close-notifications-modal');
+        
+        // Voice command elements
+        const startListeningBtn = document.getElementById('start-listening');
+        const listeningStatus = document.getElementById('listening-status');
+        const voiceChatBtn = document.getElementById('voice-chat-btn');
+        
+        // Notepad elements
+        const notepadContent = document.getElementById('notepad-content');
+        const saveNotepadBtn = document.getElementById('save-notepad');
+        const clearNotepadBtn = document.getElementById('clear-notepad');
+        
+        // Favorites elements
+        const favoritesList = document.getElementById('favorites-list');
+        
+        // Chatbot elements
+        const chatMessages = document.getElementById('chat-messages');
+        const chatInput = document.getElementById('chat-input');
+        const sendBtn = document.getElementById('send-btn');
+        const quickQuestions = document.getElementById('quick-questions');
+        
+        // Notification elements
+        const notification = document.getElementById('notification');
+        const notificationMessage = document.getElementById('notification-message');
+        const enableNotifications = document.getElementById('enable-notifications');
+        const soundNotifications = document.getElementById('sound-notifications');
+        const voiceResponses = document.getElementById('voice-responses');
+        
+        // App state
+        let currentCountry = null;
+        let recognition = null;
+        let isListening = false;
+        let isChatbotListening = false;
+        let voiceResponseEnabled = true;
+        
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load saved preferences
+            loadPreferences();
+            
+            // Set up event listeners
+            setupEventListeners();
+            
+            // Load quick questions for chatbot
+            loadQuickQuestions();
+            
+            // Try to get user's location for initial country
+            getUserLocation();
+            
+            // Welcome message
+            setTimeout(() => {
+                if (voiceResponseEnabled) {
+                    speak("Welcome to Global Explorer. You can search for any country by name or use voice commands.");
+                }
+            }, 1000);
+        });
+        
+        function loadPreferences() {
+            // Theme
+            const savedMode = localStorage.getItem('mode') || 'light';
+            setMode(savedMode);
+            
+            // Notepad
+            const savedNotes = localStorage.getItem('notepad');
+            if (savedNotes) {
+                notepadContent.value = savedNotes;
+            }
+            
+            // Notifications
+            const notificationsEnabled = localStorage.getItem('notificationsEnabled') === 'true';
+            const soundEnabled = localStorage.getItem('soundEnabled') === 'true';
+            voiceResponseEnabled = localStorage.getItem('voiceResponses') !== 'false';
+            
+            enableNotifications.checked = notificationsEnabled;
+            soundNotifications.checked = soundEnabled;
+            voiceResponses.checked = voiceResponseEnabled;
+        }
+        
+        function setupEventListeners() {
+            // Search functionality
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchCountry(searchInput.value);
+                }
+            });
+            
+            voiceBtn.addEventListener('click', toggleVoiceSearch);
+            
+            // Modal open buttons
+            voiceCommandBtn.addEventListener('click', () => voiceCommandModal.style.display = 'flex');
+            historyBtn.addEventListener('click', openHistoryModal);
+            notepadBtn.addEventListener('click', openNotepadModal);
+            favoritesBtn.addEventListener('click', openFavoritesModal);
+            chatbotBtn.addEventListener('click', openChatbotModal);
+            notificationsBtn.addEventListener('click', openNotificationsModal);
+            
+            // Modal close buttons
+            closeVoiceModal.addEventListener('click', () => voiceCommandModal.style.display = 'none');
+            closeHistoryModal.addEventListener('click', () => historyModal.style.display = 'none');
+            closeNotepadModal.addEventListener('click', () => notepadModal.style.display = 'none');
+            closeFavoritesModal.addEventListener('click', () => favoritesModal.style.display = 'none');
+            closeChatbotModal.addEventListener('click', () => chatbotModal.style.display = 'none');
+            closeNotificationsModal.addEventListener('click', () => notificationsModal.style.display = 'none');
+            
+            // Voice command modal
+            startListeningBtn.addEventListener('click', toggleVoiceCommand);
+            
+            // Notepad
+            saveNotepadBtn.addEventListener('click', saveNotepad);
+            clearNotepadBtn.addEventListener('click', clearNotepad);
+            
+            // Chatbot
+            chatInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendChatMessage();
+                }
+            });
+            sendBtn.addEventListener('click', sendChatMessage);
+            voiceChatBtn.addEventListener('click', toggleChatbotVoice);
+            
+            // Notifications
+            enableNotifications.addEventListener('change', toggleNotifications);
+            soundNotifications.addEventListener('change', toggleNotificationSound);
+            voiceResponses.addEventListener('change', toggleVoiceResponses);
+            
+            // Close modals when clicking outside
+            window.addEventListener('click', function(event) {
+                if (event.target === voiceCommandModal) voiceCommandModal.style.display = 'none';
+                if (event.target === historyModal) historyModal.style.display = 'none';
+                if (event.target === notepadModal) notepadModal.style.display = 'none';
+                if (event.target === favoritesModal) favoritesModal.style.display = 'none';
+                if (event.target === chatbotModal) chatbotModal.style.display = 'none';
+                if (event.target === notificationsModal) notificationsModal.style.display = 'none';
+            });
+        }
+        
+        // Theme functions
+        function setMode(mode) {
+            document.body.className = '';
+            if (mode === 'dark') document.body.classList.add('dark-mode');
+            if (mode === 'pro') document.body.classList.add('pro-mode');
+            
+            // Update toggle buttons
+            document.querySelector('.light-btn').classList.remove('active');
+            document.querySelector('.dark-btn').classList.remove('active');
+            document.querySelector('.pro-btn').classList.remove('active');
+            document.querySelector(`.${mode}-btn`).classList.add('active');
+            
+            localStorage.setItem('mode', mode);
+            
+            if (voiceResponseEnabled) {
+                speak(`Switched to ${mode} mode`);
+            }
+        }
+        
+        // Search functions
+        function searchCountry(query) {
+            if (!query.trim()) return;
+            
+            showLoader();
+            
+            // Save to history
+            addToHistory(query);
+            
+            // Try different API endpoints
+            const endpoints = [
+                `https://restcountries.com/v3.1/name/${query}`,
+                `https://restcountries.com/v3.1/alpha/${query}`,
+                `https://api.api-ninjas.com/v1/country?name=${query}`
+            ];
+            
+            // Try each endpoint until we get a successful response
+            const tryEndpoint = (index) => {
+                if (index >= endpoints.length) {
+                    showError("Country not found. Please try a different name.");
+                    if (voiceResponseEnabled) {
+                        speak(`Sorry, I couldn't find information for ${query}. Please try a different country name.`);
+                    }
+                    return;
+                }
+                
+                fetch(endpoints[index])
+                    .then(response => {
+                        if (!response.ok && index < endpoints.length - 1) {
+                            return tryEndpoint(index + 1);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data && data.length) {
+                            if (index === 2) { // API Ninjas response
+                                displayApiNinjasData(data[0]);
+                                if (voiceResponseEnabled) {
+                                    speak(`Here's information about ${data[0].name}`);
+                                }
+                            } else {
+                                displayCountryData(data[0]);
+                                if (voiceResponseEnabled) {
+                                    speak(`Here's information about ${data[0].name.common}`);
+                                }
+                            }
+                        } else {
+                            showError("Country not found. Please try a different name.");
+                            if (voiceResponseEnabled) {
+                                speak(`Sorry, I couldn't find information for ${query}. Please try a different country name.`);
+                            }
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        if (index < endpoints.length - 1) {
+                            tryEndpoint(index + 1);
+                        } else {
+                            showError("Failed to fetch country data. Please try again later.");
+                            if (voiceResponseEnabled) {
+                                speak("Sorry, I'm having trouble fetching the data. Please try again later.");
+                            }
+                        }
+                    });
+            };
+            
+            tryEndpoint(0);
+        }
+        
+        function displayCountryData(country) {
+            currentCountry = country;
+            
+            const languages = country.languages ? Object.values(country.languages).join(', ') : 'N/A';
+            const currencies = country.currencies ? Object.values(country.currencies).map(c => `${c.name} (${c.symbol || 'N/A'})`).join(', ') : 'N/A';
+            
+            const html = `
+                <div class="country-header">
+                    <img src="${country.flags.png}" alt="${country.name.common} flag" class="country-flag">
+                    <div>
+                        <h1 class="country-name">${country.name.common}</h1>
+                        <p>${country.name.official}</p>
+                    </div>
+                    <button id="add-favorite" style="margin-left: auto; background: none; border: none; font-size: 24px; color: #ffd700; cursor: pointer;" title="Add to favorites">
+                        <i class="far fa-star"></i>
+                    </button>
+                </div>
+                
+                <div class="country-details">
+                    <div class="detail-item">
+                        <div class="detail-label">Capital</div>
+                        <div class="detail-value">${country.capital ? country.capital.join(', ') : 'N/A'}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Continent</div>
+                        <div class="detail-value">${country.region}${country.subregion ? ` (${country.subregion})` : ''}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Population</div>
+                        <div class="detail-value">${country.population.toLocaleString()}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Area</div>
+                        <div class="detail-value">${country.area ? country.area.toLocaleString() + ' km²' : 'N/A'}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Languages</div>
+                        <div class="detail-value">${languages}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Currencies</div>
+                        <div class="detail-value">${currencies}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Timezones</div>
+                        <div class="detail-value">${country.timezones ? country.timezones.join(', ') : 'N/A'}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Calling Code</div>
+                        <div class="detail-value">${country.idd ? country.idd.root + (country.idd.suffixes ? country.idd.suffixes[0] : '') : 'N/A'}</div>
+                    </div>
+                </div>
+                
+                <h2 class="section-title">Neighboring Countries</h2>
+                <div class="neighbors-container" id="neighbors-container">
+                    ${country.borders && country.borders.length ? 
+                        '<p>Loading neighbors...</p>' : 
+                        '<p>No neighboring countries</p>'}
+                </div>
+                
+                <h2 class="section-title">More Information</h2>
+                <div style="display: flex; gap: 10px;">
+                    <button class="neighbor-btn" onclick="fetchWorldBankData('${country.cca2}')">Economic Data</button>
+                    <button class="neighbor-btn" onclick="fetchWeatherData('${country.capital ? country.capital[0] : ''}')">Capital Weather</button>
+                </div>
+            `;
+            
+            countryContent.innerHTML = html;
+            hideLoader();
+            
+            // Set up favorite button
+            document.getElementById('add-favorite').addEventListener('click', toggleFavorite);
+            updateFavoriteButton();
+            
+            // Load neighboring countries if available
+            if (country.borders && country.borders.length) {
+                fetchNeighboringCountries(country.borders);
+            }
+            
+            // Show notification
+            showNotification(`Loaded data for ${country.name.common}`);
+        }
+        
+        function displayApiNinjasData(country) {
+            currentCountry = {
+                name: {
+                    common: country.name,
+                    official: country.name
+                },
+                flags: {
+                    png: ''
+                },
+                capital: [country.capital],
+                region: country.region,
+                population: country.population,
+                area: country.area,
+                currencies: {},
+                languages: {},
+                timezones: [country.timezone],
+                idd: {
+                    root: '+' + country.calling_code
+                },
+                cca2: country.iso2,
+                cca3: country.iso3
+            };
+            
+            const html = `
+                <div class="country-header">
+                    <div>
+                        <h1 class="country-name">${country.name}</h1>
+                    </div>
+                    <button id="add-favorite" style="margin-left: auto; background: none; border: none; font-size: 24px; color: #ffd700; cursor: pointer;" title="Add to favorites">
+                        <i class="far fa-star"></i>
+                    </button>
+                </div>
+                
+                <div class="country-details">
+                    <div class="detail-item">
+                        <div class="detail-label">Capital</div>
+                        <div class="detail-value">${country.capital || 'N/A'}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Continent</div>
+                        <div class="detail-value">${country.region || 'N/A'}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Population</div>
+                        <div class="detail-value">${country.population ? country.population.toLocaleString() : 'N/A'}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Area</div>
+                        <div class="detail-value">${country.area ? country.area.toLocaleString() + ' km²' : 'N/A'}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">GDP</div>
+                        <div class="detail-value">${country.gdp ? '$' + country.gdp.toLocaleString() : 'N/A'}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Calling Code</div>
+                        <div class="detail-value">${country.calling_code ? '+' + country.calling_code : 'N/A'}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Internet TLD</div>
+                        <div class="detail-value">${country.internet_tld || 'N/A'}</div>
+                    </div>
+                </div>
+                
+                <h2 class="section-title">More Information</h2>
+                <div style="display: flex; gap: 10px;">
+                    <button class="neighbor-btn" onclick="fetchWorldBankData('${country.iso2}')">Economic Data</button>
+                    <button class="neighbor-btn" onclick="fetchWeatherData('${country.capital || ''}')">Capital Weather</button>
+                </div>
+            `;
+            
+            countryContent.innerHTML = html;
+            hideLoader();
+            
+            // Set up favorite button
+            document.getElementById('add-favorite').addEventListener('click', toggleFavorite);
+            updateFavoriteButton();
+            
+            // Show notification
+            showNotification(`Loaded data for ${country.name}`);
+        }
+        
+        function fetchNeighboringCountries(borderCodes) {
+            const neighborsContainer = document.getElementById('neighbors-container');
+            neighborsContainer.innerHTML = '<p>Loading neighbors...</p>';
+            
+            fetch(`https://restcountries.com/v3.1/alpha?codes=${borderCodes.join(',')}`)
+                .then(response => response.json())
+                .then(data => {
+                    neighborsContainer.innerHTML = '';
+                    data.forEach(neighbor => {
+                        const btn = document.createElement('button');
+                        btn.className = 'neighbor-btn';
+                        btn.textContent = neighbor.name.common;
+                        btn.onclick = () => {
+                            displayCountryData(neighbor);
+                            if (voiceResponseEnabled) {
+                                speak(`Showing information for neighboring country ${neighbor.name.common}`);
+                            }
+                        };
+                        neighborsContainer.appendChild(btn);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching neighbors:', error);
+                    neighborsContainer.innerHTML = '<p>Failed to load neighboring countries</p>';
+                });
+        }
+        
+        function fetchWorldBankData(countryCode) {
+            showLoader();
+            
+            fetch(`https://api.worldbank.org/v2/country/${countryCode}?format=json`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data[1]) {
+                        const countryData = data[1][0];
+                        
+                        const html = `
+                            <h2 class="section-title">World Bank Data</h2>
+                            <div class="country-details">
+                                <div class="detail-item">
+                                    <div class="detail-label">Income Level</div>
+                                    <div class="detail-value">${countryData.incomeLevel.value}</div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-label">Region</div>
+                                    <div class="detail-value">${countryData.region.value}</div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-label">Capital City</div>
+                                    <div class="detail-value">${countryData.capitalCity}</div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-label">Lending Type</div>
+                                    <div class="detail-value">${countryData.lendingType.value}</div>
+                                </div>
+                            </div>
+                        `;
+                        
+                        countryContent.insertAdjacentHTML('beforeend', html);
+                        if (voiceResponseEnabled) {
+                            speak(`Economic data from World Bank. Income level: ${countryData.incomeLevel.value}. Region: ${countryData.region.value}.`);
+                        }
+                    } else {
+                        showNotification('No World Bank data available for this country');
+                        if (voiceResponseEnabled) {
+                            speak("Sorry, I couldn't find World Bank data for this country.");
+                        }
+                    }
+                    hideLoader();
+                })
+                .catch(error => {
+                    console.error('Error fetching World Bank data:', error);
+                    showNotification('Failed to fetch World Bank data');
+                    if (voiceResponseEnabled) {
+                        speak("Sorry, I'm having trouble fetching the World Bank data.");
+                    }
+                    hideLoader();
+                });
+        }
+        
+        function fetchWeatherData(city) {
+            if (!city) {
+                showNotification('No capital city available for weather data');
+                if (voiceResponseEnabled) {
+                    speak("Sorry, I couldn't find the capital city to check the weather.");
+                }
+                return;
+            }
+            
+            showLoader();
+            
+            // Note: In a real app, you would use your own API key
+            fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=YOUR_API_KEY`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.cod === 200) {
+                        const html = `
+                            <h2 class="section-title">Weather in ${data.name}</h2>
+                            <div class="country-details">
+                                <div class="detail-item">
+                                    <div class="detail-label">Temperature</div>
+                                    <div class="detail-value">${data.main.temp}°C</div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-label">Weather</div>
+                                    <div class="detail-value">${data.weather[0].main} (${data.weather[0].description})</div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-label">Humidity</div>
+                                    <div class="detail-value">${data.main.humidity}%</div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-label">Wind Speed</div>
+                                    <div class="detail-value">${data.wind.speed} m/s</div>
+                                </div>
+                            </div>
+                        `;
+                        
+                        countryContent.insertAdjacentHTML('beforeend', html);
+                        if (voiceResponseEnabled) {
+                            speak(`Current weather in ${data.name}: ${data.main.temp} degrees Celsius, ${data.weather[0].description}. Wind speed: ${data.wind.speed} meters per second.`);
+                        }
+                    } else {
+                        showNotification('Weather data not available');
+                        if (voiceResponseEnabled) {
+                            speak("Sorry, I couldn't fetch the weather data.");
+                        }
+                    }
+                    hideLoader();
+                })
+                .catch(error => {
+                    console.error('Error fetching weather data:', error);
+                    showNotification('Failed to fetch weather data');
+                    if (voiceResponseEnabled) {
+                        speak("Sorry, I'm having trouble fetching the weather data.");
+                    }
+                    hideLoader();
+                });
+        }
+        
+        // Voice command functions
+        function toggleVoiceSearch() {
+            if (!isListening) {
+                startVoiceSearch();
+            } else {
+                stopVoiceSearch();
+            }
+        }
+        
+        function startVoiceSearch() {
+            recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.lang = 'en-US';
+            recognition.interimResults = false;
+            
+            recognition.onstart = function() {
+                isListening = true;
+                voiceBtn.innerHTML = '<i class="fas fa-microphone-slash"></i>';
+                voiceStatus.style.display = 'block';
+                showNotification('Listening... Speak now');
+            };
+            
+            recognition.onresult = function(event) {
+                const transcript = event.results[0][0].transcript;
+                searchInput.value = transcript;
+                searchCountry(transcript);
+            };
+            
+            recognition.onerror = function(event) {
+                console.error('Speech recognition error', event.error);
+                showNotification('Error: ' + event.error);
+                isListening = false;
+                voiceBtn.innerHTML = '<i class="fas fa-microphone"></i>';
+                voiceStatus.style.display = 'none';
+            };
+            
+            recognition.onend = function() {
+                isListening = false;
+                voiceBtn.innerHTML = '<i class="fas fa-microphone"></i>';
+                voiceStatus.style.display = 'none';
+            };
+            
+            recognition.start();
+        }
+        
+        function stopVoiceSearch() {
+            if (recognition) {
+                recognition.stop();
+            }
+            isListening = false;
+            voiceBtn.innerHTML = '<i class="fas fa-microphone"></i>';
+            voiceStatus.style.display = 'none';
+        }
+        
+        function toggleVoiceCommand() {
+            if (!isListening) {
+                startVoiceCommand();
+            } else {
+                stopVoiceCommand();
+            }
+        }
+        
+        function startVoiceCommand() {
+            recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.lang = 'en-US';
+            recognition.interimResults = false;
+            
+            recognition.onstart = function() {
+                isListening = true;
+                startListeningBtn.innerHTML = '<i class="fas fa-microphone-slash"></i> Stop Listening';
+                listeningStatus.textContent = 'Listening... Speak now';
+                voiceStatus.style.display = 'block';
+            };
+            
+            recognition.onresult = function(event) {
+                const transcript = event.results[0][0].transcript.toLowerCase();
+                listeningStatus.textContent = `You said: "${transcript}"`;
+                processVoiceCommand(transcript);
+            };
+            
+            recognition.onerror = function(event) {
+                console.error('Speech recognition error', event.error);
+                listeningStatus.textContent = 'Error: ' + event.error;
+                isListening = false;
+                startListeningBtn.innerHTML = '<i class="fas fa-microphone"></i> Start Listening';
+                voiceStatus.style.display = 'none';
+            };
+            
+            recognition.onend = function() {
+                isListening = false;
+                startListeningBtn.innerHTML = '<i class="fas fa-microphone"></i> Start Listening';
+                listeningStatus.textContent = '';
+                voiceStatus.style.display = 'none';
+            };
+            
+            recognition.start();
+        }
+        
+        function stopVoiceCommand() {
+            if (recognition) {
+                recognition.stop();
+            }
+            isListening = false;
+            startListeningBtn.innerHTML = '<i class="fas fa-microphone"></i> Start Listening';
+            listeningStatus.textContent = '';
+            voiceStatus.style.display = 'none';
+        }
+        
+        function toggleChatbotVoice() {
+            if (!isChatbotListening) {
+                startChatbotVoice();
+            } else {
+                stopChatbotVoice();
+            }
+        }
+        
+        function startChatbotVoice() {
+            recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.lang = 'en-US';
+            recognition.interimResults = false;
+            
+            recognition.onstart = function() {
+                isChatbotListening = true;
+                voiceChatBtn.innerHTML = '<i class="fas fa-microphone-slash"></i> Stop Listening';
+                addChatMessage("I'm listening...", 'bot');
+                voiceStatus.style.display = 'block';
+            };
+            
+            recognition.onresult = function(event) {
+                const transcript = event.results[0][0].transcript;
+                addChatMessage(transcript, 'user');
+                processChatQuestion(transcript);
+            };
+            
+            recognition.onerror = function(event) {
+                console.error('Speech recognition error', event.error);
+                addChatMessage("Sorry, I didn't catch that. Please try again.", 'bot');
+                isChatbotListening = false;
+                voiceChatBtn.innerHTML = '<i class="fas fa-microphone"></i> Voice Chat';
+                voiceStatus.style.display = 'none';
+            };
+            
+            recognition.onend = function() {
+                isChatbotListening = false;
+                voiceChatBtn.innerHTML = '<i class="fas fa-microphone"></i> Voice Chat';
+                voiceStatus.style.display = 'none';
+            };
+            
+            recognition.start();
+        }
+        
+        function stopChatbotVoice() {
+            if (recognition) {
+                recognition.stop();
+            }
+            isChatbotListening = false;
+            voiceChatBtn.innerHTML = '<i class="fas fa-microphone"></i> Voice Chat';
+            voiceStatus.style.display = 'none';
+        }
+        
+        function processVoiceCommand(command) {
+            // Search commands
+            if (command.includes('search for')) {
+                const country = command.split('search for')[1].trim();
+                searchCountry(country);
+                voiceCommandModal.style.display = 'none';
+            } 
+            else if (command.includes('show me countries in')) {
+                const region = command.split('show me countries in')[1].trim();
+                fetchCountriesByRegion(region);
+                voiceCommandModal.style.display = 'none';
+            }
+            else if (command.includes('countries that speak')) {
+                const language = command.split('countries that speak')[1].trim();
+                fetchCountriesByLanguage(language);
+                voiceCommandModal.style.display = 'none';
+            }
+            else if (command.includes('countries using')) {
+                const currency = command.split('countries using')[1].trim();
+                fetchCountriesByCurrency(currency);
+                voiceCommandModal.style.display = 'none';
+            }
+            // Favorite commands
+            else if (command.includes('add to favorites') && currentCountry) {
+                toggleFavorite();
+                voiceCommandModal.style.display = 'none';
+            }
+            else if (command.includes('show favorites')) {
+                openFavoritesModal();
+                voiceCommandModal.style.display = 'none';
+            }
+            // Notepad commands
+            else if (command.includes('open notepad')) {
+                openNotepadModal();
+                voiceCommandModal.style.display = 'none';
+            }
+            // Theme commands
+            else if (command.includes('dark mode')) {
+                setMode('dark');
+                showNotification('Switched to dark mode');
+            }
+            else if (command.includes('light mode')) {
+                setMode('light');
+                showNotification('Switched to light mode');
+            }
+            else if (command.includes('pro mode')) {
+                setMode('pro');
+                showNotification('Switched to pro mode');
+            }
+            // Country info commands
+            else if (currentCountry && command.includes('what\'s the population')) {
+                const response = `The population of ${currentCountry.name.common} is ${currentCountry.population.toLocaleString()}`;
+                speak(response);
+                showNotification(response);
+            }
+            else if (currentCountry && command.includes('what\'s the capital')) {
+                const capital = currentCountry.capital ? currentCountry.capital[0] : 'not available';
+                const response = `The capital of ${currentCountry.name.common} is ${capital}`;
+                speak(response);
+                showNotification(response);
+            }
+            else if (currentCountry && (command.includes('what languages') || command.includes('which languages'))) {
+                const languages = currentCountry.languages ? Object.values(currentCountry.languages).join(', ') : 'not available';
+                const response = `The languages spoken in ${currentCountry.name.common} are: ${languages}`;
+                speak(response);
+                showNotification(response);
+            }
+            else if (currentCountry && command.includes('what currency')) {
+                const currencies = currentCountry.currencies ? Object.values(currentCountry.currencies).map(c => `${c.name} (${c.symbol || 'no symbol'})`).join(', ') : 'not available';
+                const response = `The currencies used in ${currentCountry.name.common} are: ${currencies}`;
+                speak(response);
+                showNotification(response);
+            }
+            else if (currentCountry && (command.includes('neighboring countries') || command.includes('bordering countries'))) {
+                if (currentCountry.borders && currentCountry.borders.length) {
+                    const response = `${currentCountry.name.common} borders these countries: ${currentCountry.borders.join(', ')}`;
+                    speak(response);
+                    showNotification(response);
+                } else {
+                    const response = `${currentCountry.name.common} has no bordering countries or the information is not available.`;
+                    speak(response);
+                    showNotification(response);
+                }
+            }
+            else if (currentCountry && command.includes('economic data')) {
+                const code = currentCountry.cca2 || currentCountry.iso2;
+                if (code) {
+                    fetchWorldBankData(code);
+                } else {
+                    const response = "Sorry, I can't find economic data for this country.";
+                    speak(response);
+                    showNotification(response);
+                }
+            }
+            else if (currentCountry && command.includes('what\'s the weather')) {
+                const capital = currentCountry.capital ? currentCountry.capital[0] : null;
+                if (capital) {
+                    fetchWeatherData(capital);
+                } else {
+                    const response = "Sorry, I can't find the capital city to check the weather.";
+                    speak(response);
+                    showNotification(response);
+                }
+            }
+            else if (command.includes('tell me about')) {
+                const country = command.split('tell me about')[1].trim();
+                searchCountry(country);
+                voiceCommandModal.style.display = 'none';
+            }
+            else if (command.includes('open chatbot')) {
+                openChatbotModal();
+                voiceCommandModal.style.display = 'none';
+            }
+            else {
+                const response = "Sorry, I didn't understand that command. Please try again.";
+                speak(response);
+                showNotification(response);
+            }
+        }
+        
+        function speak(text) {
+            if (!voiceResponseEnabled) return;
+            
+            const utterance = new SpeechSynthesisUtterance(text);
+            window.speechSynthesis.speak(utterance);
+        }
+        
+        function fetchCountriesByRegion(region) {
+            showLoader();
+            
+            fetch(`https://restcountries.com/v3.1/region/${region}`)
+                .then(response => response.json())
+                .then(data => {
+                    displayCountryList(data, `Countries in ${region}`);
+                    if (voiceResponseEnabled) {
+                        speak(`Here are countries in ${region}. Click on any to see details.`);
+                    }
+                    hideLoader();
+                })
+                .catch(error => {
+                    console.error('Error fetching countries by region:', error);
+                    showNotification('Failed to fetch countries by region');
+                    if (voiceResponseEnabled) {
+                        speak("Sorry, I couldn't find countries in that region.");
+                    }
+                    hideLoader();
+                });
+        }
+        
+        function fetchCountriesByLanguage(language) {
+            showLoader();
+            
+            fetch(`https://restcountries.com/v3.1/lang/${language}`)
+                .then(response => response.json())
+                .then(data => {
+                    displayCountryList(data, `Countries that speak ${language}`);
+                    if (voiceResponseEnabled) {
+                        speak(`Here are countries that speak ${language}. Click on any to see details.`);
+                    }
+                    hideLoader();
+                })
+                .catch(error => {
+                    console.error('Error fetching countries by language:', error);
+                    showNotification('Failed to fetch countries by language');
+                    if (voiceResponseEnabled) {
+                        speak("Sorry, I couldn't find countries that speak that language.");
+                    }
+                    hideLoader();
+                });
+        }
+        
+        function fetchCountriesByCurrency(currency) {
+            showLoader();
+            
+            fetch(`https://restcountries.com/v3.1/currency/${currency}`)
+                .then(response => response.json())
+                .then(data => {
+                    displayCountryList(data, `Countries using ${currency}`);
+                    if (voiceResponseEnabled) {
+                        speak(`Here are countries that use ${currency}. Click on any to see details.`);
+                    }
+                    hideLoader();
+                })
+                .catch(error => {
+                    console.error('Error fetching countries by currency:', error);
+                    showNotification('Failed to fetch countries by currency');
+                    if (voiceResponseEnabled) {
+                        speak("Sorry, I couldn't find countries that use that currency.");
+                    }
+                    hideLoader();
+                });
+        }
+        
+        function displayCountryList(countries, title) {
+            const html = `
+                <h1 style="text-align: center; margin-bottom: 30px;">${title}</h1>
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px;">
+                    ${countries.map(country => `
+                        <div style="background-color: var(--card-bg); padding: 15px; border-radius: 10px; cursor: pointer; box-shadow: var(--shadow);" onclick="fetchCountryDetails('${country.cca3}')">
+                            <img src="${country.flags.png}" alt="${country.name.common}" style="width: 100%; height: auto; border-radius: 5px; margin-bottom: 10px;">
+                            <h3 style="text-align: center;">${country.name.common}</h3>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            
+            countryContent.innerHTML = html;
+        }
+        
+        function fetchCountryDetails(countryCode) {
+            showLoader();
+            
+            fetch(`https://restcountries.com/v3.1/alpha/${countryCode}`)
+                .then(response => response.json())
+                .then(data => {
+                    displayCountryData(data[0]);
+                    hideLoader();
+                })
+                .catch(error => {
+                    console.error('Error fetching country details:', error);
+                    showNotification('Failed to fetch country details');
+                    if (voiceResponseEnabled) {
+                        speak("Sorry, I couldn't fetch the country details.");
+                    }
+                    hideLoader();
+                });
+        }
+        
+        // History functions
+        function addToHistory(query) {
+            let history = JSON.parse(localStorage.getItem('searchHistory')) || [];
+            
+            // Add to beginning of array if not already there
+            if (!history.includes(query)) {
+                history.unshift(query);
+                
+                // Keep only the last 10 searches
+                if (history.length > 10) {
+                    history = history.slice(0, 10);
+                }
+                
+                localStorage.setItem('searchHistory', JSON.stringify(history));
+            }
+        }
+        
+        function openHistoryModal() {
+            historyModal.style.display = 'flex';
+            const historyList = document.getElementById('history-list');
+            const history = JSON.parse(localStorage.getItem('searchHistory')) || [];
+            
+            historyList.innerHTML = history.length ? 
+                history.map(item => `
+                    <div class="history-item" onclick="searchCountry('${item}'); historyModal.style.display='none'">
+                        ${item}
+                    </div>
+                `).join('') :
+                '<p>No search history yet</p>';
+        }
+        
+        // Notepad functions
+        function openNotepadModal() {
+            notepadModal.style.display = 'flex';
+        }
+        
+        function saveNotepad() {
+            localStorage.setItem('notepad', notepadContent.value);
+            showNotification('Notepad saved');
+            if (voiceResponseEnabled) {
+                speak("Notepad saved successfully.");
+            }
+        }
+        
+        function clearNotepad() {
+            if (confirm('Are you sure you want to clear the notepad?')) {
+                notepadContent.value = '';
+                localStorage.removeItem('notepad');
+                showNotification('Notepad cleared');
+                if (voiceResponseEnabled) {
+                    speak("Notepad cleared.");
+                }
+            }
+        }
+        
+        // Favorite functions
+        function toggleFavorite() {
+            if (!currentCountry) return;
+            
+            let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+            const countryId = currentCountry.cca3 || currentCountry.name.common;
+            
+            const index = favorites.findIndex(fav => fav.id === countryId);
+            
+            if (index === -1) {
+                // Add to favorites
+                favorites.push({
+                    id: countryId,
+                    name: currentCountry.name.common,
+                    flag: currentCountry.flags?.png || '',
+                    date: new Date().toISOString()
+                });
+                showNotification(`Added ${currentCountry.name.common} to favorites`);
+                if (voiceResponseEnabled) {
+                    speak(`Added ${currentCountry.name.common} to your favorites.`);
+                }
+            } else {
+                // Remove from favorites
+                favorites.splice(index, 1);
+                showNotification(`Removed ${currentCountry.name.common} from favorites`);
+                if (voiceResponseEnabled) {
+                    speak(`Removed ${currentCountry.name.common} from your favorites.`);
+                }
+            }
+            
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+            updateFavoriteButton();
+        }
+        
+        function updateFavoriteButton() {
+            if (!currentCountry) return;
+            
+            const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+            const countryId = currentCountry.cca3 || currentCountry.name.common;
+            const isFavorite = favorites.some(fav => fav.id === countryId);
+            
+            const favoriteBtn = document.getElementById('add-favorite');
+            if (favoriteBtn) {
+                favoriteBtn.innerHTML = isFavorite ? 
+                    '<i class="fas fa-star"></i>' : 
+                    '<i class="far fa-star"></i>';
+            }
+        }
+        
+        function openFavoritesModal() {
+            favoritesModal.style.display = 'flex';
+            const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+            
+            favoritesList.innerHTML = favorites.length ? 
+                favorites.map(fav => `
+                    <div class="favorite-item">
+                        <span onclick="searchCountry('${fav.name}'); favoritesModal.style.display='none'">
+                            ${fav.flag ? `<img src="${fav.flag}" alt="${fav.name}" style="width: 30px; margin-right: 10px;">` : ''}
+                            ${fav.name}
+                        </span>
+                        <button class="remove-favorite" onclick="removeFavorite('${fav.id}')">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                `).join('') :
+                '<p>No favorite countries yet</p>';
+        }
+        
+        function removeFavorite(countryId) {
+            event.stopPropagation();
+            
+            let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+            favorites = favorites.filter(fav => fav.id !== countryId);
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+            
+            openFavoritesModal();
+            updateFavoriteButton();
+            
+            if (currentCountry && (currentCountry.cca3 === countryId || currentCountry.name.common === countryId)) {
+                const favoriteBtn = document.getElementById('add-favorite');
+                if (favoriteBtn) {
+                    favoriteBtn.innerHTML = '<i class="far fa-star"></i>';
+                }
+            }
+            
+            if (voiceResponseEnabled) {
+                speak("Country removed from favorites.");
+            }
+        }
+        
+        // Chatbot functions
+        function openChatbotModal() {
+            chatbotModal.style.display = 'flex';
+            chatInput.focus();
+        }
+        
+        function loadQuickQuestions() {
+            const questions = [
+                "What is the population of this country?",
+                "What languages are spoken here?",
+                "What is the capital city?",
+                "What currency is used?",
+                "What countries border this one?",
+                "What region is this country in?",
+                "What's the calling code?",
+                "What's the weather in the capital?"
+            ];
+            
+            quickQuestions.innerHTML = questions.map(q => `
+                <button class="quick-question" onclick="askQuestion('${q}')">${q}</button>
+            `).join('');
+        }
+        
+        function askQuestion(question) {
+            chatInput.value = question;
+            sendChatMessage();
+        }
+        
+        function sendChatMessage() {
+            const message = chatInput.value.trim();
+            if (!message) return;
+            
+            // Add user message to chat
+            addChatMessage(message, 'user');
+            chatInput.value = '';
+            
+            // Process the question
+            processChatQuestion(message);
+        }
+        
+        function addChatMessage(text, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}-message`;
+            messageDiv.textContent = text;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        function processChatQuestion(question) {
+            if (!currentCountry) {
+                const response = "Please search for a country first so I can provide information about it.";
+                addChatMessage(response, 'bot');
+                if (voiceResponseEnabled) {
+                    speak(response);
+                }
+                return;
+            }
+            
+            const country = currentCountry;
+            let answer = "I'm sorry, I couldn't understand your question. Try asking about population, capital, languages, etc.";
+            
+            // Process common questions
+            if (question.toLowerCase().includes('population')) {
+                answer = `The population of ${country.name.common} is ${country.population.toLocaleString()}.`;
+            }
+            else if (question.toLowerCase().includes('capital')) {
+                const capital = country.capital ? country.capital[0] : 'not available';
+                answer = `The capital of ${country.name.common} is ${capital}.`;
+            }
+            else if (question.toLowerCase().includes('language')) {
+                const languages = country.languages ? Object.values(country.languages).join(', ') : 'not available';
+                answer = `The languages spoken in ${country.name.common} are: ${languages}.`;
+            }
+            else if (question.toLowerCase().includes('currency')) {
+                const currencies = country.currencies ? Object.values(country.currencies).map(c => `${c.name} (${c.symbol || 'no symbol'})`).join(', ') : 'not available';
+                answer = `The currencies used in ${country.name.common} are: ${currencies}.`;
+            }
+            else if (question.toLowerCase().includes('border') || question.toLowerCase().includes('neighbor')) {
+                if (country.borders && country.borders.length) {
+                    answer = `${country.name.common} borders these countries: ${country.borders.join(', ')}.`;
+                } else {
+                    answer = `${country.name.common} has no bordering countries or the information is not available.`;
+                }
+            }
+            else if (question.toLowerCase().includes('region')) {
+                answer = `${country.name.common} is located in ${country.region}${country.subregion ? ` (${country.subregion})` : ''}.`;
+            }
+            else if (question.toLowerCase().includes('calling code')) {
+                const callingCode = country.idd ? country.idd.root + (country.idd.suffixes ? country.idd.suffixes[0] : '') : 'not available';
+                answer = `The calling code for ${country.name.common} is ${callingCode}.`;
+            }
+            else if (question.toLowerCase().includes('weather')) {
+                const capital = country.capital ? country.capital[0] : null;
+                if (capital) {
+                    answer = `I can check the weather in ${capital}. Would you like me to fetch the weather data?`;
+                    // Add a button to fetch weather
+                    setTimeout(() => {
+                        const weatherBtn = document.createElement('button');
+                        weatherBtn.className = 'quick-question';
+                        weatherBtn.textContent = 'Get weather data';
+                        weatherBtn.onclick = () => {
+                            addChatMessage(`Fetching weather data for ${capital}...`, 'bot');
+                            fetchWeatherData(capital);
+                        };
+                        chatMessages.appendChild(weatherBtn);
+                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                    }, 100);
+                } else {
+                    answer = `I couldn't find the capital city to check the weather.`;
+                }
+            }
+            else if (question.toLowerCase().includes('economic') || question.toLowerCase().includes('gdp')) {
+                const code = country.cca2 || country.iso2;
+                if (code) {
+                    answer = `I can fetch economic data for ${country.name.common}. Would you like me to get it from the World Bank?`;
+                    // Add a button to fetch economic data
+                    setTimeout(() => {
+                        const econBtn = document.createElement('button');
+                        econBtn.className = 'quick-question';
+                        econBtn.textContent = 'Get economic data';
+                        econBtn.onclick = () => {
+                            addChatMessage(`Fetching economic data for ${country.name.common}...`, 'bot');
+                            fetchWorldBankData(code);
+                        };
+                        chatMessages.appendChild(econBtn);
+                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                    }, 100);
+                } else {
+                    answer = `I couldn't find economic data for this country.`;
+                }
+            }
+            
+            // Simulate typing effect
+            setTimeout(() => {
+                addChatMessage(answer, 'bot');
+                if (voiceResponseEnabled) {
+                    speak(answer);
+                }
+            }, 500);
+        }
+        
+        // Notification functions
+        function openNotificationsModal() {
+            notificationsModal.style.display = 'flex';
+        }
+        
+        function toggleNotifications() {
+            localStorage.setItem('notificationsEnabled', enableNotifications.checked);
+            showNotification(`Notifications ${enableNotifications.checked ? 'enabled' : 'disabled'}`);
+            if (voiceResponseEnabled) {
+                speak(`Notifications ${enableNotifications.checked ? 'enabled' : 'disabled'}`);
+            }
+        }
+        
+        function toggleNotificationSound() {
+            localStorage.setItem('soundEnabled', soundNotifications.checked);
+            showNotification(`Notification sound ${soundNotifications.checked ? 'enabled' : 'disabled'}`);
+            if (voiceResponseEnabled) {
+                speak(`Notification sound ${soundNotifications.checked ? 'enabled' : 'disabled'}`);
+            }
+        }
+        
+        function toggleVoiceResponses() {
+            voiceResponseEnabled = voiceResponses.checked;
+            localStorage.setItem('voiceResponses', voiceResponseEnabled);
+            showNotification(`Voice responses ${voiceResponseEnabled ? 'enabled' : 'disabled'}`);
+            if (voiceResponseEnabled) {
+                speak(`Voice responses ${voiceResponseEnabled ? 'enabled' : 'disabled'}`);
+            }
+        }
+        
+        function showNotification(message) {
+            if (enableNotifications.checked) {
+                notificationMessage.textContent = message;
+                notification.classList.add('show');
+                
+                if (soundNotifications.checked) {
+                    // Play a simple notification sound
+                    const audio = new Audio('data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU...');
+                    audio.play().catch(e => console.log('Audio play failed:', e));
+                }
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 3000);
+            }
+        }
+        
+        // Utility functions
+        function showLoader() {
+            loader.style.display = 'block';
+            countryContent.style.display = 'none';
+        }
+        
+        function hideLoader() {
+            loader.style.display = 'none';
+            countryContent.style.display = 'block';
+        }
+        
+        function showError(message) {
+            countryContent.innerHTML = `
+                <h1 style="text-align: center; margin-top: 100px; color: #ff6b6b;">
+                    ${message}
+                </h1>
+            `;
+            hideLoader();
+        }
+        
+        // Location functions
+        function getUserLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    position => {
+                        fetchCountryByCoordinates(position.coords.latitude, position.coords.longitude);
+                    },
+                    error => {
+                        console.log('Geolocation error:', error);
+                        // Default to a popular country if location access is denied
+                        searchCountry('United States');
+                    }
+                );
+            } else {
+                // Geolocation not supported
+                searchCountry('United States');
+            }
+        }
+        
+        function fetchCountryByCoordinates(lat, lng) {
+            fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}&localityLanguage=en`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.countryName) {
+                        searchCountry(data.countryName);
+                    } else {
+                        searchCountry('United States');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching country by coordinates:', error);
+                    searchCountry('United States');
+                });
+        }
+    </script>
+</body>
+</html>

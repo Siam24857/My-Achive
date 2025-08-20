@@ -1,0 +1,1421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cosmic Learning Hub</title>
+    <style>
+        /* CSS Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* Space Background Animation */
+        body {
+            background: linear-gradient(to bottom, #000428, #004e92);
+            color: #fff;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            background-color: #fff;
+            border-radius: 50%;
+            animation: twinkle var(--duration) infinite ease-in-out;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
+        }
+
+        /* Main Layout */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(45deg, #00d2ff, #3a7bd5);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            margin-right: 10px;
+            font-size: 32px;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 30px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        nav ul li a:hover {
+            color: #00d2ff;
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background: #00d2ff;
+            bottom: -5px;
+            left: 0;
+            transition: width 0.3s;
+        }
+
+        nav ul li a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 60px 0;
+            margin-bottom: 60px;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #00d2ff, #3a7bd5);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+        }
+
+        .hero p {
+            font-size: 20px;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(45deg, #00d2ff, #3a7bd5);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 18px;
+            transition: all 0.3s;
+            box-shadow: 0 10px 20px rgba(0, 210, 255, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0, 210, 255, 0.4);
+        }
+
+        /* Courses Section */
+        .courses {
+            margin-bottom: 80px;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            font-size: 36px;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            width: 50%;
+            height: 3px;
+            background: linear-gradient(45deg, #00d2ff, #3a7bd5);
+            bottom: -10px;
+            left: 25%;
+        }
+
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .course-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .course-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            border-color: rgba(0, 210, 255, 0.3);
+        }
+
+        .course-video {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+        }
+
+        .course-video iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .course-details {
+            padding: 20px;
+        }
+
+        .course-details h3 {
+            font-size: 22px;
+            margin-bottom: 10px;
+            color: #00d2ff;
+        }
+
+        .course-details p {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .course-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .course-level {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .beginner {
+            background: rgba(0, 210, 255, 0.2);
+            color: #00d2ff;
+        }
+
+        .intermediate {
+            background: rgba(255, 165, 0, 0.2);
+            color: #ffa500;
+        }
+
+        .advanced {
+            background: rgba(255, 0, 0, 0.2);
+            color: #ff0000;
+        }
+
+        .course-price {
+            font-weight: 700;
+            font-size: 20px;
+        }
+
+        /* Video Upload Section */
+        .video-upload {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 80px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .upload-container {
+            text-align: center;
+            padding: 30px;
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .upload-container:hover {
+            border-color: #00d2ff;
+            background: rgba(0, 210, 255, 0.05);
+        }
+
+        .upload-icon {
+            font-size: 60px;
+            color: #00d2ff;
+            margin-bottom: 20px;
+        }
+
+        .upload-text h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .upload-text p {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 20px;
+        }
+
+        .upload-button {
+            background: linear-gradient(45deg, #00d2ff, #3a7bd5);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .upload-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 210, 255, 0.3);
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        .progress-container {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .progress-bar {
+            height: 10px;
+            background: linear-gradient(45deg, #00d2ff, #3a7bd5);
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        .upload-status {
+            margin-top: 10px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .quality-options {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            gap: 15px;
+        }
+
+        .quality-option {
+            padding: 8px 15px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .quality-option:hover, .quality-option.active {
+            background: #00d2ff;
+            color: #000;
+        }
+
+        /* Video Preview Section */
+        .video-preview-container {
+            display: none;
+            margin-top: 30px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .video-preview {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #000;
+        }
+
+        #uploadedVideo {
+            width: 100%;
+            display: block;
+        }
+
+        .video-info {
+            margin-top: 15px;
+            text-align: left;
+            padding: 0 10px;
+        }
+
+        .video-info h3 {
+            color: #00d2ff;
+            margin-bottom: 10px;
+        }
+
+        .video-meta {
+            display: flex;
+            justify-content: space-between;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+        }
+
+        .video-actions {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .video-action-btn {
+            padding: 8px 20px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .video-action-btn:hover {
+            background: #00d2ff;
+            color: #000;
+        }
+
+        /* My Videos Section */
+        .my-videos {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 80px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .videos-list {
+            margin-top: 30px;
+        }
+
+        .video-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .video-item:last-child {
+            border-bottom: none;
+        }
+
+        .video-item-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .video-item-thumbnail {
+            width: 120px;
+            height: 70px;
+            border-radius: 5px;
+            overflow: hidden;
+            background: #000;
+            position: relative;
+        }
+
+        .video-item-thumbnail video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .video-item-play {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            background: rgba(0, 0, 0, 0.7);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .video-item-details h4 {
+            color: #00d2ff;
+            margin-bottom: 5px;
+        }
+
+        .video-item-meta {
+            display: flex;
+            gap: 15px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+        }
+
+        .video-item-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .video-item-btn {
+            padding: 5px 10px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .video-item-btn:hover {
+            background: #00d2ff;
+            color: #000;
+        }
+
+        .video-item-btn.delete {
+            background: rgba(255, 0, 0, 0.2);
+            color: #ff6b6b;
+        }
+
+        .video-item-btn.delete:hover {
+            background: #ff0000;
+            color: white;
+        }
+
+        /* Features Section */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 80px;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            border-color: rgba(0, 210, 255, 0.3);
+        }
+
+        .feature-icon {
+            font-size: 50px;
+            margin-bottom: 20px;
+            color: #00d2ff;
+        }
+
+        .feature-card h3 {
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
+        .feature-card p {
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 60px;
+        }
+
+        .footer-logo {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #00d2ff, #3a7bd5);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            margin: 0 15px;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: #00d2ff;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 10px;
+            transition: all 0.3s;
+        }
+
+        .social-icon:hover {
+            background: #00d2ff;
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 14px;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .modal-close:hover {
+            color: #00d2ff;
+        }
+
+        .modal-video {
+            width: 100%;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            nav ul {
+                margin-top: 20px;
+            }
+
+            nav ul li {
+                margin: 0 10px;
+            }
+
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .hero p {
+                font-size: 18px;
+            }
+
+            .course-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-title {
+                font-size: 30px;
+            }
+
+            .video-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .video-item-actions {
+                align-self: flex-end;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 28px;
+            }
+
+            .cta-button {
+                padding: 12px 25px;
+                font-size: 16px;
+            }
+
+            .quality-options {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .video-upload {
+                padding: 20px;
+            }
+
+            .video-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .video-item-info {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .video-item-thumbnail {
+                width: 100%;
+                height: auto;
+                aspect-ratio: 16/9;
+            }
+        }
+
+        /* Animation Classes */
+        .fade-in {
+            animation: fadeIn 1s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .delay-1 {
+            animation-delay: 0.2s;
+        }
+
+        .delay-2 {
+            animation-delay: 0.4s;
+        }
+
+        .delay-3 {
+            animation-delay: 0.6s;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- Space Background -->
+    <div class="stars" id="stars"></div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="logo">
+                <i class="fas fa-rocket"></i>
+                <span>Cosmic Learning</span>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#courses">Courses</a></li>
+                    <li><a href="#upload">Upload</a></li>
+                    <li><a href="#my-videos">My Videos</a></li>
+                    <li><a href="#features">Features</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="hero fade-in">
+            <h1>Explore the Universe of Knowledge</h1>
+            <p>Master programming with our interactive courses designed for all skill levels. Join our cosmic learning journey today!</p>
+            <a href="#courses" class="cta-button">Browse Courses</a>
+        </section>
+
+        <!-- Courses Section -->
+        <section class="courses" id="courses">
+            <h2 class="section-title fade-in">Featured Courses</h2>
+            <div class="course-grid">
+                <!-- Course 1 -->
+                <div class="course-card fade-in delay-1">
+                    <div class="course-video">
+                        <iframe width="560" height="315" src="https://www.youtube.com/embed/_uQrJ0TkZlc" title="Python Full Course for Beginners" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    </div>
+                    <div class="course-details">
+                        <h3>Python Full Course</h3>
+                        <p>Learn Python programming from scratch with this comprehensive beginner's course.</p>
+                        <div class="course-meta">
+                            <span class="course-level beginner">Beginner</span>
+                            <span class="course-price">FREE</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Course 2 -->
+                <div class="course-card fade-in delay-2">
+                    <div class="course-video">
+                        <iframe width="560" height="315" src="https://www.youtube.com/embed/EerdGm-ehJQ" title="JavaScript Tutorial Full Course – Beginner to Pro" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    </div>
+                    <div class="course-details">
+                        <h3>JavaScript Mastery</h3>
+                        <p>From basics to advanced concepts, master JavaScript with this complete course.</p>
+                        <div class="course-meta">
+                            <span class="course-level intermediate">Intermediate</span>
+                            <span class="course-price">FREE</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Course 3 -->
+                <div class="course-card fade-in delay-3">
+                    <div class="course-video">
+                        <iframe width="560" height="315" src="https://www.youtube.com/embed/LfaMVlDaQ24" title="Harvard CS50 – Full Computer Science University Course" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    </div>
+                    <div class="course-details">
+                        <h3>Harvard CS50</h3>
+                        <p>Introduction to Computer Science from Harvard University.</p>
+                        <div class="course-meta">
+                            <span class="course-level advanced">Advanced</span>
+                            <span class="course-price">FREE</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Video Upload Section -->
+        <section class="video-upload fade-in" id="upload">
+            <h2 class="section-title">Share Your Knowledge</h2>
+            <div class="upload-container" id="uploadContainer">
+                <div class="upload-icon">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                </div>
+                <div class="upload-text">
+                    <h3>Upload Your Video Course</h3>
+                    <p>Drag & drop your video file here or click to browse</p>
+                    <button class="upload-button" id="uploadButton">Select Video</button>
+                    <input type="file" id="fileInput" accept="video/*">
+                </div>
+                <div class="quality-options">
+                    <div class="quality-option active" data-quality="high">High Quality</div>
+                    <div class="quality-option" data-quality="medium">Medium Quality</div>
+                    <div class="quality-option" data-quality="low">Low Quality</div>
+                </div>
+                <div class="progress-container" id="progressContainer">
+                    <div class="progress-bar" id="progressBar"></div>
+                    <div class="upload-status" id="uploadStatus">Uploading: 0%</div>
+                </div>
+            </div>
+            
+            <!-- Video Preview Section -->
+            <div class="video-preview-container" id="videoPreviewContainer">
+                <h3>Your Uploaded Video</h3>
+                <div class="video-preview">
+                    <video id="uploadedVideo" controls>
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <div class="video-info">
+                    <h3 id="videoTitle">Video Title</h3>
+                    <div class="video-meta">
+                        <span id="videoQuality">Quality: High</span>
+                        <span id="videoSize">Size: 0 MB</span>
+                        <span id="videoDuration">Duration: 0:00</span>
+                    </div>
+                </div>
+                <div class="video-actions">
+                    <button class="video-action-btn" id="saveVideoBtn">
+                        <i class="fas fa-save"></i> Save Video
+                    </button>
+                    <button class="video-action-btn" id="shareVideoBtn">
+                        <i class="fas fa-share-alt"></i> Share
+                    </button>
+                    <button class="video-action-btn" id="uploadNewBtn">
+                        <i class="fas fa-upload"></i> Upload New
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- My Videos Section -->
+        <section class="my-videos fade-in" id="my-videos">
+            <h2 class="section-title">My Uploaded Videos</h2>
+            <div class="videos-list" id="videosList">
+                <!-- Videos will be dynamically added here -->
+                <p id="noVideosMessage">You haven't uploaded any videos yet.</p>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features" id="features">
+            <div class="feature-card fade-in delay-1">
+                <div class="feature-icon">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <h3>Expert Instructors</h3>
+                <p>Learn from industry professionals with years of experience in web development and design.</p>
+            </div>
+            <div class="feature-card fade-in delay-2">
+                <div class="feature-icon">
+                    <i class="fas fa-laptop-code"></i>
+                </div>
+                <h3>Hands-on Projects</h3>
+                <p>Apply what you learn with real-world projects that build your portfolio and skills.</p>
+            </div>
+            <div class="feature-card fade-in delay-3">
+                <div class="feature-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3>Community Support</h3>
+                <p>Join our vibrant community of learners and get help when you need it.</p>
+            </div>
+        </section>
+    </div>
+
+    <!-- Video Modal -->
+    <div class="modal" id="videoModal">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">&times;</button>
+            <video class="modal-video" id="modalVideo" controls></video>
+            <h3 id="modalVideoTitle"></h3>
+            <div class="video-meta">
+                <span id="modalVideoQuality"></span>
+                <span id="modalVideoSize"></span>
+                <span id="modalVideoDuration"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-logo">Cosmic Learning</div>
+            <div class="footer-links">
+                <a href="#courses">Courses</a>
+                <a href="#upload">Upload</a>
+                <a href="#my-videos">My Videos</a>
+                <a href="#features">Features</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms</a>
+            </div>
+            <div class="social-icons">
+                <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+            </div>
+            <div class="copyright">
+                &copy; 2023 Cosmic Learning. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Create Starfield Background
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const starCount = 200;
+            
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                
+                // Random position
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                
+                // Random size (1-3px)
+                const size = Math.random() * 2 + 1;
+                
+                // Random animation duration (3-8s)
+                const duration = Math.random() * 5 + 3;
+                
+                star.style.left = `${x}%`;
+                star.style.top = `${y}%`;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.setProperty('--duration', `${duration}s`);
+                
+                // Random delay for twinkling
+                star.style.animationDelay = `${Math.random() * 5}s`;
+                
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // Video Storage System
+        class VideoStorage {
+            constructor() {
+                this.videos = JSON.parse(localStorage.getItem('cosmicLearningVideos')) || [];
+            }
+            
+            saveVideos() {
+                localStorage.setItem('cosmicLearningVideos', JSON.stringify(this.videos));
+            }
+            
+            addVideo(videoData) {
+                this.videos.push(videoData);
+                this.saveVideos();
+            }
+            
+            getVideos() {
+                return this.videos;
+            }
+            
+            deleteVideo(videoId) {
+                this.videos = this.videos.filter(video => video.id !== videoId);
+                this.saveVideos();
+            }
+            
+            getVideoById(videoId) {
+                return this.videos.find(video => video.id === videoId);
+            }
+        }
+
+        // Video Upload Functionality
+        function setupVideoUpload() {
+            const uploadContainer = document.getElementById('uploadContainer');
+            const uploadButton = document.getElementById('uploadButton');
+            const fileInput = document.getElementById('fileInput');
+            const progressContainer = document.getElementById('progressContainer');
+            const progressBar = document.getElementById('progressBar');
+            const uploadStatus = document.getElementById('uploadStatus');
+            const qualityOptions = document.querySelectorAll('.quality-option');
+            const videoPreviewContainer = document.getElementById('videoPreviewContainer');
+            const uploadedVideo = document.getElementById('uploadedVideo');
+            const videoTitle = document.getElementById('videoTitle');
+            const videoQuality = document.getElementById('videoQuality');
+            const videoSize = document.getElementById('videoSize');
+            const videoDuration = document.getElementById('videoDuration');
+            const saveVideoBtn = document.getElementById('saveVideoBtn');
+            const shareVideoBtn = document.getElementById('shareVideoBtn');
+            const uploadNewBtn = document.getElementById('uploadNewBtn');
+            const videosList = document.getElementById('videosList');
+            const noVideosMessage = document.getElementById('noVideosMessage');
+            const videoStorage = new VideoStorage();
+            
+            let selectedQuality = 'high';
+            let currentFile = null;
+            let currentVideoUrl = null;
+            
+            // Initialize videos list
+            updateVideosList();
+            
+            // Handle quality selection
+            qualityOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    qualityOptions.forEach(opt => opt.classList.remove('active'));
+                    option.classList.add('active');
+                    selectedQuality = option.dataset.quality;
+                    if (currentFile) {
+                        videoQuality.textContent = `Quality: ${selectedQuality.charAt(0).toUpperCase() + selectedQuality.slice(1)}`;
+                    }
+                });
+            });
+            
+            // Handle drag and drop
+            uploadContainer.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadContainer.style.borderColor = '#00d2ff';
+                uploadContainer.style.backgroundColor = 'rgba(0, 210, 255, 0.05)';
+            });
+            
+            uploadContainer.addEventListener('dragleave', () => {
+                uploadContainer.style.borderColor = 'rgba(255, 255, 255, 0.3)';
+                uploadContainer.style.backgroundColor = 'transparent';
+            });
+            
+            uploadContainer.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadContainer.style.borderColor = 'rgba(255, 255, 255, 0.3)';
+                uploadContainer.style.backgroundColor = 'transparent';
+                
+                if (e.dataTransfer.files.length) {
+                    handleFileUpload(e.dataTransfer.files[0]);
+                }
+            });
+            
+            // Handle file selection via button
+            uploadButton.addEventListener('click', () => {
+                fileInput.click();
+            });
+            
+            fileInput.addEventListener('change', () => {
+                if (fileInput.files.length) {
+                    handleFileUpload(fileInput.files[0]);
+                }
+            });
+            
+            // Handle video preview and upload
+            function handleFileUpload(file) {
+                if (!file.type.includes('video')) {
+                    alert('Please upload a video file');
+                    return;
+                }
+                
+                currentFile = file;
+                
+                // Show file info during upload
+                uploadStatus.textContent = `Selected: ${file.name} (${formatFileSize(file.size)}) - Quality: ${selectedQuality}`;
+                progressContainer.style.display = 'block';
+                
+                // Simulate upload progress
+                let progress = 0;
+                const interval = setInterval(() => {
+                    progress += Math.random() * 10;
+                    if (progress > 100) progress = 100;
+                    
+                    progressBar.style.width = `${progress}%`;
+                    uploadStatus.textContent = `Uploading ${file.name}: ${Math.round(progress)}%`;
+                    
+                    if (progress === 100) {
+                        clearInterval(interval);
+                        setTimeout(() => {
+                            uploadStatus.innerHTML = `<i class="fas fa-check-circle" style="color: #00d2ff;"></i> Upload complete! Video is being processed in ${selectedQuality} quality.`;
+                            progressBar.style.background = '#4CAF50';
+                            
+                            // Create object URL for preview
+                            currentVideoUrl = URL.createObjectURL(file);
+                            showVideoPreview(file);
+                        }, 500);
+                    }
+                }, 300);
+            }
+            
+            // Display video preview after upload
+            function showVideoPreview(file) {
+                uploadedVideo.src = currentVideoUrl;
+                
+                // Set video info
+                videoTitle.textContent = file.name.replace(/\.[^/.]+$/, ""); // Remove extension
+                videoQuality.textContent = `Quality: ${selectedQuality.charAt(0).toUpperCase() + selectedQuality.slice(1)}`;
+                videoSize.textContent = `Size: ${formatFileSize(file.size)}`;
+                
+                // Get video duration when metadata is loaded
+                uploadedVideo.onloadedmetadata = function() {
+                    videoDuration.textContent = `Duration: ${formatTime(uploadedVideo.duration)}`;
+                };
+                
+                // Show preview container
+                videoPreviewContainer.style.display = 'block';
+                
+                // Scroll to preview
+                setTimeout(() => {
+                    videoPreviewContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }, 300);
+            }
+            
+            // Handle action buttons
+            saveVideoBtn.addEventListener('click', () => {
+                if (!currentFile || !currentVideoUrl) {
+                    alert('Please upload a video first');
+                    return;
+                }
+                
+                const videoData = {
+                    id: Date.now().toString(),
+                    title: videoTitle.textContent,
+                    quality: selectedQuality,
+                    size: formatFileSize(currentFile.size),
+                    duration: videoDuration.textContent.replace('Duration: ', ''),
+                    file: currentFile,
+                    url: currentVideoUrl,
+                    uploadDate: new Date().toLocaleDateString()
+                };
+                
+                // Save to storage
+                videoStorage.addVideo(videoData);
+                
+                // Update videos list
+                updateVideosList();
+                
+                alert('Video saved successfully!');
+                
+                // Reset upload interface
+                resetUploadForm();
+            });
+            
+            shareVideoBtn.addEventListener('click', () => {
+                alert('Share functionality would be implemented here with social media APIs');
+            });
+            
+            uploadNewBtn.addEventListener('click', resetUploadForm);
+            
+            function resetUploadForm() {
+                progressBar.style.width = '0%';
+                progressBar.style.background = 'linear-gradient(45deg, #00d2ff, #3a7bd5)';
+                progressContainer.style.display = 'none';
+                videoPreviewContainer.style.display = 'none';
+                fileInput.value = '';
+                currentFile = null;
+                if (currentVideoUrl) {
+                    URL.revokeObjectURL(currentVideoUrl);
+                    currentVideoUrl = null;
+                }
+            }
+            
+            // Update videos list
+            function updateVideosList() {
+                const videos = videoStorage.getVideos();
+                
+                if (videos.length === 0) {
+                    noVideosMessage.style.display = 'block';
+                    videosList.innerHTML = '';
+                    videosList.appendChild(noVideosMessage);
+                    return;
+                }
+                
+                noVideosMessage.style.display = 'none';
+                videosList.innerHTML = '';
+                
+                videos.forEach(video => {
+                    const videoItem = document.createElement('div');
+                    videoItem.className = 'video-item';
+                    videoItem.innerHTML = `
+                        <div class="video-item-info">
+                            <div class="video-item-thumbnail" data-video-id="${video.id}">
+                                <video src="${video.url}"></video>
+                                <div class="video-item-play"><i class="fas fa-play"></i></div>
+                            </div>
+                            <div class="video-item-details">
+                                <h4>${video.title}</h4>
+                                <div class="video-item-meta">
+                                    <span>${video.quality}</span>
+                                    <span>${video.size}</span>
+                                    <span>${video.duration}</span>
+                                    <span>Uploaded: ${video.uploadDate}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="video-item-actions">
+                            <button class="video-item-btn view" data-video-id="${video.id}">
+                                <i class="fas fa-eye"></i> View
+                            </button>
+                            <button class="video-item-btn delete" data-video-id="${video.id}">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </div>
+                    `;
+                    videosList.appendChild(videoItem);
+                });
+                
+                // Add event listeners to new elements
+                document.querySelectorAll('.video-item-thumbnail').forEach(thumb => {
+                    thumb.addEventListener('click', () => {
+                        const videoId = thumb.dataset.videoId;
+                        playVideo(videoId);
+                    });
+                });
+                
+                document.querySelectorAll('.video-item-btn.view').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const videoId = btn.dataset.videoId;
+                        playVideo(videoId);
+                    });
+                });
+                
+                document.querySelectorAll('.video-item-btn.delete').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const videoId = btn.dataset.videoId;
+                        if (confirm('Are you sure you want to delete this video?')) {
+                            videoStorage.deleteVideo(videoId);
+                            updateVideosList();
+                        }
+                    });
+                });
+            }
+            
+            // Play video in modal
+            function playVideo(videoId) {
+                const video = videoStorage.getVideoById(videoId);
+                if (!video) return;
+                
+                const modal = document.getElementById('videoModal');
+                const modalVideo = document.getElementById('modalVideo');
+                const modalVideoTitle = document.getElementById('modalVideoTitle');
+                const modalVideoQuality = document.getElementById('modalVideoQuality');
+                const modalVideoSize = document.getElementById('modalVideoSize');
+                const modalVideoDuration = document.getElementById('modalVideoDuration');
+                const modalClose = document.getElementById('modalClose');
+                
+                modalVideo.src = video.url;
+                modalVideoTitle.textContent = video.title;
+                modalVideoQuality.textContent = `Quality: ${video.quality}`;
+                modalVideoSize.textContent = `Size: ${video.size}`;
+                modalVideoDuration.textContent = `Duration: ${video.duration}`;
+                
+                modal.style.display = 'flex';
+                modalVideo.play();
+                
+                modalClose.addEventListener('click', () => {
+                    modal.style.display = 'none';
+                    modalVideo.pause();
+                });
+                
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        modal.style.display = 'none';
+                        modalVideo.pause();
+                    }
+                });
+            }
+            
+            // Helper functions
+            function formatFileSize(bytes) {
+                if (bytes < 1024) return bytes + ' bytes';
+                else if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+                else return (bytes / 1048576).toFixed(1) + ' MB';
+            }
+            
+            function formatTime(seconds) {
+                const mins = Math.floor(seconds / 60);
+                const secs = Math.floor(seconds % 60);
+                return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+            }
+        }
+
+        // Smooth scrolling for anchor links
+        function setupSmoothScrolling() {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        }
+
+        // Animation on scroll
+        function setupAnimations() {
+            const fadeElements = document.querySelectorAll('.fade-in');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            fadeElements.forEach(element => {
+                element.style.opacity = 0;
+                element.style.transform = 'translateY(20px)';
+                element.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(element);
+            });
+        }
+
+        // Initialize everything when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            createStars();
+            setupVideoUpload();
+            setupSmoothScrolling();
+            setupAnimations();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1759 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Ultrasonic Professional | AI Business Solutions & Digital Services</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Ultrasonic Professional provides cutting-edge AI business solutions, digital services, and innovative tools for entrepreneurs and businesses.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  <style>
+    :root {
+      --primary: #2b6cb0;
+      --secondary: #4299e1;
+      --accent: #9f7aea;
+      --dark: #1a202c;
+      --darker: #0f172a;
+      --light: #f7fafc;
+      --gray: #718096;
+      --success: #48bb78;
+      --warning: #ed8936;
+      --danger: #f56565;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: var(--light);
+      background-color: var(--dark);
+      overflow-x: hidden;
+    }
+
+    /* Dark/Light Mode Toggle */
+    .theme-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1001;
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(5px);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      border: none;
+      color: white;
+    }
+
+    /* Background Elements */
+    .bg-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(43, 108, 176, 0.1) 0%, rgba(159, 122, 234, 0.1) 100%), 
+                  url('https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2000&q=80') no-repeat center center/cover;
+      z-index: -2;
+    }
+
+    .bg-overlay::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(26, 32, 44, 0.9);
+      z-index: -1;
+    }
+
+    /* Particles */
+    #particles-js {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+
+    /* Header & Navigation */
+    header {
+      padding: 1.5rem 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      background-color: rgba(26, 32, 44, 0.9);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--light);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+    }
+
+    .logo span {
+      color: var(--primary);
+    }
+
+    nav ul {
+      display: flex;
+      list-style: none;
+    }
+
+    nav ul li {
+      margin-left: 2rem;
+    }
+
+    nav ul li a {
+      color: var(--light);
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      position: relative;
+      padding: 0.5rem 0;
+    }
+
+    nav ul li a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(to right, var(--primary), var(--accent));
+      transition: width 0.3s ease;
+    }
+
+    nav ul li a:hover::after {
+      width: 100%;
+    }
+
+    .menu-toggle {
+      display: none;
+      cursor: pointer;
+      font-size: 1.5rem;
+      color: white;
+      background: none;
+      border: none;
+    }
+
+    /* Button Styles */
+    .btn {
+      display: inline-block;
+      padding: 0.8rem 2rem;
+      border-radius: 50px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      text-align: center;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: linear-gradient(to right, var(--primary), var(--accent));
+      color: white;
+      box-shadow: 0 4px 15px rgba(66, 153, 225, 0.4);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(66, 153, 225, 0.6);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: white;
+      border: 2px solid var(--primary);
+    }
+
+    .btn-outline:hover {
+      background: var(--primary);
+      transform: translateY(-3px);
+    }
+
+    /* Hero Section */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 0 5%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-content {
+      max-width: 800px;
+      z-index: 1;
+      position: relative;
+    }
+
+    .hero h1 {
+      font-size: 3.5rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.2;
+    }
+
+    .hero h1 span {
+      color: var(--primary);
+      position: relative;
+    }
+
+    .hero h1 span::after {
+      content: '';
+      position: absolute;
+      bottom: 5px;
+      left: 0;
+      width: 100%;
+      height: 10px;
+      background-color: rgba(66, 153, 225, 0.3);
+      z-index: -1;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      color: rgba(255, 255, 255, 0.8);
+      max-width: 600px;
+    }
+
+    .typing-text {
+      font-size: 1.5rem;
+      height: 2rem;
+      margin-bottom: 1rem;
+      color: var(--accent);
+    }
+
+    .hero-btns {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    /* AI Business Plan Generator Section */
+    .ai-section {
+      padding: 5rem 5%;
+      background: rgba(15, 23, 42, 0.7);
+      position: relative;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 4rem;
+      position: relative;
+    }
+
+    .section-title h2 {
+      font-size: 2.5rem;
+      display: inline-block;
+      position: relative;
+    }
+
+    .section-title h2::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(to right, var(--primary), var(--accent));
+    }
+
+    .ai-generator-container {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      padding: 2rem;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .ai-form {
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 5px;
+      color: white;
+      font-family: inherit;
+      transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    textarea.form-control {
+      min-height: 150px;
+      resize: vertical;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .ai-result {
+      margin-top: 2rem;
+      padding: 1.5rem;
+      background: rgba(43, 108, 176, 0.1);
+      border-radius: 5px;
+      border-left: 4px solid var(--primary);
+      display: none;
+    }
+
+    .ai-result h3 {
+      margin-bottom: 1rem;
+      color: var(--primary);
+    }
+
+    .ai-result-content {
+      white-space: pre-wrap;
+      line-height: 1.7;
+    }
+
+    .loading {
+      display: none;
+      text-align: center;
+      margin: 1rem 0;
+    }
+
+    .loading-spinner {
+      border: 4px solid rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      border-top: 4px solid var(--primary);
+      width: 30px;
+      height: 30px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Notepad Section */
+    .notepad-section {
+      padding: 5rem 5%;
+      background: rgba(15, 23, 42, 0.7);
+      position: relative;
+    }
+
+    .notepad-container {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      padding: 2rem;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .notepad-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .notepad-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .notepad-btn:hover {
+      background: var(--primary);
+    }
+
+    .notepad-btn.active {
+      background: var(--accent);
+    }
+
+    .notepad-editor {
+      width: 100%;
+      min-height: 300px;
+      padding: 1rem;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 5px;
+      color: white;
+      font-family: inherit;
+      line-height: 1.6;
+      resize: vertical;
+    }
+
+    .notepad-editor:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    /* Fullscreen Notepad */
+    .fullscreen-notepad {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--darker);
+      z-index: 2000;
+      display: none;
+      flex-direction: column;
+      padding: 1rem;
+    }
+
+    .fullscreen-notepad.active {
+      display: flex;
+    }
+
+    .fullscreen-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      background: rgba(26, 32, 44, 0.9);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .fullscreen-toolbar-left {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .fullscreen-editor {
+      flex: 1;
+      width: 100%;
+      padding: 1rem;
+      background: var(--dark);
+      border: none;
+      color: white;
+      font-family: inherit;
+      font-size: 1rem;
+      line-height: 1.6;
+      resize: none;
+    }
+
+    .fullscreen-editor:focus {
+      outline: none;
+    }
+
+    /* Services Section */
+    .services-section {
+      padding: 5rem 5%;
+      position: relative;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .service-card {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      padding: 2rem;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .service-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+      border-color: var(--primary);
+    }
+
+    .service-icon {
+      font-size: 2.5rem;
+      color: var(--primary);
+      margin-bottom: 1.5rem;
+    }
+
+    .service-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .service-card p {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    /* Portfolio Section */
+    .portfolio-section {
+      padding: 5rem 5%;
+      background: rgba(15, 23, 42, 0.7);
+      position: relative;
+    }
+
+    .portfolio-filter {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 3rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .filter-btn {
+      padding: 0.5rem 1.5rem;
+      background: transparent;
+      border: 1px solid var(--primary);
+      color: white;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .filter-btn.active, .filter-btn:hover {
+      background: var(--primary);
+    }
+
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 2rem;
+    }
+
+    .portfolio-item {
+      position: relative;
+      border-radius: 10px;
+      overflow: hidden;
+      height: 250px;
+    }
+
+    .portfolio-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .portfolio-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 1.5rem;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .portfolio-item:hover .portfolio-overlay {
+      opacity: 1;
+    }
+
+    .portfolio-item:hover .portfolio-img {
+      transform: scale(1.1);
+    }
+
+    .portfolio-overlay h3 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+      transform: translateY(20px);
+      transition: transform 0.3s ease;
+    }
+
+    .portfolio-overlay p {
+      color: rgba(255, 255, 255, 0.8);
+      transform: translateY(20px);
+      transition: transform 0.3s ease 0.1s;
+    }
+
+    .portfolio-item:hover .portfolio-overlay h3,
+    .portfolio-item:hover .portfolio-overlay p {
+      transform: translateY(0);
+    }
+
+    /* Contact Section */
+    .contact-section {
+      padding: 5rem 5%;
+      position: relative;
+    }
+
+    .contact-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 3rem;
+    }
+
+    .contact-info {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .contact-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 1.5rem;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .contact-card:hover {
+      background: rgba(66, 153, 225, 0.1);
+      transform: translateY(-5px);
+    }
+
+    .contact-icon {
+      font-size: 1.5rem;
+      color: var(--primary);
+    }
+
+    .contact-details h3 {
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .contact-details p, .contact-details a {
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .contact-details a:hover {
+      color: var(--primary);
+    }
+
+    .contact-form {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 2rem;
+      border-radius: 10px;
+      backdrop-filter: blur(10px);
+    }
+
+    /* Footer */
+    footer {
+      background: rgba(0, 0, 0, 0.5);
+      padding: 2rem 5%;
+      text-align: center;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .social-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      font-size: 1.2rem;
+      transition: all 0.3s ease;
+    }
+
+    .social-link:hover {
+      background: var(--primary);
+      transform: translateY(-3px);
+    }
+
+    .copyright {
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 0.9rem;
+    }
+
+    /* Back to Top Button */
+    .back-to-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 50px;
+      height: 50px;
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      text-decoration: none;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      z-index: 999;
+      border: none;
+      cursor: pointer;
+    }
+
+    .back-to-top.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .back-to-top:hover {
+      background: var(--accent);
+      transform: translateY(-5px);
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 992px) {
+      .hero h1 {
+        font-size: 2.8rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .menu-toggle {
+        display: block;
+      }
+      
+      nav {
+        position: fixed;
+        top: 80px;
+        left: 0;
+        width: 100%;
+        background: rgba(26, 32, 44, 0.95);
+        backdrop-filter: blur(10px);
+        padding: 1rem;
+        transform: translateY(-150%);
+        transition: transform 0.3s ease;
+        z-index: 999;
+      }
+      
+      nav.active {
+        transform: translateY(0);
+      }
+      
+      nav ul {
+        flex-direction: column;
+      }
+      
+      nav ul li {
+        margin: 0.5rem 0;
+      }
+      
+      .hero h1 {
+        font-size: 2.2rem;
+      }
+      
+      .hero-btns {
+        flex-direction: column;
+      }
+      
+      .btn {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .hero h1 {
+        font-size: 2rem;
+      }
+      
+      .section-title h2 {
+        font-size: 2rem;
+      }
+      
+      .portfolio-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Animation Classes */
+    .animate-fade-in {
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    .animate-slide-up {
+      animation: slideUp 0.8s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+      from { 
+        opacity: 0;
+        transform: translateY(50px);
+      }
+      to { 
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Light Theme */
+    body.light-theme {
+      color: var(--dark);
+      background-color: var(--light);
+    }
+
+    body.light-theme .bg-overlay::after {
+      background-color: rgba(247, 250, 252, 0.9);
+    }
+
+    body.light-theme header {
+      background-color: rgba(247, 250, 252, 0.9);
+    }
+
+    body.light-theme nav ul li a {
+      color: var(--dark);
+    }
+
+    body.light-theme .logo {
+      color: var(--dark);
+    }
+
+    body.light-theme .service-card,
+    body.light-theme .contact-card,
+    body.light-theme .contact-form,
+    body.light-theme .ai-generator-container,
+    body.light-theme .notepad-container {
+      background: rgba(255, 255, 255, 0.7);
+      color: var(--dark);
+    }
+
+    body.light-theme .form-control,
+    body.light-theme .notepad-editor {
+      background: rgba(255, 255, 255, 0.8);
+      color: var(--dark);
+      border-color: rgba(0, 0, 0, 0.1);
+    }
+
+    body.light-theme .service-card p,
+    body.light-theme .contact-details p,
+    body.light-theme .contact-details a {
+      color: rgba(26, 32, 44, 0.8);
+    }
+
+    body.light-theme .btn-outline {
+      color: var(--dark);
+      border-color: var(--dark);
+    }
+
+    body.light-theme .btn-outline:hover {
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <!-- Theme Toggle -->
+  <button class="theme-toggle" title="Toggle Dark/Light Mode">
+    <i class="fas fa-moon"></i>
+  </button>
+  
+  <!-- Background Elements -->
+  <div class="bg-overlay"></div>
+  <div id="particles-js"></div>
+  
+  <!-- Header --> 
+  <header>
+    <a href="#" class="logo">Ultrasonic<span>Professional</span></a>
+    <button class="menu-toggle">
+      <i class="fas fa-bars"></i>
+    </button>
+    <nav>
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#ai-generator">AI Business Plan</a></li>
+        <li><a href="#notepad">Notepad</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#portfolio">Portfolio</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+  
+  <!-- Hero Section -->
+  <section class="hero" id="home">
+    <div class="hero-content animate-slide-up">
+      <h1>Innovative Solutions with <span>Ultrasonic Professional</span></h1>
+      <div class="typing-text" id="typing-text"></div>
+      <p>We provide cutting-edge AI business solutions, digital services, and innovative tools to help your business thrive in the digital age.</p>
+      <div class="hero-btns">
+        <a href="#ai-generator" class="btn btn-primary">Generate Business Plan</a>
+        <a href="#notepad" class="btn btn-outline">Try Our Notepad</a>
+      </div>
+    </div>
+  </section>
+  
+  <!-- AI Business Plan Generator Section -->
+  <section class="ai-section" id="ai-generator">
+    <div class="section-title">
+      <h2>AI Business Plan Generator</h2>
+      <p>Create a comprehensive 500-word business plan in seconds with our AI-powered tool</p>
+    </div>
+    <div class="ai-generator-container">
+      <form class="ai-form" id="businessPlanForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="business-name" class="form-label">Business Name</label>
+            <input type="text" id="business-name" class="form-control" placeholder="Enter your business name" required>
+          </div>
+          <div class="form-group">
+            <label for="business-type" class="form-label">Business Type</label>
+            <select id="business-type" class="form-control" required>
+              <option value="">Select business type</option>
+              <option value="startup">Startup</option>
+              <option value="small-business">Small Business</option>
+              <option value="ecommerce">E-commerce</option>
+              <option value="saas">SaaS</option>
+              <option value="consulting">Consulting</option>
+              <option value="retail">Retail</option>
+              <option value="manufacturing">Manufacturing</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="industry" class="form-label">Industry</label>
+            <input type="text" id="industry" class="form-control" placeholder="Enter your industry" required>
+          </div>
+          <div class="form-group">
+            <label for="target-market" class="form-label">Target Market</label>
+            <input type="text" id="target-market" class="form-control" placeholder="Describe your target customers" required>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="business-concept" class="form-label">Business Concept</label>
+          <textarea id="business-concept" class="form-control" placeholder="Describe your business concept, products or services" required></textarea>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="goals" class="form-label">Business Goals</label>
+            <textarea id="goals" class="form-control" placeholder="What are your short-term and long-term goals?" required></textarea>
+          </div>
+          <div class="form-group">
+            <label for="unique-selling" class="form-label">Unique Selling Proposition</label>
+            <textarea id="unique-selling" class="form-control" placeholder="What makes your business unique?" required></textarea>
+          </div>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Generate Business Plan</button>
+      </form>
+      
+      <div class="loading" id="loading">
+        <div class="loading-spinner"></div>
+        <p>Generating your business plan...</p>
+      </div>
+      
+      <div class="ai-result" id="ai-result">
+        <h3>Your Custom Business Plan</h3>
+        <div class="ai-result-content" id="ai-result-content"></div>
+        <button class="btn btn-outline" id="copy-plan" style="margin-top: 1rem;">Copy to Notepad</button>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Notepad Section -->
+  <section class="notepad-section" id="notepad">
+    <div class="section-title">
+      <h2>Advanced Notepad Editor</h2>
+      <p>A powerful text editor with formatting options and fullscreen mode</p>
+    </div>
+    <div class="notepad-container">
+      <div class="notepad-toolbar">
+        <button class="notepad-btn" data-command="bold" title="Bold"><i class="fas fa-bold"></i></button>
+        <button class="notepad-btn" data-command="italic" title="Italic"><i class="fas fa-italic"></i></button>
+        <button class="notepad-btn" data-command="underline" title="Underline"><i class="fas fa-underline"></i></button>
+        <button class="notepad-btn" data-command="strikeThrough" title="Strikethrough"><i class="fas fa-strikethrough"></i></button>
+        
+        <select class="notepad-btn" id="font-family" title="Font Family">
+          <option value="Arial, sans-serif">Arial</option>
+          <option value="'Courier New', monospace">Courier New</option>
+          <option value="Georgia, serif">Georgia</option>
+          <option value="'Times New Roman', serif">Times New Roman</option>
+          <option value="Verdana, sans-serif">Verdana</option>
+        </select>
+        
+        <select class="notepad-btn" id="font-size" title="Font Size">
+          <option value="1">Small</option>
+          <option value="3" selected>Normal</option>
+          <option value="5">Large</option>
+          <option value="7">Extra Large</option>
+        </select>
+        
+        <input type="color" class="notepad-btn" id="text-color" title="Text Color" value="#ffffff">
+        
+        <input type="color" class="notepad-btn" id="bg-color" title="Background Color" value="#1a202c">
+        
+        <button class="notepad-btn" data-command="justifyLeft" title="Align Left"><i class="fas fa-align-left"></i></button>
+        <button class="notepad-btn" data-command="justifyCenter" title="Align Center"><i class="fas fa-align-center"></i></button>
+        <button class="notepad-btn" data-command="justifyRight" title="Align Right"><i class="fas fa-align-right"></i></button>
+        
+        <button class="notepad-btn" id="fullscreen-btn" title="Fullscreen"><i class="fas fa-expand"></i> Fullscreen</button>
+        <button class="notepad-btn" id="clear-btn" title="Clear"><i class="fas fa-trash"></i> Clear</button>
+        <button class="notepad-btn" id="save-btn" title="Save"><i class="fas fa-save"></i> Save</button>
+      </div>
+      
+      <div class="notepad-editor" id="notepad-editor" contenteditable="true">
+        Start typing here... You can format your text using the toolbar above.
+      </div>
+    </div>
+  </section>
+  
+  <!-- Fullscreen Notepad -->
+  <div class="fullscreen-notepad" id="fullscreen-notepad">
+    <div class="fullscreen-toolbar">
+      <div class="fullscreen-toolbar-left">
+        <button class="notepad-btn" data-command="bold" title="Bold"><i class="fas fa-bold"></i></button>
+        <button class="notepad-btn" data-command="italic" title="Italic"><i class="fas fa-italic"></i></button>
+        <button class="notepad-btn" data-command="underline" title="Underline"><i class="fas fa-underline"></i></button>
+        <button class="notepad-btn" data-command="strikeThrough" title="Strikethrough"><i class="fas fa-strikethrough"></i></button>
+        
+        <select class="notepad-btn" id="fs-font-family" title="Font Family">
+          <option value="Arial, sans-serif">Arial</option>
+          <option value="'Courier New', monospace">Courier New</option>
+          <option value="Georgia, serif">Georgia</option>
+          <option value="'Times New Roman', serif">Times New Roman</option>
+          <option value="Verdana, sans-serif">Verdana</option>
+        </select>
+        
+        <select class="notepad-btn" id="fs-font-size" title="Font Size">
+          <option value="1">Small</option>
+          <option value="3" selected>Normal</option>
+          <option value="5">Large</option>
+          <option value="7">Extra Large</option>
+        </select>
+        
+        <input type="color" class="notepad-btn" id="fs-text-color" title="Text Color" value="#ffffff">
+        
+        <input type="color" class="notepad-btn" id="fs-bg-color" title="Background Color" value="#1a202c">
+      </div>
+      
+      <div>
+        <button class="notepad-btn" id="exit-fullscreen" title="Exit Fullscreen"><i class="fas fa-compress"></i> Exit</button>
+      </div>
+    </div>
+    
+    <textarea class="fullscreen-editor" id="fullscreen-editor"></textarea>
+  </div>
+  
+  <!-- Services Section -->
+  <section class="services-section" id="services">
+    <div class="section-title">
+      <h2>Our Services</h2>
+    </div>
+    <div class="services-grid">
+      <div class="service-card animate-slide-up" style="animation-delay: 0.1s">
+        <div class="service-icon">
+          <i class="fas fa-robot"></i>
+        </div>
+        <h3>AI Business Solutions</h3>
+        <p>Custom AI tools and solutions to automate and optimize your business processes and decision making.</p>
+      </div>
+      <div class="service-card animate-slide-up" style="animation-delay: 0.2s">
+        <div class="service-icon">
+          <i class="fas fa-code"></i>
+        </div>
+        <h3>Web Development</h3>
+        <p>Custom website and web application development tailored to your business needs.</p>
+      </div>
+      <div class="service-card animate-slide-up" style="animation-delay: 0.3s">
+        <div class="service-icon">
+          <i class="fas fa-paint-brush"></i>
+        </div>
+        <h3>UI/UX Design</h3>
+        <p>Beautiful, intuitive user interfaces that enhance user experience and engagement.</p>
+      </div>
+      <div class="service-card animate-slide-up" style="animation-delay: 0.4s">
+        <div class="service-icon">
+          <i class="fas fa-chart-line"></i>
+        </div>
+        <h3>Business Analytics</h3>
+        <p>Data-driven insights and analytics to help you make informed business decisions.</p>
+      </div>
+      <div class="service-card animate-slide-up" style="animation-delay: 0.5s">
+        <div class="service-icon">
+          <i class="fas fa-lightbulb"></i>
+        </div>
+        <h3>Business Consulting</h3>
+        <p>Expert advice and strategies to help your business grow and succeed.</p>
+      </div>
+      <div class="service-card animate-slide-up" style="animation-delay: 0.6s">
+        <div class="service-icon">
+          <i class="fas fa-tools"></i>
+        </div>
+        <h3>Productivity Tools</h3>
+        <p>Custom tools and applications to boost your team's productivity and efficiency.</p>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Portfolio Section -->
+  <section class="portfolio-section" id="portfolio">
+    <div class="section-title">
+      <h2>Our Portfolio</h2>
+    </div>
+    <div class="portfolio-filter">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="ai">AI Solutions</button>
+      <button class="filter-btn" data-filter="web">Web Development</button>
+      <button class="filter-btn" data-filter="design">UI/UX Design</button>
+    </div>
+    <div class="portfolio-grid">
+      <div class="portfolio-item" data-category="ai">
+        <img src="https://images.unsplash.com/photo-1677442135136-760c813a743d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="AI Business Planner" class="portfolio-img">
+        <div class="portfolio-overlay">
+          <h3>AI Business Planner</h3>
+          <p>Custom AI solution for business planning and strategy</p>
+        </div>
+      </div>
+      
+      <div class="portfolio-item" data-category="web">
+        <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="E-commerce Platform" class="portfolio-img">
+        <div class="portfolio-overlay">
+          <h3>E-commerce Platform</h3>
+          <p>Custom online store with advanced features</p>
+        </div>
+      </div>
+      
+      <div class="portfolio-item" data-category="design">
+        <img src="https://images.unsplash.com/photo-1547658719-da2b51169166?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Mobile App UI" class="portfolio-img">
+        <div class="portfolio-overlay">
+          <h3>Mobile App UI</h3>
+          <p>Beautiful and intuitive mobile application interface</p>
+        </div>
+      </div>
+      
+      <div class="portfolio-item" data-category="ai">
+        <img src="https://images.unsplash.com/photo-1573164713988-8665fc963095?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Data Analytics Dashboard" class="portfolio-img">
+        <div class="portfolio-overlay">
+          <h3>Data Analytics Dashboard</h3>
+          <p>Interactive dashboard for business intelligence</p>
+        </div>
+      </div>
+      
+      <div class="portfolio-item" data-category="web">
+        <img src="https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Corporate Website" class="portfolio-img">
+        <div class="portfolio-overlay">
+          <h3>Corporate Website</h3>
+          <p>Modern website for financial services company</p>
+        </div>
+      </div>
+      
+      <div class="portfolio-item" data-category="design">
+        <img src="https://images.unsplash.com/photo-1559028012-481c04fa702d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Healthcare Portal" class="portfolio-img">
+        <div class="portfolio-overlay">
+          <h3>Healthcare Portal</h3>
+          <p>User-friendly interface for patient management</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Contact Section -->
+  <section class="contact-section" id="contact">
+    <div class="section-title">
+      <h2>Contact Us</h2>
+    </div>
+    <div class="contact-container">
+      <div class="contact-info">
+        <div class="contact-card animate-slide-up" style="animation-delay: 0.1s">
+          <div class="contact-icon">
+            <i class="fas fa-map-marker-alt"></i>
+          </div>
+          <div class="contact-details">
+            <h3>Location</h3>
+            <p>123 Business Avenue, Suite 456</p>
+            <p>New York, NY 10001</p>
+          </div>
+        </div>
+        <div class="contact-card animate-slide-up" style="animation-delay: 0.2s">
+          <div class="contact-icon">
+            <i class="fas fa-envelope"></i>
+          </div>
+          <div class="contact-details">
+            <h3>Email</h3>
+            <a href="mailto:info@ultrasonicpro.com">info@ultrasonicpro.com</a>
+          </div>
+        </div>
+        <div class="contact-card animate-slide-up" style="animation-delay: 0.3s">
+          <div class="contact-icon">
+            <i class="fas fa-phone"></i>
+          </div>
+          <div class="contact-details">
+            <h3>Phone</h3>
+            <a href="tel:+12125551234">+1 (212) 555-1234</a>
+          </div>
+        </div>
+        <div class="contact-card animate-slide-up" style="animation-delay: 0.4s">
+          <div class="contact-icon">
+            <i class="fas fa-clock"></i>
+          </div>
+          <div class="contact-details">
+            <h3>Working Hours</h3>
+            <p>Mon-Fri: 9AM - 6PM EST</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="contact-form animate-slide-up" style="animation-delay: 0.4s">
+        <form id="contactForm">
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="Your Name" required>
+          </div>
+          <div class="form-group">
+            <input type="email" class="form-control" placeholder="Your Email" required>
+          </div>
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="Subject">
+          </div>
+          <div class="form-group">
+            <textarea class="form-control" placeholder="Your Message" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Send Message</button>
+        </form>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Footer -->
+  <footer>
+    <div class="social-links">
+      <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+      <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+      <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+      <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+      <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+    </div>
+    <p class="copyright">&copy; <span id="year"></span> Ultrasonic Professional. All Rights Reserved.</p>
+  </footer>
+  
+  <!-- Back to Top Button -->
+  <button class="back-to-top">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Set current year in footer
+      document.getElementById('year').textContent = new Date().getFullYear();
+
+      // Mobile Menu Toggle
+      const menuToggle = document.querySelector('.menu-toggle');
+      const nav = document.querySelector('nav');
+      
+      menuToggle.addEventListener('click', () => {
+        nav.classList.toggle('active');
+        menuToggle.innerHTML = nav.classList.contains('active') ? 
+          '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+      });
+      
+      // Close menu when clicking on a link
+      document.querySelectorAll('nav ul li a').forEach(link => {
+        link.addEventListener('click', () => {
+          nav.classList.remove('active');
+          menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+        });
+      });
+      
+      // Portfolio Filter
+      const filterBtns = document.querySelectorAll('.filter-btn');
+      const portfolioItems = document.querySelectorAll('.portfolio-item');
+      
+      filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          // Remove active class from all buttons
+          filterBtns.forEach(btn => btn.classList.remove('active'));
+          // Add active class to clicked button
+          btn.classList.add('active');
+          
+          const filter = btn.getAttribute('data-filter');
+          
+          portfolioItems.forEach(item => {
+            if (filter === 'all' || item.getAttribute('data-category') === filter) {
+              item.style.display = 'block';
+            } else {
+              item.style.display = 'none';
+            }
+          });
+        });
+      });
+      
+      // Back to Top Button
+      const backToTopBtn = document.querySelector('.back-to-top');
+      
+      window.addEventListener('scroll', () => {
+        if (window.pageYOffset > 300) {
+          backToTopBtn.classList.add('active');
+        } else {
+          backToTopBtn.classList.remove('active');
+        }
+      });
+      
+      backToTopBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      });
+      
+      // Smooth Scrolling for Navigation Links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          e.preventDefault();
+          
+          const targetId = this.getAttribute('href');
+          const targetElement = document.querySelector(targetId);
+          
+          if (targetElement) {
+            window.scrollTo({
+              top: targetElement.offsetTop - 80,
+              behavior: 'smooth'
+            });
+          }
+        });
+      });
+      
+      // Initialize Particles.js
+      particlesJS("particles-js", {
+        "particles": {
+          "number": {
+            "value": 80,
+            "density": {
+              "enable": true,
+              "value_area": 800
+            }
+          },
+          "color": {
+            "value": "#4299e1"
+          },
+          "shape": {
+            "type": "circle",
+            "stroke": {
+              "width": 0,
+              "color": "#000000"
+            },
+            "polygon": {
+              "nb_sides": 5
+            }
+          },
+          "opacity": {
+            "value": 0.5,
+            "random": false,
+            "anim": {
+              "enable": false,
+              "speed": 1,
+              "opacity_min": 0.1,
+              "sync": false
+            }
+          },
+          "size": {
+            "value": 3,
+            "random": true,
+            "anim": {
+              "enable": false,
+              "speed": 40,
+              "size_min": 0.1,
+              "sync": false
+            }
+          },
+          "line_linked": {
+            "enable": true,
+            "distance": 150,
+            "color": "#4299e1",
+            "opacity": 0.4,
+            "width": 1
+          },
+          "move": {
+            "enable": true,
+            "speed": 2,
+            "direction": "none",
+            "random": false,
+            "straight": false,
+            "out_mode": "out",
+            "bounce": false,
+            "attract": {
+              "enable": false,
+              "rotateX": 600,
+              "rotateY": 1200
+            }
+          }
+        },
+        "interactivity": {
+          "detect_on": "canvas",
+          "events": {
+            "onhover": {
+              "enable": true,
+              "mode": "grab"
+            },
+            "onclick": {
+              "enable": true,
+              "mode": "push"
+            },
+            "resize": true
+          },
+          "modes": {
+            "grab": {
+              "distance": 140,
+              "line_linked": {
+                "opacity": 1
+              }
+            },
+            "bubble": {
+              "distance": 400,
+              "size": 40,
+              "duration": 2,
+              "opacity": 8,
+              "speed": 3
+            },
+            "repulse": {
+              "distance": 200,
+              "duration": 0.4
+            },
+            "push": {
+              "particles_nb": 4
+            },
+            "remove": {
+              "particles_nb": 2
+            }
+          }
+        },
+        "retina_detect": true
+      });
+      
+      // Form submission
+      const contactForm = document.getElementById('contactForm');
+      if (contactForm) {
+        contactForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          // Here you would typically send the form data to a server
+          alert('Thank you for your message! We will get back to you soon.');
+          this.reset();
+        });
+      }
+      
+      // Typing Animation
+      const typingText = document.getElementById('typing-text');
+      if (typingText) {
+        const professions = ["AI Business Solutions", "Web Development", "UI/UX Design", "Productivity Tools"];
+        let i = 0;
+        let j = 0;
+        let currentProfession = '';
+        let isDeleting = false;
+        let isEnd = false;
+        
+        function type() {
+          isEnd = false;
+          currentProfession = professions[i];
+          
+          if (isDeleting) {
+            typingText.textContent = currentProfession.substring(0, j-1);
+            j--;
+          } else {
+            typingText.textContent = currentProfession.substring(0, j+1);
+            j++;
+          }
+          
+          if (!isDeleting && j === currentProfession.length) {
+            isEnd = true;
+            isDeleting = true;
+            setTimeout(type, 2000);
+          } else if (isDeleting && j === 0) {
+            isDeleting = false;
+            i++;
+            if (i === professions.length) i = 0;
+            setTimeout(type, 500);
+          } else {
+            const speed = isEnd ? 2000 : isDeleting ? 100 : 150;
+            setTimeout(type, speed);
+          }
+        }
+        
+        setTimeout(type, 1000);
+      }
+      
+      // Theme Toggle
+      const themeToggle = document.querySelector('.theme-toggle');
+      if (themeToggle) {
+        themeToggle.addEventListener('click', function() {
+          document.body.classList.toggle('light-theme');
+          const icon = this.querySelector('i');
+          if (document.body.classList.contains('light-theme')) {
+            icon.classList.remove('fa-moon');
+            icon.classList.add('fa-sun');
+          } else {
+            icon.classList.remove('fa-sun');
+            icon.classList.add('fa-moon');
+          }
+        });
+      }
+      
+      // AI Business Plan Generator
+      const businessPlanForm = document.getElementById('businessPlanForm');
+      const loadingElement = document.getElementById('loading');
+      const aiResult = document.getElementById('ai-result');
+      const aiResultContent = document.getElementById('ai-result-content');
+      const copyPlanBtn = document.getElementById('copy-plan');
+      
+      if (businessPlanForm) {
+        businessPlanForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          
+          // Get form values
+          const businessName = document.getElementById('business-name').value;
+          const businessType = document.getElementById('business-type').value;
+          const industry = document.getElementById('industry').value;
+          const targetMarket = document.getElementById('target-market').value;
+          const businessConcept = document.getElementById('business-concept').value;
+          const goals = document.getElementById('goals').value;
+          const uniqueSelling = document.getElementById('unique-selling').value;
+          
+          // Show loading
+          loadingElement.style.display = 'block';
+          aiResult.style.display = 'none';
+          
+          // Simulate AI processing (in a real app, this would be an API call)
+          setTimeout(() => {
+            // Generate business plan
+            const businessPlan = generateBusinessPlan(
+              businessName,
+              businessType,
+              industry,
+              targetMarket,
+              businessConcept,
+              goals,
+              uniqueSelling
+            );
+            
+            // Display result
+            aiResultContent.textContent = businessPlan;
+            loadingElement.style.display = 'none';
+            aiResult.style.display = 'block';
+            
+            // Scroll to result
+            aiResult.scrollIntoView({ behavior: 'smooth' });
+          }, 2000);
+        });
+      }
+      
+      // Function to generate business plan
+      function generateBusinessPlan(name, type, industry, market, concept, goals, unique) {
+        const now = new Date();
+        const dateStr = now.toLocaleDateString('en-US', { 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric' 
+        });
+        
+        return `Business Plan for ${name}
+
+Date: ${dateStr}
+
+1. Executive Summary
+${name} is a ${type} business operating in the ${industry} industry. Our company specializes in ${concept}. What sets us apart is ${unique}. This business plan outlines our strategy for establishing and growing ${name} in the competitive ${industry} market.
+
+2. Business Description
+${name} will operate as a ${type} business focusing on ${concept}. Our target market consists of ${market}. The ${industry} industry is experiencing growth due to [industry trends], and ${name} is well-positioned to capitalize on these opportunities.
+
+3. Market Analysis
+The target market for ${name} includes ${market}. This segment was chosen because [reasons]. Current trends in the ${industry} industry include [trends]. Our competitive analysis reveals that ${name} differentiates itself through ${unique}.
+
+4. Organization & Management
+${name} will be structured as [legal structure]. The management team brings [experience/skills] to the table. Key personnel include [roles]. We plan to [hiring plans] as the business grows.
+
+5. Service/Product Line
+Our core offering is ${concept}. The key features include [features]. The benefits to customers are [benefits]. Future products/services under consideration include [future offerings].
+
+6. Marketing & Sales Strategy
+Our marketing approach will focus on [channels]. The sales strategy involves [strategy]. Pricing will be set at [pricing model] to remain competitive while ensuring profitability. Customer acquisition costs are estimated at [amount] with a lifetime value of [amount].
+
+7. Goals & Objectives
+Our short-term goals include:
+- ${goals.split('\n').filter(g => g.trim()).join('\n- ')}
+
+Long-term objectives are:
+- Achieve [revenue target] in annual revenue by year 3
+- Expand to [new markets] by year 5
+- Develop [new products/services] by year 2
+
+8. Financial Plan
+Initial startup costs are estimated at [amount]. Revenue projections for the first three years are [amount], [amount], and [amount] respectively. Break-even analysis indicates we will become profitable by [timeframe]. Funding requirements total [amount] which will be secured through [sources].
+
+9. Conclusion
+${name} presents a compelling opportunity in the ${industry} sector. With our focus on ${unique} and a clear plan to serve ${market}, we are confident in our ability to achieve our goals of ${goals.split('\n')[0]}. This business plan provides the roadmap for turning this vision into reality.
+
+For more information, please contact:
+[Your Contact Information]`;
+      }
+      
+      // Copy to Notepad button
+      if (copyPlanBtn) {
+        copyPlanBtn.addEventListener('click', function() {
+          const planContent = aiResultContent.textContent;
+          const notepadEditor = document.getElementById('notepad-editor');
+          
+          notepadEditor.innerHTML = planContent.replace(/\n/g, '<br>');
+          
+          // Scroll to notepad
+          document.getElementById('notepad').scrollIntoView({ behavior: 'smooth' });
+          
+          // Show notification
+          alert('Business plan copied to notepad!');
+        });
+      }
+      
+      // Notepad Editor Functionality
+      const notepadEditor = document.getElementById('notepad-editor');
+      const fullscreenEditor = document.getElementById('fullscreen-editor');
+      const fullscreenNotepad = document.getElementById('fullscreen-notepad');
+      const fullscreenBtn = document.getElementById('fullscreen-btn');
+      const exitFullscreenBtn = document.getElementById('exit-fullscreen');
+      const clearBtn = document.getElementById('clear-btn');
+      const saveBtn = document.getElementById('save-btn');
+      
+      // Formatting buttons
+      document.querySelectorAll('.notepad-btn[data-command]').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const command = this.getAttribute('data-command');
+          document.execCommand(command, false, null);
+          notepadEditor.focus();
+        });
+      });
+      
+      // Font family change
+      document.getElementById('font-family').addEventListener('change', function() {
+        document.execCommand('fontName', false, this.value);
+        notepadEditor.focus();
+      });
+      
+      // Font size change
+      document.getElementById('font-size').addEventListener('change', function() {
+        document.execCommand('fontSize', false, this.value);
+        notepadEditor.focus();
+      });
+      
+      // Text color change
+      document.getElementById('text-color').addEventListener('input', function() {
+        document.execCommand('foreColor', false, this.value);
+        notepadEditor.focus();
+      });
+      
+      // Background color change
+      document.getElementById('bg-color').addEventListener('input', function() {
+        notepadEditor.style.backgroundColor = this.value;
+      });
+      
+      // Fullscreen notepad buttons
+      document.getElementById('fs-font-family').addEventListener('change', function() {
+        fullscreenEditor.style.fontFamily = this.value;
+      });
+      
+      document.getElementById('fs-font-size').addEventListener('change', function() {
+        fullscreenEditor.style.fontSize = this.value + 'px';
+      });
+      
+      document.getElementById('fs-text-color').addEventListener('input', function() {
+        fullscreenEditor.style.color = this.value;
+      });
+      
+      document.getElementById('fs-bg-color').addEventListener('input', function() {
+        fullscreenEditor.style.backgroundColor = this.value;
+      });
+      
+      // Toggle fullscreen
+      if (fullscreenBtn) {
+        fullscreenBtn.addEventListener('click', function() {
+          // Copy content to fullscreen editor
+          fullscreenEditor.value = notepadEditor.innerText;
+          fullscreenNotepad.classList.add('active');
+          fullscreenEditor.focus();
+        });
+      }
+      
+      if (exitFullscreenBtn) {
+        exitFullscreenBtn.addEventListener('click', function() {
+          // Copy content back to regular editor
+          notepadEditor.innerHTML = fullscreenEditor.value.replace(/\n/g, '<br>');
+          fullscreenNotepad.classList.remove('active');
+        });
+      }
+      
+      // Clear notepad
+      if (clearBtn) {
+        clearBtn.addEventListener('click', function() {
+          if (confirm('Are you sure you want to clear the notepad?')) {
+            notepadEditor.innerHTML = '';
+          }
+        });
+      }
+      
+      // Save notepad (simulated)
+      if (saveBtn) {
+        saveBtn.addEventListener('click', function() {
+          const content = notepadEditor.innerText;
+          if (content.trim() === '') {
+            alert('Nothing to save!');
+            return;
+          }
+          
+          // In a real app, this would save to server or local storage
+          alert('Content saved (simulated). In a real app, this would save to your account.');
+        });
+      }
+    });
+  </script>
+</body>
+</html>
